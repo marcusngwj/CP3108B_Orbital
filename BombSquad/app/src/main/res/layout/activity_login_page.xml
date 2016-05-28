@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="sg.edu.nus.bombsquad.LoginPage">
+    tools:context="sg.edu.nus.bombsquad.LoginPage"
+    android:background="#44546A">
 
 </RelativeLayout>

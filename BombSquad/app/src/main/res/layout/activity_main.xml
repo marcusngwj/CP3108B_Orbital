@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FF0000"
-        android:textSize="40sp"
+        android:textSize="45sp"
         android:text="Bomb Squad"
         android:id="@+id/textView"
         android:layout_marginTop="136dp"

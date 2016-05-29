@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginPage" />
-        <activity android:name=".RoomType"></activity>
+        <activity android:name=".RoomType" />
+        <activity android:name=".EnterRoom"></activity>
     </application>
 
 </manifest>

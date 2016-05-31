@@ -31,4 +31,15 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF" />
+
+    <!-- To be removed, for testing only -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:textSize="40sp"
+        android:id="@+id/buttonMain"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="116dp" />
 </RelativeLayout>

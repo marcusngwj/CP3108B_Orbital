@@ -34,7 +34,7 @@
         android:textSize="70sp"
         android:textColor="#ffffff"
         android:background="@drawable/white_border"
-        android:id="@+id/buttonCreate"
+        android:id="@+id/buttonCreateRoom"
         android:layout_marginTop="79dp"
         android:layout_below="@+id/buttonHistory"
         android:layout_alignParentEnd="true" />
@@ -49,9 +49,9 @@
         android:textSize="70sp"
         android:textColor="#ffffff"
         android:background="@drawable/white_border"
-        android:id="@+id/buttonEnter"
+        android:id="@+id/buttonEnterRoom"
         android:layout_marginTop="84dp"
-        android:layout_below="@+id/buttonCreate"
-        android:layout_alignStart="@+id/buttonCreate" />
+        android:layout_below="@+id/buttonCreateRoom"
+        android:layout_alignStart="@+id/buttonCreateRoom" />
 
 </RelativeLayout>

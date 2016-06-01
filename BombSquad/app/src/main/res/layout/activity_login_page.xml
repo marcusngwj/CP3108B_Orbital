@@ -11,6 +11,7 @@
     android:background="#44546A"
     android:textAlignment="center">
 
+    <!--App Name-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,6 +24,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <!--Username-->
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,18 +38,21 @@
         android:layout_below="@+id/textView3"
         android:layout_centerHorizontal="true" />
 
+    <!--Password-->
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="16"
         android:id="@+id/editTextPass"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:hint="password"
         android:textColorHint="#FFFFFF"
-        android:backgroundTint="@android:color/holo_green_light" />
+        android:backgroundTint="@android:color/holo_green_light"
+        android:layout_below="@+id/editTextUser"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp" />
 
+    <!--Login-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,6 +65,7 @@
         android:layout_alignEnd="@+id/editTextPass"
         android:background="#ffffff" />
 
+    <!--Register-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -11,18 +11,20 @@
     android:background="#44546A"
     android:textAlignment="center">
 
+    <!--History-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="20sp"
         android:paddingRight="20sp"
         android:text="History"
-        android:id="@+id/button3"
+        android:id="@+id/buttonHistory"
         android:background="#ffffff"
         android:layout_marginTop="34dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
+    <!--Create-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,11 +34,12 @@
         android:textSize="70sp"
         android:textColor="#ffffff"
         android:background="@drawable/white_border"
-        android:id="@+id/button4"
-        android:layout_marginTop="181dp"
-        android:layout_below="@+id/button3"
+        android:id="@+id/buttonCreate"
+        android:layout_marginTop="79dp"
+        android:layout_below="@+id/buttonHistory"
         android:layout_alignParentEnd="true" />
 
+    <!--Enter-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,9 +49,9 @@
         android:textSize="70sp"
         android:textColor="#ffffff"
         android:background="@drawable/white_border"
-        android:id="@+id/button5"
+        android:id="@+id/buttonEnter"
         android:layout_marginTop="84dp"
-        android:layout_below="@+id/button4"
-        android:layout_alignStart="@+id/button4" />
+        android:layout_below="@+id/buttonCreate"
+        android:layout_alignStart="@+id/buttonCreate" />
 
 </RelativeLayout>

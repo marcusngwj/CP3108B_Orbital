@@ -12,9 +12,6 @@ public class LoginPage extends AppCompatActivity {
     Button bLogin,bRegister;
     EditText editUser,editPass;
 
-//    TextView tx1;
-    int counter = 3;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,9 +23,6 @@ public class LoginPage extends AppCompatActivity {
         bLogin=(Button)findViewById(R.id.buttonLogin);
         editUser=(EditText)findViewById(R.id.editTextUser);
         editPass=(EditText)findViewById(R.id.editTextPass);
-
-//        tx1=(TextView)findViewById(R.id.textView3);
-//        tx1.setVisibility(View.GONE);
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,14 +36,6 @@ public class LoginPage extends AppCompatActivity {
                 else
                 {
                     Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
-
-//                    tx1.setVisibility(View.VISIBLE);
-//                    tx1.setBackgroundColor(Color.RED);
-//                    counter--;
-//                    tx1.setText(Integer.toString(counter));
-//
-//                    if (counter == 0) {
-//                        b1.setEnabled(false);
                 }
             }
         });

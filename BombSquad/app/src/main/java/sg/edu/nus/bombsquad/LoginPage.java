@@ -24,11 +24,12 @@ public class LoginPage extends AppCompatActivity {
         editUser=(EditText)findViewById(R.id.editTextUser);
         editPass=(EditText)findViewById(R.id.editTextPass);
 
+        //Login Button
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Redirecting...",Toast.LENGTH_SHORT).show();
-                if(editUser.getText().toString().equals("admin") && editPass.getText().toString().equals("admin"))
+                if(editUser.getText().toString().equals("admin") && editPass.getText().toString().equals("admin"))  //To check if credential exists
                 {
                     Intent intent = new Intent(v.getContext(), RoomType.class);
                     startActivity(intent);

@@ -7,13 +7,14 @@ import android.view.View;
 import android.widget.Button;
 
 public class RoomType extends AppCompatActivity {
-    Button bCreate,bEnter, bHistory;
+    Button bCreate, bEnter, bHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_type);
 
+        //Create Room button
         bCreate=(Button)findViewById(R.id.buttonCreate);
         if (bCreate != null) {
             bCreate.setOnClickListener(new View.OnClickListener() {
@@ -25,6 +26,7 @@ public class RoomType extends AppCompatActivity {
             });
         }
 
+        //Enter Room button
         bEnter=(Button)findViewById(R.id.buttonEnter);
         if (bEnter != null) {
             bEnter.setOnClickListener(new View.OnClickListener() {

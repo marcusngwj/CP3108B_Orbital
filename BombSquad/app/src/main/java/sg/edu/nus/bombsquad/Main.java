@@ -12,6 +12,8 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //To be removed and replaced with splash screen
         Button buttonToNext=(Button)findViewById(R.id.buttonMain);
         if (buttonToNext != null) {
             buttonToNext.setOnClickListener(new View.OnClickListener() {

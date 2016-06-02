@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="sg.edu.nus.bombsquad.RegisterPage"
+    android:background="#44546A">
+
+    <!--App Name-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FF0000"
+        android:textSize="45sp"
+        android:text="Bomb Squad"
+        android:id="@+id/textView6"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <!--First Name-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextFirstName"
+        android:layout_below="@+id/textView6"
+        android:layout_marginTop="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff"
+        android:hint="First Name" />
+
+    <!--Last Name-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextLastName"
+        android:layout_below="@+id/editTextFirstName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Last Name"
+        android:textColor="#ffffff" />
+
+    <!--Email Address-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/editTextEmail"
+        android:layout_below="@+id/editTextLastName"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editTextLastName"
+        android:textColor="#ffffff"
+        android:hint="Email Address" />
+
+    <!--Mobile Number-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/editTextMobileNo"
+        android:layout_below="@+id/editTextEmail"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editTextEmail"
+        android:textColor="#ffffff"
+        android:hint="Mobile Number" />
+
+    <!--Username-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextUserRegister"
+        android:layout_below="@+id/editTextMobileNo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Username"
+        android:textColor="#ffffff" />
+
+    <!--Password-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editTextPassRegister"
+        android:layout_below="@+id/editTextUserRegister"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editTextUserRegister"
+        android:textColor="#ffffff"
+        android:hint="Password" />
+
+    <!--Confirm Password-->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editTextPassRegisterConfirm"
+        android:layout_below="@+id/editTextPassRegister"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editTextPassRegister"
+        android:hint="Confirm Password"
+        android:textColor="#ffffff" />
+
+    <!--Register Button-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/buttonRegisterPage"
+        android:layout_below="@+id/editTextPassRegisterConfirm"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="77dp"
+        android:background="#ffffff" />
+
+</RelativeLayout>

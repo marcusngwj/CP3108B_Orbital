@@ -18,7 +18,8 @@
         <activity android:name=".LoginPage" />
         <activity android:name=".RoomType" />
         <activity android:name=".EnterRoom" />
-        <activity android:name=".CreateRoom"></activity>
+        <activity android:name=".CreateRoom" />
+        <activity android:name=".RegisterPage"></activity>
     </application>
 
 </manifest>

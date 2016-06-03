@@ -17,6 +17,7 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
         onLogin();
+        onRegister();
     }
 
     public void onLogin(){
@@ -38,6 +39,19 @@ public class LoginPage extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    public void onRegister(){
+        bRegister=(Button)findViewById(R.id.buttonRegister);
+
+        //Register Button
+        bRegister.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(v.getContext(), RegisterPage.class);
+                startActivity(intent);
             }
         });
     }

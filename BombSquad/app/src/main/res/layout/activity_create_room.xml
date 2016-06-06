@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sg.edu.nus.bombsquad.CreateRoom"
-    android:background="#44546A">
+    android:background="#44546A"
+    android:contextClickable="true">
 
     <!--Room Name-->
     <TextView
@@ -26,13 +27,13 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:textSize="40sp"
-        android:ems="15"
         android:id="@+id/editTextRoomName"
-        android:background="#ffffff"
         android:layout_below="@+id/textView5"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:paddingTop="7sp"
+        android:paddingBottom="7sp"
+        android:background="#ffffff" />
 
     <!--Generate Code-->
     <Button
@@ -79,8 +80,9 @@
         android:paddingLeft="25sp"
         android:paddingRight="25sp"
         android:layout_below="@+id/textViewGCode"
-        android:layout_alignEnd="@+id/editTextRoomName"
         android:layout_marginTop="60dp" />
+
+
 
 
 </RelativeLayout>

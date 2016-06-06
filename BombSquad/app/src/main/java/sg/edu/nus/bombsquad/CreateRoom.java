@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CreateRoom extends AppCompatActivity {
     EditText editRoomName;
@@ -16,6 +17,7 @@ public class CreateRoom extends AppCompatActivity {
     Button bGenerate, bSetUp;
     TextView txGCode;
     int generatedCode;
+    boolean bGenerateClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class CreateRoom extends AppCompatActivity {
                 txGCode.setVisibility(View.VISIBLE);
                 txGCode.setBackgroundColor(Color.WHITE);
                 txGCode.setText(Integer.toString(generatedCode));
+                bGenerateClicked = true;
             }
         });
     }
@@ -51,6 +54,12 @@ public class CreateRoom extends AppCompatActivity {
                 roomName = editRoomName.getText().toString();
                 if(TextUtils.isEmpty(roomName)){
                     editRoomName.setError("Input Room Name");
+                }
+                else if(roomName.length()>20){
+                    editRoomName.setError("Name must be less than 20 characters");
+                }
+                else if(bGenerateClicked==false){
+                    Toast.makeText(getApplicationContext(), "Please Generate Code",Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Intent intent = new Intent(v.getContext(), ExistOrNew.class);

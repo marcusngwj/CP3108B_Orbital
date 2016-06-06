@@ -14,28 +14,31 @@ public class RoomType extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_type);
 
-        //Create Room button
-        bCreateRoom=(Button)findViewById(R.id.buttonCreateRoom);
-        if (bCreateRoom != null) {
-            bCreateRoom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intentCreate = new Intent(v.getContext(), CreateRoom.class);
-                    startActivity(intentCreate);
-                }
-            });
-        }
+        createRoom();
+        enterRoom();
+    }
 
-        //Enter Room button
+    //Create Room button
+    private void createRoom(){
+        bCreateRoom=(Button)findViewById(R.id.buttonCreateRoom);
+        bCreateRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCreate = new Intent(v.getContext(), CreateRoom.class);
+                startActivity(intentCreate);
+            }
+        });
+    }
+
+    //Enter Room button
+    private void enterRoom(){
         bEnterRoom=(Button)findViewById(R.id.buttonEnterRoom);
-        if (bEnterRoom != null) {
-            bEnterRoom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intentEnter = new Intent(v.getContext(), EnterRoom.class);
-                    startActivity(intentEnter);
-                }
-            });
-        }
+        bEnterRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentEnter = new Intent(v.getContext(), EnterRoom.class);
+                startActivity(intentEnter);
+            }
+        });
     }
 }

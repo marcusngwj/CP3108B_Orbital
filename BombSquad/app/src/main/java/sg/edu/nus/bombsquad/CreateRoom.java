@@ -24,7 +24,6 @@ public class CreateRoom extends AppCompatActivity {
         txGCode=(TextView)findViewById(R.id.textViewGCode);
         txGCode.setVisibility(View.GONE);
 
-        roomName = editRoomName.getText().toString();
         generateCode();
         setUpRoom();
     }
@@ -47,6 +46,7 @@ public class CreateRoom extends AppCompatActivity {
         bSetUp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                roomName = editRoomName.getText().toString();
                 Intent intent = new Intent(v.getContext(), ExistOrNew.class);
                 startActivity(intent);
             }

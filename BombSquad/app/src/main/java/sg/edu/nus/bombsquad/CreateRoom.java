@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,9 +47,15 @@ public class CreateRoom extends AppCompatActivity {
         bSetUp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                editRoomName = (EditText)findViewById(R.id.editTextRoomName);
                 roomName = editRoomName.getText().toString();
-                Intent intent = new Intent(v.getContext(), ExistOrNew.class);
-                startActivity(intent);
+                if(TextUtils.isEmpty(roomName)){
+                    editRoomName.setError("Input Room Name");
+                }
+                else {
+                    Intent intent = new Intent(v.getContext(), ExistOrNew.class);
+                    startActivity(intent);
+                }
             }
         });
     }

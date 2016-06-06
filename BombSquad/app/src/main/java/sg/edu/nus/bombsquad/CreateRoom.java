@@ -26,6 +26,7 @@ public class CreateRoom extends AppCompatActivity {
 
         roomName = editRoomName.getText().toString();
         generateCode();
+        setUpRoom();
     }
 
     private void generateCode(){
@@ -37,6 +38,17 @@ public class CreateRoom extends AppCompatActivity {
                 txGCode.setVisibility(View.VISIBLE);
                 txGCode.setBackgroundColor(Color.WHITE);
                 txGCode.setText(Integer.toString(generatedCode));
+            }
+        });
+    }
+
+    private void setUpRoom(){
+        bSetUp=(Button)findViewById(R.id.buttonSetUp);
+        bSetUp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(v.getContext(), ExistOrNew.class);
+                startActivity(intent);
             }
         });
     }

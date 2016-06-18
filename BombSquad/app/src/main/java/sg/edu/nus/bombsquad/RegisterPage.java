@@ -1,20 +1,20 @@
 package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
+
+/*import android.support.v7.app.AlertDialog;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONObject;*/
 
 public class RegisterPage extends AppCompatActivity {
 
@@ -37,8 +37,8 @@ public class RegisterPage extends AppCompatActivity {
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String first_name = editFirstName.getText().toString();
-                final String last_name = editLastName.getText().toString();
+                String first_name = editFirstName.getText().toString();
+                String last_name = editLastName.getText().toString();
                 final String email = editEmail.getText().toString();
                 final String mobile_no = editMobileNo.getText().toString();
                 final String username = editUser.getText().toString();
@@ -73,19 +73,62 @@ public class RegisterPage extends AppCompatActivity {
                     }
                 };
 
-                
+                boolean[] success = {false, false, true, true, true};
 
+                //To capitalise first character in the first name
+                Character firstChar = first_name.charAt(0);
+                if(Character.isLetter(firstChar)){
+                    first_name = Character.toUpperCase(firstChar) + first_name.substring(1);
+                    success[0] = true;
+                }
+                else{
+                    editFirstName.setError("Name has to begin with an alphabet");
+                }
+
+                //To capitalise first character in the last name
+                firstChar = last_name.charAt(0);
+                if(Character.isLetter(firstChar)){
+                    last_name = Character.toUpperCase(firstChar) + last_name.substring(1);
+                    success[1] = true;
+                }
+                else{
+                    editLastName.setError("Name has to begin with an alphabet");
+                }
+
+                //Simple Email verification
+                if(email.startsWith("@") || email.endsWith("@") || !email.contains("@")){
+                    editEmail.setError("Missing local part or domain");
+                    success[2] = false;
+                }
+
+                //Simple Mobile verfication
+                if(mobile_no.startsWith("-") || mobile_no.substring(1).contains("+")){
+                    editMobileNo.setError("Incorrect mobile number");
+                    success[3] = false;
+                }
+
+                //To ensure password more than 8 characters
+                if(password.length()<8){
+                    editPass.setError("Password must be more than 8 characters");
+                    editPass.setText("");
+                    editPassConfirm.setText("");
+                    success[4] = false;
+                }
+
+                //To check if password matches password confirmation
                 if(!password.equals(passConfirm)){
                     editPassConfirm.setError("Password does not match");
                     editPass.setText("");
                     editPassConfirm.setText("");
+                    success[4] = false;
                 }
 
-                else {
+                if(success[0] && success[1] && success[2] && success[3] && success[4]) {
                     RegisterRequest registerRequest = new RegisterRequest(first_name, last_name, email, mobile_no, username, password, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterPage.this);
                     queue.add(registerRequest);
                 }
+
             }
         });
 

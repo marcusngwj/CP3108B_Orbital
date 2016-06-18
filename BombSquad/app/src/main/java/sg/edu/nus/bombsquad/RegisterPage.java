@@ -43,10 +43,12 @@ public class RegisterPage extends AppCompatActivity {
                 final String mobile_no = editMobileNo.getText().toString();
                 final String username = editUser.getText().toString();
                 final String password = editPass.getText().toString();
+                final String passConfirm = editPassConfirm.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        /*
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
@@ -64,12 +66,26 @@ public class RegisterPage extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        */
+
+                        Intent intent = new Intent(RegisterPage.this, LoginPage.class);
+                        RegisterPage.this.startActivity(intent);
                     }
                 };
 
-                RegisterRequest registerRequest = new RegisterRequest(first_name, last_name, email, mobile_no, username, password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(RegisterPage.this);
-                queue.add(registerRequest);
+                
+
+                if(!password.equals(passConfirm)){
+                    editPassConfirm.setError("Password does not match");
+                    editPass.setText("");
+                    editPassConfirm.setText("");
+                }
+
+                else {
+                    RegisterRequest registerRequest = new RegisterRequest(first_name, last_name, email, mobile_no, username, password, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(RegisterPage.this);
+                    queue.add(registerRequest);
+                }
             }
         });
 

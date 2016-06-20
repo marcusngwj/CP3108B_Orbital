@@ -125,9 +125,8 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/buttonRegisterPage"
-        android:layout_below="@+id/editTextPassRegisterConfirm"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="77dp"
-        android:background="#ffffff" />
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

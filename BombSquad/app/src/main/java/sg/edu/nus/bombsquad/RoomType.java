@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class RoomType extends AppCompatActivity {
     Button bCreateRoom, bEnterRoom, bHistory;
@@ -13,6 +14,15 @@ public class RoomType extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_type);
+
+        final EditText etTestFirstName = (EditText)findViewById(R.id.etTestFirstName);
+        final EditText etTestLastName = (EditText)findViewById(R.id.etTestLastName);
+
+        Intent intent = getIntent();
+        String first_name = intent.getStringExtra("first_name");
+        String last_name = intent.getStringExtra("last_name");
+        etTestFirstName.setText(first_name);
+        etTestLastName.setText(last_name);
 
         createRoom();
         enterRoom();

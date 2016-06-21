@@ -27,6 +27,7 @@ public class RoomType extends AppCompatActivity {
 
         createRoom();
         enterRoom();
+        history();
     }
 
     //Create Room button
@@ -49,6 +50,18 @@ public class RoomType extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentEnter = new Intent(v.getContext(), EnterRoom.class);
                 startActivity(intentEnter);
+            }
+        });
+    }
+
+    //Enter Histroy
+    private void history() {
+        bHistory = (Button)findViewById(R.id.buttonHistory);
+        bHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHistory = new Intent(v.getContext(), History.class);
+                startActivity(intentHistory);
             }
         });
     }

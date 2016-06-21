@@ -54,20 +54,26 @@
         android:layout_below="@+id/buttonCreateRoom"
         android:layout_alignStart="@+id/buttonCreateRoom" />
 
-    <!--To be removed-->
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="First Name"
         android:id="@+id/etTestFirstName"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <!--To be removed-->
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Last Name"
         android:id="@+id/etTestLastName"
-        android:layout_below="@+id/etTestFirstName"
+        android:layout_alignTop="@+id/buttonHistory"
         android:layout_alignParentStart="true" />
+
+    <!--To be removed-->
+
+    <!--To be removed-->
 
 </RelativeLayout>

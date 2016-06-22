@@ -11,13 +11,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
-
 /*import android.support.v7.app.AlertDialog;
 import org.json.JSONException;
 import org.json.JSONObject;*/
 
 public class RegisterPage extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +99,7 @@ public class RegisterPage extends AppCompatActivity {
                     success[2] = false;
                 }
 
-                //Simple Mobile verfication
+                //Simple Mobile verification
                 if(mobile_no.startsWith("-") || mobile_no.substring(1).contains("+")){
                     editMobileNo.setError("Incorrect mobile number");
                     success[3] = false;

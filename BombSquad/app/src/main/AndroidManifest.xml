@@ -22,6 +22,7 @@
         <activity android:name=".EnterRoom" />
         <activity android:name=".CreateRoom" />
         <activity android:name=".RegisterPage" />
+        <activity android:name=".History" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

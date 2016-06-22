@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class RoomType extends AppCompatActivity {
     Button bCreateRoom, bEnterRoom, bHistory;
@@ -15,8 +16,8 @@ public class RoomType extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_type);
 
-        final EditText etTestFirstName = (EditText)findViewById(R.id.etTestFirstName);
-        final EditText etTestLastName = (EditText)findViewById(R.id.etTestLastName);
+        final TextView etTestFirstName = (TextView)findViewById(R.id.etTestFirstName);
+        final TextView etTestLastName = (TextView)findViewById(R.id.etTestLastName);
 
         Intent intent = getIntent();
         String first_name = intent.getStringExtra("first_name");
@@ -26,6 +27,7 @@ public class RoomType extends AppCompatActivity {
 
         createRoom();
         enterRoom();
+        history();
     }
 
     //Create Room button
@@ -48,6 +50,18 @@ public class RoomType extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentEnter = new Intent(v.getContext(), EnterRoom.class);
                 startActivity(intentEnter);
+            }
+        });
+    }
+
+    //Enter Histroy
+    private void history() {
+        bHistory = (Button)findViewById(R.id.buttonHistory);
+        bHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHistory = new Intent(v.getContext(), History.class);
+                startActivity(intentHistory);
             }
         });
     }

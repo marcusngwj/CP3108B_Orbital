@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
 public class CreateRoom extends AppCompatActivity {
     EditText editRoomName;
     String roomName;
@@ -41,6 +45,7 @@ public class CreateRoom extends AppCompatActivity {
                 txGCode.setBackgroundColor(Color.WHITE);
                 txGCode.setText(Integer.toString(generatedCode));
                 bGenerateClicked = true;
+
             }
         });
     }
@@ -52,21 +57,22 @@ public class CreateRoom extends AppCompatActivity {
             public void onClick(View v){
                 editRoomName = (EditText)findViewById(R.id.editTextRoomName);
                 roomName = editRoomName.getText().toString();
-                if(TextUtils.isEmpty(roomName)){
-                    editRoomName.setError("Input Room Name");
+
+                        if(TextUtils.isEmpty(roomName)){
+                            editRoomName.setError("Input Room Name");
+                        }
+                        else if(roomName.length()>20){
+                            editRoomName.setError("Name must be less than 20 characters");
+                        }
+                        else if(bGenerateClicked==false){
+                            Toast.makeText(getApplicationContext(), "Please Generate Code",Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Intent intent = new Intent(v.getContext(), ExistOrNew.class);
+                            startActivity(intent);
+                        }
                 }
-                else if(roomName.length()>20){
-                    editRoomName.setError("Name must be less than 20 characters");
-                }
-                else if(bGenerateClicked==false){
-                    Toast.makeText(getApplicationContext(), "Please Generate Code",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Intent intent = new Intent(v.getContext(), ExistOrNew.class);
-                    startActivity(intent);
-                }
-            }
-        });
+            });
     }
 
     public String getRoomName(){

@@ -20,7 +20,7 @@ public class CreateRoom extends AppCompatActivity {
     String roomName;
     Button bGenerate, bSetUp;
     TextView txGCode;
-    int generatedCode;
+    int roomCode;
     boolean bGenerateClicked = false;
 
     @Override
@@ -40,10 +40,10 @@ public class CreateRoom extends AppCompatActivity {
         bGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generatedCode = (int) Math.floor(Math.random()*1000000);
+                roomCode = (int) Math.floor(Math.random()*1000000);
                 txGCode.setVisibility(View.VISIBLE);
                 txGCode.setBackgroundColor(Color.WHITE);
-                txGCode.setText(Integer.toString(generatedCode));
+                txGCode.setText(Integer.toString(roomCode));
                 bGenerateClicked = true;
 
             }
@@ -76,7 +76,7 @@ public class CreateRoom extends AppCompatActivity {
                     }
 
                 };
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(userID, roomName, generatedCode + "", responseListener);
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(userID, roomName, roomCode + "", responseListener);
                 RequestQueue queue = Volley.newRequestQueue(CreateRoom.this);
                 queue.add(createRoomRequest);
             }

@@ -10,15 +10,16 @@
     mysqli_stmt_store_result($statement);
     mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code);
     
-    $response = array();
-    $response["success"] = false;  
-    
+    $response = array(array(), array());
+    $response["success"] = false;
+    $i = 0;
     while(mysqli_stmt_fetch($statement)){
-        $response["success"] = true;
-		$response["room_id"] = $room_id;
-		$response["room_name"] = $room_name;
-		$response["user_id"] = $user_id;
-		$response["room_code"] = $room_code;
+        $response[$i]["success"] = true;
+		$response[$i]["room_id"] = $room_id;
+		$response[$i]["room_name"] = $room_name;
+		$response[$i]["user_id"] = $user_id;
+		$response[$i]["room_code"] = $room_code;
+		$i++;
     }
     
     echo json_encode($response);

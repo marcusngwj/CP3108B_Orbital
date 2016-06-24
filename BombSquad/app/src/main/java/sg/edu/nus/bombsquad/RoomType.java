@@ -73,8 +73,40 @@ public class RoomType extends AppCompatActivity {
         bHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentHistory = new Intent(v.getContext(), History.class);
-                startActivity(intentHistory);
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response){
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+
+                            if(success){
+                                String room_id = jsonResponse.getString("room_id");
+                                String room_name = jsonResponse.getString("room_name");
+                                String userID = jsonResponse.getString("user_id");
+                                Intent intentHistory = new Intent(RoomType.this, History.class);
+                                intentHistory.putExtra("room_id", room_id);
+                                intentHistory.putExtra("room_name", room_name);
+                                intentHistory.putExtra("userID", userID);
+                                RoomType.this.startActivity(intentHistory);
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RoomType.this);
+                                builder.setMessage("FAILLLLLLLLLLLLLLLL")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                Intent intent = getIntent();
+                HistoryRequest historyRequest = new HistoryRequest(intent.getStringExtra("userID"), responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RoomType.this);
+                queue.add(historyRequest);
             }
         });
     }

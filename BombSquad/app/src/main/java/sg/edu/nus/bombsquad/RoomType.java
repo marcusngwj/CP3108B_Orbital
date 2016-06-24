@@ -13,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,16 +80,19 @@ public class RoomType extends AppCompatActivity {
 
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
+                            boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
+                            //System.out.println(jsonResponse);
+                            //System.out.println(jsonResponse.getJSONObject("0"));
 
                             if(success){
-                                String room_id = jsonResponse.getString("room_id");
+                                /*String room_id = jsonResponse.getString("room_id");
                                 String room_name = jsonResponse.getString("room_name");
-                                String userID = jsonResponse.getString("user_id");
+                                String userID = jsonResponse.getString("user_id");*/
                                 Intent intentHistory = new Intent(RoomType.this, History.class);
-                                intentHistory.putExtra("room_id", room_id);
+                                intentHistory.putExtra("room", jsonResponse.toString());
+                                /*intentHistory.putExtra("room_id", room_id);
                                 intentHistory.putExtra("room_name", room_name);
-                                intentHistory.putExtra("userID", userID);
+                                intentHistory.putExtra("userID", userID);*/
                                 RoomType.this.startActivity(intentHistory);
                             }
                             else {

@@ -82,12 +82,5 @@ public class CreateRoom extends AppCompatActivity {
             }
         });
     }
-
-    public String getRoomName(){
-        return roomName;
-    }
-
-    public int getRoomCode(){
-        return generatedCode;
-    }
+    
 }

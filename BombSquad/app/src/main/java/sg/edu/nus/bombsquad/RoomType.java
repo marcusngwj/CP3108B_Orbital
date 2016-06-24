@@ -20,18 +20,21 @@ public class RoomType extends AppCompatActivity {
         final TextView etTestLastName = (TextView)findViewById(R.id.etTestLastName);
 
         Intent intent = getIntent();
-        String first_name = intent.getStringExtra("first_name");
-        String last_name = intent.getStringExtra("last_name");
+        final String first_name = intent.getStringExtra("first_name");
+        final String last_name = intent.getStringExtra("last_name");
+        final String userID = intent.getStringExtra("userID");
+        final TextView eTestId = (TextView)findViewById(R.id.eTestId);
+        eTestId.setText(userID);
         etTestFirstName.setText(first_name);
         etTestLastName.setText(last_name);
 
-        createRoom();
+        createRoom(userID);
         enterRoom();
         history();
     }
 
     //Create Room button
-    private void createRoom(){
+    private void createRoom(String userID){
         bCreateRoom=(Button)findViewById(R.id.buttonCreateRoom);
         bCreateRoom.setOnClickListener(new View.OnClickListener() {
             @Override

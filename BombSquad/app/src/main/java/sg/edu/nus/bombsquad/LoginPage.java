@@ -68,10 +68,12 @@ public class LoginPage extends AppCompatActivity {
                             if(success){
                                 String first_name = jsonResponse.getString("first_name");
                                 String last_name = jsonResponse.getString("last_name");
+                                String userID = jsonResponse.getString("userID");
 
                                 Intent intent = new Intent(LoginPage.this, RoomType.class);
                                 intent.putExtra("first_name", first_name);
                                 intent.putExtra("last_name", last_name);
+                                intent.putExtra("userID", userID);
 
                                 LoginPage.this.startActivity(intent);
                             }
@@ -80,7 +82,7 @@ public class LoginPage extends AppCompatActivity {
                                 builder.setMessage("Login Failed")
                                         .setNegativeButton("Retry", null)
                                         .create()
-                                        .show();
+                                         .show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

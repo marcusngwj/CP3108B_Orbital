@@ -120,7 +120,6 @@ public class RegisterPage extends AppCompatActivity {
                     editPassConfirm.setText("");
                     success[4] = false;
                 }
-
                 if(success[0] && success[1] && success[2] && success[3] && success[4]) {
                     RegisterRequest registerRequest = new RegisterRequest(first_name, last_name, email, mobile_no, username, password, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterPage.this);

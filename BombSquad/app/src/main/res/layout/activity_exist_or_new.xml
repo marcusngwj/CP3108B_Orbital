@@ -35,4 +35,6 @@
         android:background="@drawable/white_border"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
+
+
 </RelativeLayout>

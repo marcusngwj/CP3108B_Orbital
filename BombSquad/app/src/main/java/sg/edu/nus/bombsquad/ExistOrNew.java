@@ -16,11 +16,15 @@ public class ExistOrNew extends AppCompatActivity {
         final Button bExistingBomb = (Button) findViewById(R.id.buttonExistingBomb);
         final Button bNewBomb = (Button) findViewById(R.id.buttonNewBomb);
 
+        Intent intent = getIntent();
+        final String roomCode = intent.getStringExtra("roomCode");
+
         //Button: New Bomb
         bNewBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ExistOrNew.this, NewBomb.class);
+                intent.putExtra("roomCode", roomCode);
                 ExistOrNew.this.startActivity(intent);
             }
         });

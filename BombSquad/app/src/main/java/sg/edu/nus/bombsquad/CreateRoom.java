@@ -57,6 +57,7 @@ public class CreateRoom extends AppCompatActivity {
             public void onClick(View v) {
                 editRoomName = (EditText) findViewById(R.id.editTextRoomName);
                 roomName = editRoomName.getText().toString();
+                final String roomCodeString = roomCode+"";
                 Intent intent = getIntent();
                 final String userID = intent.getStringExtra("userID");
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -71,6 +72,7 @@ public class CreateRoom extends AppCompatActivity {
                         } else {
                             Intent intent = new Intent(CreateRoom.this, ExistOrNew.class);
                             intent.putExtra("userID", userID);
+                            intent.putExtra("roomCode", roomCodeString);
                             startActivity(intent);
                         }
                     }

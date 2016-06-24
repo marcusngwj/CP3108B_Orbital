@@ -11,9 +11,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
-/*import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import org.json.JSONException;
-import org.json.JSONObject;*/
+import org.json.JSONObject;
 
 public class RegisterPage extends AppCompatActivity {
 
@@ -39,35 +39,36 @@ public class RegisterPage extends AppCompatActivity {
                 String last_name = editLastName.getText().toString();
                 final String email = editEmail.getText().toString();
                 final String mobile_no = editMobileNo.getText().toString();
-                final String username = editUser.getText().toString();
+                String username = editUser.getText().toString();
                 final String password = editPass.getText().toString();
                 final String passConfirm = editPassConfirm.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        /*
+                        boolean success = true;   //To go around JSON loophole
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
+                            boolean userexist = jsonResponse.getBoolean("userexist");
 
-                            if (success) {
-                                Intent intent = new Intent(RegisterPage.this, LoginPage.class);
-                                RegisterPage.this.startActivity(intent);
-                            } else {
+                            if (userexist) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPage.this);
-                                builder.setMessage("Register Failed")
+                                builder.setMessage("User Exist")
                                         .setNegativeButton("Retry", null)
                                         .create()
                                         .show();
+                                editUser.setText("");
+                                success = false;
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        */
 
-                        Intent intent = new Intent(RegisterPage.this, LoginPage.class);
-                        RegisterPage.this.startActivity(intent);
+                        if(success) {
+                            Intent intent = new Intent(RegisterPage.this, LoginPage.class);
+                            RegisterPage.this.startActivity(intent);
+                        }
                     }
                 };
 

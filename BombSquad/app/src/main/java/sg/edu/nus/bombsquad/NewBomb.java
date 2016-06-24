@@ -18,6 +18,9 @@ public class NewBomb extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_bomb);
 
+        Intent intent = getIntent();
+        final String roomCode = intent.getStringExtra("roomCode");
+
         final EditText etBombName = (EditText) findViewById(R.id.editTextBombName);
         final Spinner spinner = (Spinner) findViewById(R.id.spinnerQuestionType);
 

@@ -1,5 +1,6 @@
 package sg.edu.nus.bombsquad;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -63,6 +64,61 @@ public class NewBomb extends AppCompatActivity {
                 String pointsDeducted = etPointsDeducted.getText().toString();
                 String numPass = etNumPass.getText().toString();
                 String choice = spinner.getSelectedItem().toString();
+
+                boolean[] success = {false, false, false, false, false, false};
+
+                //Bomb Name vrification
+                if(bombName.isEmpty()){
+                    etBombName.setError("Field cannot be empty");
+                }
+                else{
+                    success[0] = true;
+                }
+
+                //Question verification
+                if(question.isEmpty()){
+                    etQuestion.setError("Field cannot be empty");
+                }
+                else{
+                    success[1] = true;
+                }
+
+                //Time Limit Verification
+                if(timeLimit.isEmpty()){
+                    etTimeLimit.setError("Field cannot be empty");
+                }
+                else{
+                    success[2] = true;
+                }
+
+                //Points Awarded Verification
+                if(pointsAwarded.isEmpty()){
+                    etPointsAwarded.setError("Field cannot be empty");
+                }
+                else{
+                    success[3] = true;
+                }
+
+                //Points Deducted Verification
+                if(pointsDeducted.isEmpty()){
+                    etPointsDeducted.setError("Field cannot be empty");
+                }
+                else{
+                    success[4] = true;
+                }
+
+                //Number of Passes Verification
+                if(numPass.isEmpty()){
+                    etNumPass.setError("Field cannot be empty");
+                }
+                else{
+                    success[5] = true;
+                }
+
+                if(success[0] && success[1] &&success[2] && success[3] && success[4] && success[5]) {
+                    Intent intent = new Intent(NewBomb.this, ExistOrNew.class);
+                    NewBomb.this.startActivity(intent);
+                }
             }
 
         });

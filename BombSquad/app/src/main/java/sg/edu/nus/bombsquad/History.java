@@ -39,13 +39,6 @@ public class History extends AppCompatActivity {
                 ll.addView(myButton, lp);
                 i++;
             }
-            /*
-            for (int i = 0; i < 40; i++) { //need to change to while loop to check if user had any room before not
-                Button myButton = new Button(this);
-                myButton.setText(room_name); //need to think how to pull from database
-                myButton.setId(i); //pull from database
-                ll.addView(myButton, lp);
-            }*/
         }
         catch (JSONException e) {
             e.printStackTrace();

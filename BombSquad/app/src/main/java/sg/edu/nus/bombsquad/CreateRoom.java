@@ -76,7 +76,7 @@ public class CreateRoom extends AppCompatActivity {
                     }
 
                 };
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(userID, roomName, responseListener);
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(userID, roomName, generatedCode + "", responseListener);
                 RequestQueue queue = Volley.newRequestQueue(CreateRoom.this);
                 queue.add(createRoomRequest);
             }

@@ -89,7 +89,6 @@ public class LoginPage extends AppCompatActivity {
                         }
                     }
                 };
-
                 LoginRequest loginRequest = new LoginRequest(username, password, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginPage.this);
                 queue.add(loginRequest);

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Bomb Squad</string>
+
+    <string-array name="question_type">
+        <item>Multiple Choice</item>
+        <item>Short Answer</item>
+        <item>Long Answer</item>
+    </string-array>
 </resources>

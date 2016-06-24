@@ -29,6 +29,7 @@
             android:layout_alignParentStart="true"
             android:textAlignment="center" />
 
+
         <!--Bomb Name-->
         <TextView
             android:layout_width="wrap_content"
@@ -43,10 +44,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/editTextBombName"
             android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:layout_below="@+id/textViewBombName"
             android:layout_alignParentStart="true"
             android:background="#FFFFFF"
             android:layout_alignParentEnd="true" />
+
 
         <!--Question Type-->
         <TextView
@@ -59,13 +63,207 @@
             android:layout_below="@+id/editTextBombName" />
 
         <Spinner
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerQuestionType"
+            android:entries="@array/question_type"
+            android:dropDownWidth="match_parent"
             android:layout_marginTop = "2dp"
             android:layout_below="@+id/textViewQuestionType"
             android:layout_alignParentStart="true"
             android:background="#FFFFFF" />
+
+
+        <!--Question-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Question"
+            android:id="@+id/textViewQuestion"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/spinnerQuestionType" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextQuestion"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/textViewQuestion"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true" />
+
+
+        <!--Answer-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Answer"
+            android:id="@+id/textViewAnswer"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/editTextQuestion" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayoutAnswer"
+            android:layout_below="@+id/textViewAnswer">
+
+            <!--MCQ-->
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioGroupMCQ"
+                android:layout_alignParentStart="true">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/option1" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/option2" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/option3" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/option4" />
+            </RadioGroup>
+
+            <!--Short Answer / Long Answer-->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextShortLongAnswer"
+                android:layout_marginTop = "2dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_alignParentStart="true"
+                android:background="#FFFFFF"
+                android:layout_alignParentEnd="true" />
+        </LinearLayout>
+
+        <!--Time Limit (in seconds)-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Time Limit (in seconds)"
+            android:id="@+id/textViewTimeLimit"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/linearLayoutAnswer" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/editTextTimeLimit"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/textViewTimeLimit"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true" />
+
+
+        <!--Points Awarded when defused-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Points Awarded when defused"
+            android:id="@+id/textViewPointsAwarded"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/editTextTimeLimit" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/editTextPointsAwarded"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/textViewPointsAwarded"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true" />
+
+
+        <!--Points Deducted when explode-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Points Deducted when exploded"
+            android:id="@+id/textViewPointsDeducted"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/editTextPointsAwarded" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/editTextPointsDeducted"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/textViewPointsDeducted"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true" />
+
+
+        <!--Number of passes-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Number of Passes"
+            android:id="@+id/textViewNumPass"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/editTextPointsDeducted" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/editTextNumPass"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/textViewNumPass"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true" />
+
+
+        <!--Create Bomb-->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop = "15dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:id="@+id/buttonCreateBomb"
+            android:text="Create Bomb"
+            android:layout_below="@+id/editTextNumPass"
+            android:background="@drawable/red_border"
+            android:textColor="#FFFFFF" />
+
 
     </RelativeLayout>
 </ScrollView>

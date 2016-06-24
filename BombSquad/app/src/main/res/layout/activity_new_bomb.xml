@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="sg.edu.nus.bombsquad.NewBomb"
+    android:background="#44546A"
+    android:fillViewport="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--New Bomb (Title)-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="New Bomb"
+            android:id="@+id/newBomb"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/abc_primary_text_disable_only_material_dark"
+            android:textSize="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:textAlignment="center" />
+
+        <!--Bomb Name-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Bomb Name"
+            android:id="@+id/textViewBombName"
+            android:layout_below="@+id/newBomb" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextBombName"
+            android:layout_marginTop = "2dp"
+            android:layout_below="@+id/textViewBombName"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true" />
+
+        <!--Question Type-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Question Type"
+            android:id="@+id/textViewQuestionType"
+            android:layout_marginTop = "10dp"
+            android:layout_below="@+id/editTextBombName" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerQuestionType"
+            android:layout_marginTop = "2dp"
+            android:layout_below="@+id/textViewQuestionType"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF" />
+
+    </RelativeLayout>
+</ScrollView>

@@ -23,8 +23,8 @@ public class RoomType extends AppCompatActivity {
         final String first_name = intent.getStringExtra("first_name");
         final String last_name = intent.getStringExtra("last_name");
         final String userID = intent.getStringExtra("userID");
-        final TextView eTestId = (TextView)findViewById(R.id.eTestId);
-        eTestId.setText(userID);
+        final TextView eTestId = (TextView)findViewById(R.id.eTestId); //test
+        eTestId.setText(userID); //test
         etTestFirstName.setText(first_name);
         etTestLastName.setText(last_name);
 
@@ -35,11 +35,13 @@ public class RoomType extends AppCompatActivity {
 
     //Create Room button
     private void createRoom(String userID){
+        final String _userID = userID;
         bCreateRoom=(Button)findViewById(R.id.buttonCreateRoom);
         bCreateRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentCreate = new Intent(v.getContext(), CreateRoom.class);
+                intentCreate.putExtra("userID", _userID);
                 startActivity(intentCreate);
             }
         });
@@ -57,7 +59,7 @@ public class RoomType extends AppCompatActivity {
         });
     }
 
-    //Enter Histroy
+    //Enter History
     private void history() {
         bHistory = (Button)findViewById(R.id.buttonHistory);
         bHistory.setOnClickListener(new View.OnClickListener() {

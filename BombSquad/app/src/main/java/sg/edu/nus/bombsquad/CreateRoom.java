@@ -52,27 +52,35 @@ public class CreateRoom extends AppCompatActivity {
 
     private void setUpRoom(){
         bSetUp=(Button)findViewById(R.id.buttonSetUp);
-        bSetUp.setOnClickListener(new View.OnClickListener(){
+        bSetUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                editRoomName = (EditText)findViewById(R.id.editTextRoomName);
+            public void onClick(View v) {
+                editRoomName = (EditText) findViewById(R.id.editTextRoomName);
                 roomName = editRoomName.getText().toString();
-
-                        if(TextUtils.isEmpty(roomName)){
+                Intent intent = getIntent();
+                final String userID = intent.getStringExtra("userID");
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (TextUtils.isEmpty(roomName)) {
                             editRoomName.setError("Input Room Name");
-                        }
-                        else if(roomName.length()>20){
+                        } else if (roomName.length() > 20) {
                             editRoomName.setError("Name must be less than 20 characters");
-                        }
-                        else if(bGenerateClicked==false){
-                            Toast.makeText(getApplicationContext(), "Please Generate Code",Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Intent intent = new Intent(v.getContext(), ExistOrNew.class);
+                        } else if (bGenerateClicked == false) {
+                            Toast.makeText(getApplicationContext(), "Please Generate Code", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(CreateRoom.this, ExistOrNew.class);
+                            intent.putExtra("userID", userID);
                             startActivity(intent);
                         }
-                }
-            });
+                    }
+
+                };
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(userID, roomName, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(CreateRoom.this);
+                queue.add(createRoomRequest);
+            }
+        });
     }
 
     public String getRoomName(){

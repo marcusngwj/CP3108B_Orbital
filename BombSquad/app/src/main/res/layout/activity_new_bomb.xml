@@ -178,6 +178,7 @@
             android:layout_below="@+id/textViewTimeLimit"
             android:layout_alignParentStart="true"
             android:background="#FFFFFF"
+            android:digits="0123456789"
             android:layout_alignParentEnd="true" />
 
 
@@ -201,6 +202,7 @@
             android:layout_below="@+id/textViewPointsAwarded"
             android:layout_alignParentStart="true"
             android:background="#FFFFFF"
+            android:digits="0123456789"
             android:layout_alignParentEnd="true" />
 
 
@@ -224,6 +226,7 @@
             android:layout_below="@+id/textViewPointsDeducted"
             android:layout_alignParentStart="true"
             android:background="#FFFFFF"
+            android:digits="0123456789"
             android:layout_alignParentEnd="true" />
 
 
@@ -247,6 +250,7 @@
             android:layout_below="@+id/textViewNumPass"
             android:layout_alignParentStart="true"
             android:background="#FFFFFF"
+            android:digits="0123456789"
             android:layout_alignParentEnd="true" />
 
 

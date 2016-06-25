@@ -84,70 +84,52 @@
             android:layout_marginTop = "10dp"
             android:layout_below="@+id/spinnerQuestionType" />
 
-        <LinearLayout
+        <!--Question-->
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextQuestion"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/textViewQuestion" />
+
+        <!--Question - MCQ Options-->
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/linearLayoutQuestion"
-            android:layout_below="@+id/textViewQuestion">
+            android:layout_height="wrap_content"
+            android:layout_marginTop = "2dp"
+            android:id="@+id/radioGroupMCQ"
+            android:background="#ffffff"
+            android:layout_below="@+id/editTextQuestion">
 
-            <RadioGroup
-                android:layout_width="match_parent"
+            <RadioButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop = "2dp"
-                android:id="@+id/radioGroupMCQ"
-                android:background="#ffffff">
+                android:text=""
+                android:id="@+id/radioButtonMCQOption1" />
 
-                <!--Question-->
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editTextQuestion"
-                    android:layout_marginTop = "2dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:layout_alignParentStart="true"
-                    android:background="#FFFFFF"
-                    android:layout_alignParentEnd="true" />
-
-                <!--Question - MCQ Options-->
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/radioButtonMCQOption1" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/radioButtonMCQOption2" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/radioButtonMCQOption3" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/radioButtonMCQOption4" />
-            </RadioGroup>
-
-            <!--Short / Long Answer Question-->
-            <EditText
-                android:layout_width="match_parent"
+            <RadioButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editTextShortLongAnswerQuestion"
-                android:layout_marginTop = "2dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:layout_alignParentStart="true"
-                android:background="#FFFFFF"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/textViewQuestion"/>
-        </LinearLayout>
+                android:text=""
+                android:id="@+id/radioButtonMCQOption2" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/radioButtonMCQOption3" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/radioButtonMCQOption4" />
+        </RadioGroup>
 
 
         <!--Answer-->
@@ -158,7 +140,7 @@
             android:text="Answer"
             android:id="@+id/textViewAnswer"
             android:layout_marginTop = "10dp"
-            android:layout_below="@+id/linearLayoutQuestion" />
+            android:layout_below="@+id/radioGroupMCQ" />
 
         <EditText
             android:layout_width="match_parent"

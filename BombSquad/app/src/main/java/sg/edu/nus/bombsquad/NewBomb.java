@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -21,13 +22,26 @@ public class NewBomb extends AppCompatActivity {
         Intent intent = getIntent();
         final String roomCode = intent.getStringExtra("roomCode");
 
+        //Bomb Name
         final EditText etBombName = (EditText) findViewById(R.id.editTextBombName);
+
+        //Question Type
         final Spinner spinner = (Spinner) findViewById(R.id.spinnerQuestionType);
 
         final EditText etQuestion = (EditText) findViewById(R.id.editTextQuestion);
 
+        //MCQ
         final RadioGroup rgMCQ = (RadioGroup) findViewById(R.id.radioGroupMCQ);
-        final EditText etShortLongAnswer = (EditText) findViewById(R.id.editTextShortLongAnswer);
+        final RadioButton rbMCQOption1 = (RadioButton) findViewById(R.id.radioButtonMCQOption1);
+        final RadioButton rbMCQOption2 = (RadioButton) findViewById(R.id.radioButtonMCQOption2);
+        final RadioButton rbMCQOption3 = (RadioButton) findViewById(R.id.radioButtonMCQOption3);
+        final RadioButton rbMCQOption4 = (RadioButton) findViewById(R.id.radioButtonMCQOption4);
+
+        //Short-or-Long Answer Question
+        final EditText etShortLongAnswerQuestion = (EditText) findViewById(R.id.editTextShortLongAnswerQuestion);
+
+        //Answer
+        final EditText etAnswer = (EditText) findViewById(R.id.editTextAnswer);
 
         final EditText etTimeLimit = (EditText) findViewById(R.id.editTextTimeLimit);
         final EditText etPointsAwarded = (EditText) findViewById(R.id.editTextPointsAwarded);
@@ -44,10 +58,10 @@ public class NewBomb extends AppCompatActivity {
                 String spinnerString = parent.getItemAtPosition(position).toString();
                 if (spinnerString.equals("Multiple Choice")) {
                     rgMCQ.setVisibility(View.VISIBLE);
-                    etShortLongAnswer.setVisibility(View.GONE);
+                    etQuestion.setVisibility(View.VISIBLE);
                 } else {
-                    etShortLongAnswer.setVisibility(View.VISIBLE);
                     rgMCQ.setVisibility(View.GONE);
+                    etQuestion.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -61,64 +75,86 @@ public class NewBomb extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String bombName = etBombName.getText().toString();
+                String questionType = spinner.getSelectedItem().toString();
+
                 String question = etQuestion.getText().toString();
+                //Need to get text from radio button options
+
+                String answer = etAnswer.getText().toString();
                 String timeLimit = etTimeLimit.getText().toString();
                 String pointsAwarded = etPointsAwarded.getText().toString();
                 String pointsDeducted = etPointsDeducted.getText().toString();
                 String numPass = etNumPass.getText().toString();
                 String choice = spinner.getSelectedItem().toString();
 
-                boolean[] success = {false, false, false, false, false, false};
+                boolean[] success = {false, false, false, false, false, false, false};
 
-                //Bomb Name vrification
+                //Bomb Name verification
                 if(bombName.isEmpty()){
                     etBombName.setError("Field cannot be empty");
+                    success[0] = false;
                 }
                 else{
                     success[0] = true;
                 }
 
                 //Question verification
-                if(question.isEmpty()){
-                    etQuestion.setError("Field cannot be empty");
-                }
-                else{
-                    success[1] = true;
+                if(questionType.equals("Multiple Choice")){
+                    if(question.isEmpty()){
+                        etQuestion.setError("Field cannot be empty");
+                        success[1] = false;
+                    }
+                    else{
+                        success[1] = true;
+                    }
                 }
 
-                //Time Limit Verification
-                if(timeLimit.isEmpty()){
-                    etTimeLimit.setError("Field cannot be empty");
+                //Answer Verification
+                if(answer.isEmpty()){
+                    etAnswer.setError("Field cannot be empty");
+                    success[2] = false;
                 }
                 else{
                     success[2] = true;
                 }
 
-                //Points Awarded Verification
-                if(pointsAwarded.isEmpty()){
-                    etPointsAwarded.setError("Field cannot be empty");
+                //Time Limit Verification
+                if(timeLimit.isEmpty()){
+                    etTimeLimit.setError("Field cannot be empty");
+                    success[3] = false;
                 }
                 else{
                     success[3] = true;
                 }
 
-                //Points Deducted Verification
-                if(pointsDeducted.isEmpty()){
-                    etPointsDeducted.setError("Field cannot be empty");
+                //Points Awarded Verification
+                if(pointsAwarded.isEmpty()){
+                    etPointsAwarded.setError("Field cannot be empty");
+                    success[4] = false;
                 }
                 else{
                     success[4] = true;
                 }
 
-                //Number of Passes Verification
-                if(numPass.isEmpty()){
-                    etNumPass.setError("Field cannot be empty");
+                //Points Deducted Verification
+                if(pointsDeducted.isEmpty()){
+                    etPointsDeducted.setError("Field cannot be empty");
+                    success[5] = false;
                 }
                 else{
                     success[5] = true;
                 }
 
-                if(success[0] && success[1] &&success[2] && success[3] && success[4] && success[5]) {
+                //Number of Passes Verification
+                if(numPass.isEmpty()){
+                    etNumPass.setError("Field cannot be empty");
+                    success[6] = false;
+                }
+                else{
+                    success[6] = true;
+                }
+
+                if(success[0] && success[1] &&success[2] && success[3] && success[4] && success[5] && success[6]) {
                     Intent intent = new Intent(NewBomb.this, ExistOrNew.class);
                     NewBomb.this.startActivity(intent);
                 }

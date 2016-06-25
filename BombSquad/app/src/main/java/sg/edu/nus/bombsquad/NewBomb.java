@@ -36,6 +36,10 @@ public class NewBomb extends AppCompatActivity {
         final RadioButton rbMCQOption2 = (RadioButton) findViewById(R.id.radioButtonMCQOption2);
         final RadioButton rbMCQOption3 = (RadioButton) findViewById(R.id.radioButtonMCQOption3);
         final RadioButton rbMCQOption4 = (RadioButton) findViewById(R.id.radioButtonMCQOption4);
+        final EditText etMCQOption1 = (EditText) findViewById(R.id.editTextMCQOption1);
+        final EditText etMCQOption2 = (EditText) findViewById(R.id.editTextMCQOption2);
+        final EditText etMCQOption3 = (EditText) findViewById(R.id.editTextMCQOption3);
+        final EditText etMCQOption4 = (EditText) findViewById(R.id.editTextMCQOption4);
 
         //Answer
         final EditText etAnswer = (EditText) findViewById(R.id.editTextAnswer);
@@ -71,39 +75,69 @@ public class NewBomb extends AppCompatActivity {
         bCreateBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                assert etBombName != null;
                 String bombName = etBombName.getText().toString();
                 String questionType = spinner.getSelectedItem().toString();
 
+                assert etQuestion != null;
                 String question = etQuestion.getText().toString();
+                assert etMCQOption1 != null;
+                String option1 = etMCQOption1.getText().toString();
+                assert etMCQOption2 != null;
+                String option2 = etMCQOption2.getText().toString();
+                assert etMCQOption3 != null;
+                String option3 = etMCQOption3.getText().toString();
+                assert etMCQOption4 != null;
+                String option4 = etMCQOption4.getText().toString();
 
-                //Need to get text from radio button options
-
+                assert etAnswer != null;
                 String answer = etAnswer.getText().toString();
+                assert etTimeLimit != null;
                 String timeLimit = etTimeLimit.getText().toString();
+                assert etPointsAwarded != null;
                 String pointsAwarded = etPointsAwarded.getText().toString();
+                assert etPointsDeducted != null;
                 String pointsDeducted = etPointsDeducted.getText().toString();
+                assert etNumPass != null;
                 String numPass = etNumPass.getText().toString();
-                String choice = spinner.getSelectedItem().toString();
 
-                boolean[] success = {false, false, false, false, false, false, false};
+                boolean[] success = {true, true, true, true, true, true, true};
 
                 //Bomb Name verification
                 if(bombName.isEmpty()){
                     etBombName.setError("Field cannot be empty");
                     success[0] = false;
                 }
-                else{
-                    success[0] = true;
-                }
 
                 //Question verification
+                if(question.isEmpty()){
+                    etQuestion.setError("Field cannot be empty");
+                    success[1] = false;
+                }
+
                 if(questionType.equals("Multiple Choice")){
-                    if(question.isEmpty()){
-                        etQuestion.setError("Field cannot be empty");
+                    //Option1 Verification
+                    if(option1.isEmpty()){
+                        etMCQOption1.setError("Field cannot be empty");
                         success[1] = false;
                     }
-                    else{
-                        success[1] = true;
+
+                    //Option2 Verification
+                    if(option2.isEmpty()){
+                        etMCQOption2.setError("Field cannot be empty");
+                        success[1] = false;
+                    }
+
+                    //Option3 Verification
+                    if(option3.isEmpty()){
+                        etMCQOption3.setError("Field cannot be empty");
+                        success[1] = false;
+                    }
+
+                    //Option4 Verification
+                    if(option4.isEmpty()){
+                        etMCQOption4.setError("Field cannot be empty");
+                        success[1] = false;
                     }
                 }
 
@@ -113,16 +147,18 @@ public class NewBomb extends AppCompatActivity {
                     success[2] = false;
                 }
                 else{
-                    success[2] = true;
+                    if(questionType.equals("Multiple Choice") && !answer.equals(option1) && !answer.equals(option2) && !answer.equals(option3) && !answer.equals(option4))
+                    {
+                        etAnswer.setError("Answer muut be in one of the options");
+                        etAnswer.setText("");
+                        success[2] = false;
+                    }
                 }
-
+                
                 //Time Limit Verification
                 if(timeLimit.isEmpty()){
                     etTimeLimit.setError("Field cannot be empty");
                     success[3] = false;
-                }
-                else{
-                    success[3] = true;
                 }
 
                 //Points Awarded Verification
@@ -130,26 +166,17 @@ public class NewBomb extends AppCompatActivity {
                     etPointsAwarded.setError("Field cannot be empty");
                     success[4] = false;
                 }
-                else{
-                    success[4] = true;
-                }
 
                 //Points Deducted Verification
                 if(pointsDeducted.isEmpty()){
                     etPointsDeducted.setError("Field cannot be empty");
                     success[5] = false;
                 }
-                else{
-                    success[5] = true;
-                }
 
                 //Number of Passes Verification
                 if(numPass.isEmpty()){
                     etNumPass.setError("Field cannot be empty");
                     success[6] = false;
-                }
-                else{
-                    success[6] = true;
                 }
 
                 if(success[0] && success[1] &&success[2] && success[3] && success[4] && success[5] && success[6]) {

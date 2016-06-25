@@ -95,7 +95,10 @@ public class RoomType extends AppCompatActivity {
                                         .show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RoomType.this);
+                            builder.setMessage("No history found")
+                                    .create()
+                                    .show();
                         }
                     }
                 };

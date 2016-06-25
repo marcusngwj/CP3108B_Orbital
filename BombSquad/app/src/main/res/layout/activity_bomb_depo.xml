@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#44546A"
-    android:id = "@+id/history_layout">
+    android:id = "@+id/bombDepo_layout">
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +29,8 @@
         android:layout_below="@+id/bombdepo"
         android:layout_toEndOf="@+id/checkBox2"
         android:layout_marginStart="76dp"
-        android:layout_marginTop="33dp" />
+        android:layout_marginTop="33dp"
+        android:contextClickable="false" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -50,11 +51,18 @@
         android:id="@+id/scrollView"
         android:layout_below="@+id/checkBox"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp" />
+        android:layout_marginTop="29dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/scrollView"
+            android:id="@+id/bombDepoScroll"
+            android:layout_centerHorizontal="true">
+        </LinearLayout>
 
 
-
-
+    </ScrollView>
 
 
 </RelativeLayout>

@@ -84,17 +84,70 @@
             android:layout_marginTop = "10dp"
             android:layout_below="@+id/spinnerQuestionType" />
 
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editTextQuestion"
-            android:layout_marginTop = "2dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:layout_below="@+id/textViewQuestion"
-            android:layout_alignParentStart="true"
-            android:background="#FFFFFF"
-            android:layout_alignParentEnd="true" />
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayoutQuestion"
+            android:layout_below="@+id/textViewQuestion">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop = "2dp"
+                android:id="@+id/radioGroupMCQ"
+                android:background="#ffffff">
+
+                <!--Question-->
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTextQuestion"
+                    android:layout_marginTop = "2dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:layout_alignParentStart="true"
+                    android:background="#FFFFFF"
+                    android:layout_alignParentEnd="true" />
+
+                <!--Question - MCQ Options-->
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/radioButtonMCQOption1" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/radioButtonMCQOption2" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/radioButtonMCQOption3" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/radioButtonMCQOption4" />
+            </RadioGroup>
+
+            <!--Short / Long Answer Question-->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextShortLongAnswerQuestion"
+                android:layout_marginTop = "2dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_alignParentStart="true"
+                android:background="#FFFFFF"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/textViewQuestion"/>
+        </LinearLayout>
 
 
         <!--Answer-->
@@ -105,58 +158,20 @@
             android:text="Answer"
             android:id="@+id/textViewAnswer"
             android:layout_marginTop = "10dp"
-            android:layout_below="@+id/editTextQuestion" />
+            android:layout_below="@+id/linearLayoutQuestion" />
 
-        <LinearLayout
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/linearLayoutAnswer"
-            android:layout_below="@+id/textViewAnswer">
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextAnswer"
+            android:layout_marginTop = "2dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_alignParentStart="true"
+            android:background="#FFFFFF"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/textViewAnswer"/>
 
-            <!--MCQ-->
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/radioGroupMCQ"
-                android:layout_alignParentStart="true">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/option1" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/option2" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/option3" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:id="@+id/option4" />
-            </RadioGroup>
-
-            <!--Short Answer / Long Answer-->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editTextShortLongAnswer"
-                android:layout_marginTop = "2dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:layout_alignParentStart="true"
-                android:background="#FFFFFF"
-                android:layout_alignParentEnd="true" />
-        </LinearLayout>
 
         <!--Time Limit (in seconds)-->
         <TextView
@@ -166,7 +181,7 @@
             android:text="Time Limit (in seconds)"
             android:id="@+id/textViewTimeLimit"
             android:layout_marginTop = "10dp"
-            android:layout_below="@+id/linearLayoutAnswer" />
+            android:layout_below="@+id/editTextAnswer" />
 
         <EditText
             android:layout_width="match_parent"

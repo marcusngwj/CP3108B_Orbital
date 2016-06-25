@@ -17,6 +17,7 @@ public class ExistOrNew extends AppCompatActivity {
         final Button bNewBomb = (Button) findViewById(R.id.buttonNewBomb);
 
         Intent intent = getIntent();
+        final String userID = intent.getStringExtra("userID");
         final String roomCode = intent.getStringExtra("roomCode");
 
         //Button: New Bomb
@@ -24,6 +25,7 @@ public class ExistOrNew extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ExistOrNew.this, NewBomb.class);
+                intent.putExtra("userID", userID);
                 intent.putExtra("roomCode", roomCode);
                 ExistOrNew.this.startActivity(intent);
             }

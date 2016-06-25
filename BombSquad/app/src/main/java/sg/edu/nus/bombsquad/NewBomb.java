@@ -1,6 +1,7 @@
 package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NewBomb extends AppCompatActivity {
 
     @Override
@@ -20,6 +28,7 @@ public class NewBomb extends AppCompatActivity {
         setContentView(R.layout.activity_new_bomb);
 
         Intent intent = getIntent();
+        final String userID = intent.getStringExtra("userID");
         final String roomCode = intent.getStringExtra("roomCode");
 
         //Bomb Name
@@ -101,6 +110,16 @@ public class NewBomb extends AppCompatActivity {
                 assert etNumPass != null;
                 String numPass = etNumPass.getText().toString();
 
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Intent intent = new Intent(NewBomb.this, ExistOrNew.class);
+                        intent.putExtra("userID", userID);
+                        
+                        NewBomb.this.startActivity(intent);
+                    }
+                };
+
                 boolean[] success = {true, true, true, true, true, true, true};
 
                 //Bomb Name verification
@@ -180,8 +199,9 @@ public class NewBomb extends AppCompatActivity {
                 }
 
                 if(success[0] && success[1] &&success[2] && success[3] && success[4] && success[5] && success[6]) {
-                    Intent intent = new Intent(NewBomb.this, ExistOrNew.class);
-                    NewBomb.this.startActivity(intent);
+                    NewBombRequest newBombRequest = new NewBombRequest(bombName, questionType, question, option1, option2, option3, option4, answer, timeLimit, pointsAwarded, pointsDeducted, numPass, userID, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(NewBomb.this);
+                    queue.add(newBombRequest);
                 }
             }
 

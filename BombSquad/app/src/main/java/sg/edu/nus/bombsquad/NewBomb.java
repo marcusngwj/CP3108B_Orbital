@@ -37,9 +37,6 @@ public class NewBomb extends AppCompatActivity {
         final RadioButton rbMCQOption3 = (RadioButton) findViewById(R.id.radioButtonMCQOption3);
         final RadioButton rbMCQOption4 = (RadioButton) findViewById(R.id.radioButtonMCQOption4);
 
-        //Short-or-Long Answer Question
-        final EditText etShortLongAnswerQuestion = (EditText) findViewById(R.id.editTextShortLongAnswerQuestion);
-
         //Answer
         final EditText etAnswer = (EditText) findViewById(R.id.editTextAnswer);
 
@@ -57,11 +54,11 @@ public class NewBomb extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String spinnerString = parent.getItemAtPosition(position).toString();
                 if (spinnerString.equals("Multiple Choice")) {
+                    etQuestion.setVisibility(View.VISIBLE);
                     rgMCQ.setVisibility(View.VISIBLE);
-                    etQuestion.setVisibility(View.VISIBLE);
                 } else {
-                    rgMCQ.setVisibility(View.GONE);
                     etQuestion.setVisibility(View.VISIBLE);
+                    rgMCQ.setVisibility(View.GONE);
                 }
             }
 
@@ -78,6 +75,7 @@ public class NewBomb extends AppCompatActivity {
                 String questionType = spinner.getSelectedItem().toString();
 
                 String question = etQuestion.getText().toString();
+
                 //Need to get text from radio button options
 
                 String answer = etAnswer.getText().toString();

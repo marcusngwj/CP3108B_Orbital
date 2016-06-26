@@ -15,8 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ExistOrNew extends AppCompatActivity {
-    final Button bExistingBomb = (Button) findViewById(R.id.buttonExistingBomb);
-    final Button bNewBomb = (Button) findViewById(R.id.buttonNewBomb);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +25,11 @@ public class ExistOrNew extends AppCompatActivity {
         newBomb();
 
     }
+
     //Button: Existing Bomb
     private void existingBomb() {
+        final Button bExistingBomb = (Button) findViewById(R.id.buttonExistingBomb);
+        assert bExistingBomb != null;
         bExistingBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +55,7 @@ public class ExistOrNew extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(ExistOrNew.this);
-                            builder.setMessage("No history found")
+                            builder.setMessage("No bomb found")
                                     .create()
                                     .show();
                         }
@@ -69,9 +71,11 @@ public class ExistOrNew extends AppCompatActivity {
 
     //Button: New Bomb
     private void newBomb() {
+        final Button bNewBomb = (Button) findViewById(R.id.buttonNewBomb);
         Intent intent = getIntent();
         final String userID = intent.getStringExtra("userID");
         final String roomCode = intent.getStringExtra("roomCode");
+        assert bNewBomb != null;
         bNewBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

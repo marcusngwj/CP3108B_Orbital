@@ -42,8 +42,8 @@ public class ExistOrNew extends AppCompatActivity {
                             boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
 
                             if(success){
-                                Intent intentDepo = new Intent(ExistOrNew.this, History.class);
-                                intentDepo.putExtra("depo", jsonResponse.toString());
+                                Intent intentDepo = new Intent(ExistOrNew.this, BombDepo.class);
+                                intentDepo.putExtra("bomb", jsonResponse.toString());
                                 ExistOrNew.this.startActivity(intentDepo);
                             }
                             else {

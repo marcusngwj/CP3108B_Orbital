@@ -15,41 +15,34 @@
         android:textColor="@color/abc_primary_text_disable_only_material_dark"
         android:textSize="40dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="10dp" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox"
-        android:layout_gravity="center_horizontal"
-        android:checked="false"
-        android:layout_marginRight="91dp"
-        android:scaleX="3"
-        android:scaleY="3"
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/greenTick"
+        android:maxHeight="10dp"
+        android:background="@drawable/green_tick"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="61dp"
+        android:layout_alignTop="@+id/redCross"
+        android:layout_toStartOf="@+id/redCross" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/redCross"
+        android:background="@drawable/red_cross"
         android:layout_below="@+id/bombdepo"
-        android:layout_toEndOf="@+id/checkBox2"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="33dp"
-        android:contextClickable="false" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox2"
-        android:layout_gravity="center_horizontal"
-        android:checked="false"
-        android:layout_marginRight="86dp"
-        android:scaleX="3"
-        android:scaleY="3"
-        android:layout_marginStart="81dp"
-        android:layout_alignTop="@+id/checkBox"
-        android:layout_alignStart="@+id/bombdepo" />
+        android:layout_alignEnd="@+id/bombdepo"
+        android:layout_marginEnd="76dp" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_below="@+id/checkBox"
+        android:layout_below="@+id/redCross"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp" >
 

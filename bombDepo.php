@@ -1,36 +1,38 @@
 <?php
     $con = mysqli_connect("mysql12.000webhost.com", "a6020307_squad", "orbital123", "a6020307_squad");
     
-    $bomb_name = $_POST["bomb_name"];
-	$question_type = $_POST["question_type"];
-	$question = $_POST["question"];
-	$option_one = $_POST["option_one"];
-	$option_two = $_POST["option_two"];
-	$option_three = $_POST["option_three"];
-	$option_four = $_POST["option_four"];
-	$answer = $_POST["answer"];
-	$time_limit = $_POST["time_limit"];
-	$points_awarded = $_POST["points_awarded"];
-	$points_deducted = $_POST["points_deducted"];
-	$num_pass = $_POST["num_pass"];
 	$user_id = $_POST["user_id"];
-	
-	$response = array();
-    $response["success"] = false;  
-    
-	$result = mysqli_query($con,"INSERT INTO Bomb_Depository (bomb_name, question_type, question, option_one, option_two, option_three, option_four, answer, time_limit, points_awarded, points_deducted, num_pass, user_id) 
-      VALUES ('$bomb_name', '$question_type', '$question', '$option_one', '$option_two', '$option_three', '$option_four', '$answer', '$time_limit', '$points_awarded', '$points_deducted', '$num_pass', '$user_id')");
-		  
-	if($result == true){
-		echo '{"query_result":"SUCCESS"}';
-		$response["success"] = true;
-	}
-	else{
-		echo '{"query_result":"FAILURE!!!"}';
-	}
-	
-	mysqli_close($con);
-	
-	echo json_encode($response);
 
+    $statement = mysqli_prepare($con, "SELECT * FROM Bomb_Depository WHERE user_id = ?");
+    mysqli_stmt_bind_param($statement, "s", $user_id);
+    mysqli_stmt_execute($statement);
+    
+    mysqli_stmt_store_result($statement);
+    mysqli_stmt_bind_result($statement, $question_id, $bomb_name, $question_type, $question, 
+	$option_one, $option_two, $option_three, $option_four, $answer, $time_limit, $points_awarded,
+	$points_deducted, $num_pass, $user_id);
+    
+    $response = array(array(), array());
+    $response["success"] = false;
+    $i = 0;
+    while(mysqli_stmt_fetch($statement)){
+        $response[$i]["success"] = true;
+		$response[$i]["question_id"] = $question_id;
+		$response[$i]["bomb_name"] = $bomb_name;
+		$response[$i]["question_type"] = $question_type;
+		$response[$i]["question"] = $question;
+		$response[$i]["option_one"] = $option_one;
+		$response[$i]["option_two"] = $option_two;
+		$response[$i]["option_three"] = $option_three;
+		$response[$i]["option_four"] = $option_four;
+		$response[$i]["answer"] = $answer;
+		$response[$i]["time_limit"] = $time_limit;
+		$response[$i]["points_awarded"] = $points_awarded;
+		$response[$i]["points deducted"] = $points_deducted;
+		$response[$i]["num_pass"] = $num_pass;
+		$response[$i]["user_id"] = $user_id;
+		$i++;
+    }
+    
+    echo json_encode($response);
 ?>

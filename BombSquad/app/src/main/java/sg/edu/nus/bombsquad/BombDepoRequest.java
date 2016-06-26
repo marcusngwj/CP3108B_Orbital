@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by user on 26/6/2016.
  */
 public class BombDepoRequest extends StringRequest {
-    private static final String BOMBDEPO_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombdepo.php";
+    private static final String BOMBDEPO_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDepo.php";
     private Map<String, String> params;
 
     public BombDepoRequest(String user_id, Response.Listener<String> listener) {

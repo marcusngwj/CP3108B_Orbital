@@ -2,16 +2,19 @@ package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by user on 26/6/2016.
- */
+
 public class BombDepo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,18 +27,19 @@ public class BombDepo extends AppCompatActivity {
 
         try {
             Intent intent = getIntent();
-            final String room_name = intent.getStringExtra("room_name");
-            JSONObject room = new JSONObject(intent.getStringExtra("room"));
-            System.out.println(room);
-            System.out.println(room.length());
+            final String bomb_name = intent.getStringExtra("bomb_name");
+            JSONObject bomb = new JSONObject(intent.getStringExtra("bomb"));
+            System.out.println(bomb);
+            System.out.println(bomb.length());
             LinearLayout ll = (LinearLayout) findViewById(R.id.bombDepoScroll);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             int i = 0;
-            while (i < room.length()) {
-                Button myButton = new Button(this);
-                myButton.setText(room.getJSONObject(i+"").getString("room_name"));
-                myButton.setId(i);
-                ll.addView(myButton, lp);
+            while (i < bomb.length()) {
+                CheckBox checkbox = (CheckBox)((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox,null);
+                checkbox.setText(bomb.getJSONObject(i+"").getString("bomb_name"));
+                checkbox.setTextSize(25);
+                assert ll != null;
+                ll.addView(checkbox, lp);
                 i++;
             }
         }

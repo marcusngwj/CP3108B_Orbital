@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NewBombRequest extends StringRequest {
-    private static final String NEW_BOMB_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDepo.php";
+    private static final String NEW_BOMB_REQUEST_URL = "http://orbitalbombsquad.comlu.com/newBomb.php";
     private Map<String, String> params;
 
     public NewBombRequest(String bomb_name, String question_type, String question, String option_one, String option_two, String option_three, String option_four, String answer, String time_limit, String points_awarded, String points_deducted, String num_pass, String user_id, Response.Listener<String> listener){

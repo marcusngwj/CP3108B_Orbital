@@ -7,17 +7,15 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by user on 24/6/2016.
- */
-public class HistoryRequest extends StringRequest {
-    private static final String HISTORY_REQUEST_URL = "http://orbitalbombsquad.comlu.com/history.php";
+public class BombDeleteRequest extends StringRequest {
+    private static final String BOMB_DELETE_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDelete.php";
     private Map<String, String> params;
 
-    public HistoryRequest(String user_id, Response.Listener<String> listener) {
-        super(Request.Method.POST, HISTORY_REQUEST_URL, listener, null);
+    public BombDeleteRequest(String user_id, String question_id, Response.Listener<String> listener) {
+        super(Request.Method.POST, BOMB_DELETE_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("user_id", user_id);
+        params.put("question_id", question_id);
     }
     @Override
     public Map<String, String> getParams(){

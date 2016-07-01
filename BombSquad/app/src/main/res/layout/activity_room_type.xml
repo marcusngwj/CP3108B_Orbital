@@ -20,9 +20,8 @@
         android:text="History"
         android:id="@+id/buttonHistory"
         android:background="#ffffff"
-        android:layout_marginTop="34dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/buttonManageRoom" />
 
     <!--Create-->
     <Button
@@ -35,9 +34,9 @@
         android:textColor="#ffffff"
         android:background="@drawable/white_border"
         android:id="@+id/buttonCreateRoom"
-        android:layout_marginTop="79dp"
-        android:layout_below="@+id/buttonHistory"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/buttonManageRoom"
+        android:layout_alignParentStart="true" />
 
     <!--Enter-->
     <Button
@@ -50,39 +49,22 @@
         android:textColor="#ffffff"
         android:background="@drawable/white_border"
         android:id="@+id/buttonEnterRoom"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="26dp"
         android:layout_below="@+id/buttonCreateRoom"
-        android:layout_alignStart="@+id/buttonCreateRoom" />
+        android:layout_centerHorizontal="true" />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="First Name"
-        android:id="@+id/etTestFirstName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Last Name"
-        android:id="@+id/etTestLastName"
-        android:layout_alignTop="@+id/buttonHistory"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="ID"
-        android:id="@+id/eTestId"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:text="Manage Room"
+        android:textSize="50sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/white_border"
+        android:id="@+id/buttonManageRoom"
+        android:layout_marginTop="27dp"
         android:layout_below="@+id/buttonHistory"
-        android:layout_alignParentStart="true" />
-
-    <!--To be removed-->
-
-    <!--To be removed-->
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

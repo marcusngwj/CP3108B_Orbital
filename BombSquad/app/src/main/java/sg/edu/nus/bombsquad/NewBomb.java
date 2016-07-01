@@ -28,7 +28,7 @@ public class NewBomb extends AppCompatActivity {
         setContentView(R.layout.activity_new_bomb);
 
         Intent intent = getIntent();
-        final String userID = intent.getStringExtra("userID");
+        final String user_id = intent.getStringExtra("user_id");
         final String roomCode = intent.getStringExtra("roomCode");
 
         //Bomb Name
@@ -114,7 +114,7 @@ public class NewBomb extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Intent intent = new Intent(NewBomb.this, ExistOrNew.class);
-                        intent.putExtra("userID", userID);
+                        intent.putExtra("user_id", user_id);
                         
                         NewBomb.this.startActivity(intent);
                     }
@@ -199,7 +199,7 @@ public class NewBomb extends AppCompatActivity {
                 }
 
                 if(success[0] && success[1] &&success[2] && success[3] && success[4] && success[5] && success[6]) {
-                    NewBombRequest newBombRequest = new NewBombRequest(bombName, questionType, question, option1, option2, option3, option4, answer, timeLimit, pointsAwarded, pointsDeducted, numPass, userID, responseListener);
+                    NewBombRequest newBombRequest = new NewBombRequest(bombName, questionType, question, option1, option2, option3, option4, answer, timeLimit, pointsAwarded, pointsDeducted, numPass, user_id, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(NewBomb.this);
                     queue.add(newBombRequest);
                 }

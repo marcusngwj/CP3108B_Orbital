@@ -18,39 +18,72 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RoomType extends AppCompatActivity {
-    Button bCreateRoom, bEnterRoom, bHistory;
+    Button bCreateRoom, bEnterRoom, bHistory, bManageRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_type);
-
-        final TextView etTestFirstName = (TextView)findViewById(R.id.etTestFirstName);
-        final TextView etTestLastName = (TextView)findViewById(R.id.etTestLastName);
-
-        Intent intent = getIntent();
-        final String first_name = intent.getStringExtra("first_name");
-        final String last_name = intent.getStringExtra("last_name");
-        final String userID = intent.getStringExtra("userID");
-        final TextView eTestId = (TextView)findViewById(R.id.eTestId); //test
-        eTestId.setText(userID); //test
-        etTestFirstName.setText(first_name);
-        etTestLastName.setText(last_name);
-
-        createRoom(userID);
+        manageRoom();
+        createRoom();
         enterRoom();
         history();
     }
 
+    //Manage Room Button
+    private void manageRoom() {
+        bManageRoom = (Button)findViewById(R.id.buttonManageRoom);
+        bManageRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response){
+
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
+
+                            if(success){
+                                Intent intentManage = new Intent(RoomType.this, ManageRoom.class);
+                                intentManage.putExtra("room", jsonResponse.toString());
+                                intentManage.putExtra("user_id", jsonResponse.getJSONObject("0").getString("user_id"));
+                                RoomType.this.startActivity(intentManage);
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RoomType.this);
+                                builder.setMessage("FAILLLLLLLLLLLLLLLL")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RoomType.this);
+                            builder.setMessage("No rooms found")
+                                    .create()
+                                    .show();
+                        }
+                    }
+                };
+                Intent intent = getIntent();
+                RoomRequest roomRequest = new RoomRequest(intent.getStringExtra("user_id"), responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RoomType.this);
+                queue.add(roomRequest);
+            }
+        });
+    }
+
     //Create Room button
-    private void createRoom(String userID){
-        final String _userID = userID;
+    private void createRoom(){
+        Intent intent = getIntent();
+        final String user_id = intent.getStringExtra("user_id");
         bCreateRoom=(Button)findViewById(R.id.buttonCreateRoom);
         bCreateRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentCreate = new Intent(v.getContext(), CreateRoom.class);
-                intentCreate.putExtra("userID", _userID);
+                intentCreate.putExtra("user_id", user_id);
                 startActivity(intentCreate);
             }
         });
@@ -103,9 +136,9 @@ public class RoomType extends AppCompatActivity {
                     }
                 };
                 Intent intent = getIntent();
-                HistoryRequest historyRequest = new HistoryRequest(intent.getStringExtra("userID"), responseListener);
+                RoomRequest roomRequest = new RoomRequest(intent.getStringExtra("user_id"), responseListener);
                 RequestQueue queue = Volley.newRequestQueue(RoomType.this);
-                queue.add(historyRequest);
+                queue.add(roomRequest);
             }
         });
     }

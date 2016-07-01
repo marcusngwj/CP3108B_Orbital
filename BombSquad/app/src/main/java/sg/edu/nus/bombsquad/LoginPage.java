@@ -56,6 +56,7 @@ public class LoginPage extends AppCompatActivity {
             public void onClick(View v){
                 final String username = editUser.getText().toString();
                 final String password = editPass.getText().toString();
+                System.out.println("Success login");
 
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override
@@ -68,12 +69,13 @@ public class LoginPage extends AppCompatActivity {
                             if(success){
                                 String first_name = jsonResponse.getString("first_name");
                                 String last_name = jsonResponse.getString("last_name");
-                                String userID = jsonResponse.getString("userID");
+                                String user_id = jsonResponse.getString("user_id");
 
                                 Intent intent = new Intent(LoginPage.this, RoomType.class);
                                 intent.putExtra("first_name", first_name);
                                 intent.putExtra("last_name", last_name);
-                                intent.putExtra("userID", userID);
+                                intent.putExtra("user_id", user_id);
+                                intent.putExtra("user_id", user_id);
 
                                 LoginPage.this.startActivity(intent);
                             }

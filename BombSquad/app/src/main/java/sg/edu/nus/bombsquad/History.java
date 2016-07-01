@@ -10,9 +10,7 @@ import android.widget.ScrollView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by user on 21/6/2016.
- */
+
 public class History extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

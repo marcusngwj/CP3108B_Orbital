@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#44546A"
+    android:id = "@+id/manageRoom_layout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Room Manager"
+        android:id="@+id/manageRoom"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/abc_primary_text_disable_only_material_dark"
+        android:textSize="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="10dp" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/RMgreenTick"
+        android:maxHeight="10dp"
+        android:background="@drawable/green_tick"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="51dp"
+        android:layout_alignTop="@+id/RMredCross"
+        android:layout_toStartOf="@+id/RMredCross" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/RMredCross"
+        android:background="@drawable/red_cross"
+        android:layout_below="@+id/manageRoom"
+        android:layout_alignEnd="@+id/manageRoom"
+        android:layout_marginEnd="70dp" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/RMredCross"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/manageRoomScroll"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

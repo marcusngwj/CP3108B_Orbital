@@ -3,14 +3,20 @@ package sg.edu.nus.bombsquad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class roomConfirm extends AppCompatActivity {
+public class RoomConfirm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,8 +26,8 @@ public class roomConfirm extends AppCompatActivity {
 
     private void display() {
         final int[] id = new int[100000];
+        final Intent intent = getIntent();
         try {
-            Intent intent = getIntent();
             JSONObject bomb = new JSONObject(intent.getStringExtra("bomb"));
             boolean[] selected = intent.getBooleanArrayExtra("selected");
             LinearLayout ll = (LinearLayout) findViewById(R.id.roomConfirmScroll);
@@ -36,6 +42,7 @@ public class roomConfirm extends AppCompatActivity {
                     ctv.setTextSize(20);
                     assert ll != null;
                     ll.addView(ctv, lp);
+                    j++;
                 }
                 i++;
             }
@@ -43,8 +50,38 @@ public class roomConfirm extends AppCompatActivity {
         catch(JSONException e) {
             e.printStackTrace();
         }
+        Button createRoom = (Button)findViewById(R.id.createRoom);
+        assert createRoom != null;
+        createRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user_id = intent.getStringExtra("user_id");
 
+                int k = 0;
+                while(k < 100000) {
+                    if (id[k] != 0) {
+                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                System.out.println("test");
+                            }
+                        };
+                        CreateRoomRequest createRoomRequest = new CreateRoomRequest(user_id, intent.getStringExtra("room_name"),
+                                intent.getStringExtra("room_code"), id[k], responseListener);
+                        RequestQueue queue = Volley.newRequestQueue(RoomConfirm.this);
+                        queue.add(createRoomRequest);
+                    }
+                    k++;
+                }
 
+                Intent intentRoom = new Intent(RoomConfirm.this, RoomType.class);
+                intentRoom.putExtra("bomb", intent.getStringExtra("bomb"));
+                intentRoom.putExtra("user_id", intent.getStringExtra("user_id"));
+                intentRoom.putExtra("room_name", intent.getStringExtra("room_name"));
+                intentRoom.putExtra("room_code", intent.getStringExtra("room_code"));
+                startActivity(intentRoom);
+            }
+        });
     }
 
 }

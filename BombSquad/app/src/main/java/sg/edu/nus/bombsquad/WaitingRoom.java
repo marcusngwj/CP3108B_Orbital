@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-public class History extends AppCompatActivity {
+public class WaitingRoom extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +22,15 @@ public class History extends AppCompatActivity {
         try {
             Intent intent = getIntent();
             final String room_name = intent.getStringExtra("room_name");
-            JSONObject room = new JSONObject(intent.getStringExtra("room"));
-            System.out.println(room);
-            System.out.println(room.length());
-            LinearLayout ll = (LinearLayout) findViewById(R.id.history_layout);
+            JSONObject game = new JSONObject(intent.getStringExtra("game"));
+            LinearLayout ll = (LinearLayout) findViewById(R.id.waitingRoom_layout);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             int i = 0;
-            while (i < room.length()) {
+            while (i < game.length()) {
                 Button myButton = new Button(this);
-                myButton.setText(room.getJSONObject(i+"").getString("room_name"));
+                myButton.setText(game.getJSONObject(i+"").getString("player"));
                 myButton.setId(i);
+                assert ll != null;
                 ll.addView(myButton, lp);
                 i++;
             }

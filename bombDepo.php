@@ -33,6 +33,6 @@
 		$response[$i]["user_id"] = $user_id;
 		$i++;
     }
-    
+	mysqli_close($con);
     echo json_encode($response);
 ?>

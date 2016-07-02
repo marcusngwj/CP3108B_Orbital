@@ -20,7 +20,6 @@ public class ExistOrNew extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exist_or_new);
-
         existingBomb();
         newBomb();
 
@@ -28,6 +27,7 @@ public class ExistOrNew extends AppCompatActivity {
 
     //Button: Existing Bomb
     private void existingBomb() {
+        final Intent intent = getIntent();
         final Button bExistingBomb = (Button) findViewById(R.id.buttonExistingBomb);
         assert bExistingBomb != null;
         bExistingBomb.setOnClickListener(new View.OnClickListener() {
@@ -36,7 +36,6 @@ public class ExistOrNew extends AppCompatActivity {
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response){
-
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
@@ -44,6 +43,9 @@ public class ExistOrNew extends AppCompatActivity {
                             if(success){
                                 Intent intentDepo = new Intent(ExistOrNew.this, BombDepo.class);
                                 intentDepo.putExtra("bomb", jsonResponse.toString());
+                                intentDepo.putExtra("user_id", intent.getStringExtra("user_id"));
+                                intentDepo.putExtra("room_name", intent.getStringExtra("room_name"));
+                                intentDepo.putExtra("room_code", intent.getStringExtra("room_code"));
                                 ExistOrNew.this.startActivity(intentDepo);
                             }
                             else {
@@ -62,7 +64,7 @@ public class ExistOrNew extends AppCompatActivity {
                     }
                 };
                 Intent intent = getIntent();
-                BombDepoRequest bombDepoRequest = new BombDepoRequest(intent.getStringExtra("userID"), responseListener);
+                BombDepoRequest bombDepoRequest = new BombDepoRequest(intent.getStringExtra("user_id"), responseListener);
                 RequestQueue queue = Volley.newRequestQueue(ExistOrNew.this);
                 queue.add(bombDepoRequest);
             }
@@ -71,16 +73,16 @@ public class ExistOrNew extends AppCompatActivity {
 
     //Button: New Bomb
     private void newBomb() {
-        final Button bNewBomb = (Button) findViewById(R.id.buttonNewBomb);
         Intent intent = getIntent();
-        final String userID = intent.getStringExtra("userID");
+        final Button bNewBomb = (Button) findViewById(R.id.buttonNewBomb);
+        final String user_id = intent.getStringExtra("user_id");
         final String roomCode = intent.getStringExtra("roomCode");
         assert bNewBomb != null;
         bNewBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ExistOrNew.this, NewBomb.class);
-                intent.putExtra("userID", userID);
+                intent.putExtra("user_id", user_id);
                 intent.putExtra("roomCode", roomCode);
                 ExistOrNew.this.startActivity(intent);
             }

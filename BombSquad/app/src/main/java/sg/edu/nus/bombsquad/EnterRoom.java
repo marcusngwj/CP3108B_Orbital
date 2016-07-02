@@ -25,6 +25,7 @@ public class EnterRoom extends AppCompatActivity {
         final EditText etEnterRoomCode = (EditText) findViewById(R.id.editTextEnterRoomCode);
         final Button bReadyForBattle = (Button) findViewById(R.id.buttonReadyForBattle);
 
+        assert bReadyForBattle != null;
         bReadyForBattle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){

@@ -27,27 +27,7 @@ public class CreateRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
-
-        txGCode=(TextView)findViewById(R.id.textViewGCode);
-        txGCode.setVisibility(View.GONE);
-
-        generateCode();
         setUpRoom();
-    }
-
-    private void generateCode(){
-        bGenerate=(Button)findViewById(R.id.buttonGenerate);
-        bGenerate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                roomCode = (int) Math.floor(Math.random()*1000000);
-                txGCode.setVisibility(View.VISIBLE);
-                txGCode.setBackgroundColor(Color.WHITE);
-                txGCode.setText(Integer.toString(roomCode));
-                bGenerateClicked = true;
-
-            }
-        });
     }
 
     private void setUpRoom(){
@@ -55,34 +35,24 @@ public class CreateRoom extends AppCompatActivity {
         bSetUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                roomCode = (int) Math.floor(Math.random()*1000000);
                 editRoomName = (EditText) findViewById(R.id.editTextRoomName);
                 roomName = editRoomName.getText().toString();
-                final String roomCodeString = roomCode+"";
+                final String roomCodeString = roomCode + "";
                 Intent intent = getIntent();
-                final String userID = intent.getStringExtra("userID");
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (TextUtils.isEmpty(roomName)) {
-                            editRoomName.setError("Input Room Name");
-                        } else if (roomName.length() > 20) {
-                            editRoomName.setError("Name must be less than 20 characters");
-                        } else if (bGenerateClicked == false) {
-                            Toast.makeText(getApplicationContext(), "Please Generate Code", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Intent intent = new Intent(CreateRoom.this, ExistOrNew.class);
-                            intent.putExtra("userID", userID);
-                            intent.putExtra("roomCode", roomCodeString);
-                            startActivity(intent);
-                        }
-                    }
-
-                };
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(userID, roomName, roomCode + "", responseListener);
-                RequestQueue queue = Volley.newRequestQueue(CreateRoom.this);
-                queue.add(createRoomRequest);
+                final String user_id = intent.getStringExtra("user_id");
+                if (TextUtils.isEmpty(roomName)) {
+                    editRoomName.setError("Input Room Name");
+                } else if (roomName.length() > 20) {
+                    editRoomName.setError("Name must be less than 20 characters");
+                } else {
+                    intent = new Intent(CreateRoom.this, ExistOrNew.class);
+                    intent.putExtra("user_id", user_id);
+                    intent.putExtra("room_code", roomCodeString);
+                    intent.putExtra("room_name", roomName);
+                    startActivity(intent);
+                }
             }
         });
     }
-    
 }

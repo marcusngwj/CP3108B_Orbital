@@ -7,15 +7,15 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class BombDepoRequest extends StringRequest {
-    private static final String BOMBDEPO_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDepo.php";
+public class RoomDeleteRequest extends StringRequest {
+    private static final String ROOM_DELETE_REQUEST_URL = "http://orbitalbombsquad.comlu.com/roomDelete.php";
     private Map<String, String> params;
 
-    public BombDepoRequest(String user_id, Response.Listener<String> listener) {
-        super(Request.Method.POST, BOMBDEPO_REQUEST_URL, listener, null);
+    public RoomDeleteRequest(String user_id, String room_id, Response.Listener<String> listener) {
+        super(Request.Method.POST, ROOM_DELETE_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("user_id", user_id);
+        params.put("room_id", room_id);
     }
     @Override
     public Map<String, String> getParams(){

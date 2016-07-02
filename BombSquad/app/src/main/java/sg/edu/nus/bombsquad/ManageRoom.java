@@ -105,9 +105,13 @@ public class ManageRoom extends AppCompatActivity {
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-
+                                Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                                startActivity(hostIntent);
                             }
                         };
+                        GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", intent.getStringExtra("room_id"), responseListener);
+                        RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
+                        queue.add(game);
                     }
                     k++;
                 }

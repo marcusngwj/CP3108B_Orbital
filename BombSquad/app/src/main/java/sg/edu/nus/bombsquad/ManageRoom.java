@@ -25,6 +25,7 @@ public class ManageRoom extends AppCompatActivity {
         setContentView(R.layout.activity_manage_room);
         display();
         deleteRoom();
+        startRoom();
     }
 
     private void display() {
@@ -69,9 +70,9 @@ public class ManageRoom extends AppCompatActivity {
         redCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i = 0;
-                while (i < 100000) {
-                    if (selected[i]) {
+                int j = 0;
+                while (j < 100000) {
+                    if (selected[j]) {
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -81,12 +82,36 @@ public class ManageRoom extends AppCompatActivity {
                                 startActivity(backIntent);
                             }
                         };
-                        RoomDeleteRequest roomDelete = new RoomDeleteRequest(intent.getStringExtra("user_id"), i+"", responseListener);
+                        RoomDeleteRequest roomDelete = new RoomDeleteRequest(intent.getStringExtra("user_id"), j+"", responseListener);
                         RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
                         queue.add(roomDelete);
                     }
-                    i++;
+                    j++;
                 }
+            }
+        });
+    }
+
+    private void startRoom() {
+        final Intent intent = getIntent();
+        ImageButton greenTick = (ImageButton)findViewById(R.id.RMgreenTick);
+        assert greenTick != null;
+        greenTick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int k = 0;
+                while (k < 100000) {
+                    if (selected[k]) {
+                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                            }
+                        };
+                    }
+                    k++;
+                }
+
             }
         });
     }

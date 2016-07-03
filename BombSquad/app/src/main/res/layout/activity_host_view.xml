@@ -41,6 +41,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/textViewHostViewBattlefield"
             android:layout_marginTop="5dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
             android:padding="5dp"
             android:id="@+id/linearLayoutHostView">
         </LinearLayout>

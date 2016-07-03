@@ -2,10 +2,9 @@ package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class HostView extends AppCompatActivity {
@@ -29,11 +28,36 @@ public class HostView extends AppCompatActivity {
         while (i < 2) {
             LinearLayout innerLL = new LinearLayout(this);
             innerLL.setBackgroundResource(R.drawable.white_border_transparent_background);
-            TextView question = new TextView(this);
-            question.setText("Question");
-            innerLL.addView(question);
+            LinearLayout.LayoutParams ilp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            innerLL.setId(i);
+
+            //Question
+            TextView tvQuestion = new TextView(this);
+            tvQuestion.setText("Question");
+            tvQuestion.setPadding(15, 5, 2, 2);
+
+            //In possession of
+            TextView tvInPossessionOf = new TextView(this);
+            tvInPossessionOf.setText("In possession of");
+            tvInPossessionOf.setPadding(15, 5, 2, 2);
+
+            //Time Left
+            TextView tvTimeLeft = new TextView(this);
+            tvTimeLeft.setText("Time Left");
+            tvTimeLeft.setPadding(15, 5, 2, 2);
+
+            EditText etTimeLeft = new EditText(this);
+            etTimeLeft.setPadding(15, 5, 2, 2);
+
+            innerLL.addView(tvQuestion);
+            innerLL.addView(tvInPossessionOf);
+            innerLL.addView(tvTimeLeft);
+            innerLL.addView(etTimeLeft);
+
             outerLL.addView(innerLL, lp);
+
             i++;
+
         }
 
     }

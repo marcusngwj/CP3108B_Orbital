@@ -5,6 +5,7 @@
     android:background="#44546A">
 
     <RelativeLayout
+        android:id="@+id/relativeLayoutHostView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -27,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="22222222222222222222"
             android:id="@+id/textViewHostViewBattlefieldRoomName"
             android:textColor="@color/abc_primary_text_disable_only_material_dark"
             android:textSize="23dp"
@@ -38,20 +38,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textViewHostViewBattlefield"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:padding="5dp"
-            android:layout_below="@+id/textViewHostViewBattlefieldRoomName"
-            android:background="@drawable/white_border_transparent_background">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Question"
-                android:id="@+id/textViewHostViewQuestion"
-                android:textColor="#ffffff"/>
-
+            android:id="@+id/linearLayoutHostView">
         </LinearLayout>
 
     </RelativeLayout>

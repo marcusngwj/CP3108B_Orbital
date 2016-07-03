@@ -44,8 +44,23 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:padding="5dp"
-            android:id="@+id/linearLayoutHostView">
+            android:id="@+id/linearLayoutHostView"
+            android:orientation="vertical">
         </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/buttonEndBattle"
+            android:text="End Battle"
+            android:textColor="#ffffff"
+            android:textSize="30dp"
+            android:background="@drawable/white_border"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="35dp"
+            android:layout_below="@id/linearLayoutHostView"/>
 
     </RelativeLayout>
 

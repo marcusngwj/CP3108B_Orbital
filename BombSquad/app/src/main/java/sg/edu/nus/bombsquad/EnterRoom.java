@@ -71,6 +71,7 @@ public class EnterRoom extends AppCompatActivity {
                 EnterRoomRequest enterRoomRequest = new EnterRoomRequest(roomCode, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(EnterRoom.this);
                 queue.add(enterRoomRequest);
+
             }
         });
     }

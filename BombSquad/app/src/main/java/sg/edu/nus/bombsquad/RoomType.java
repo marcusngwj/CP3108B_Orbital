@@ -91,11 +91,14 @@ public class RoomType extends AppCompatActivity {
 
     //Enter Room button
     private void enterRoom(){
+        Intent intent = getIntent();
+        final String user_id = intent.getStringExtra("user_id");
         bEnterRoom=(Button)findViewById(R.id.buttonEnterRoom);
         bEnterRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentEnter = new Intent(v.getContext(), EnterRoom.class);
+                intentEnter.putExtra("user_id", user_id);
                 startActivity(intentEnter);
             }
         });

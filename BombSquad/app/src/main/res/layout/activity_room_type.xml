@@ -53,6 +53,7 @@
         android:layout_below="@+id/buttonCreateRoom"
         android:layout_centerHorizontal="true" />
 
+    <!--Manage Room-->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

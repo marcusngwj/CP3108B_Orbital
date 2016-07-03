@@ -121,6 +121,7 @@ public class ManageRoom extends AppCompatActivity {
                     k++;
                 }*/
 
+                //Proceed to next activity iff 1 option is selected
                 while(k < 100000){
                     if(numTrues>1){
                         Toast.makeText(getApplicationContext(), "Select only one",Toast.LENGTH_SHORT).show();

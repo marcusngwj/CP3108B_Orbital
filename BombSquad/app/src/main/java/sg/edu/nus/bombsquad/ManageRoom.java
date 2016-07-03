@@ -134,6 +134,8 @@ public class ManageRoom extends AppCompatActivity {
                     k++;
                 }
 
+                final int idOfRoomChosen = chosenK;
+
                 if(numTrues < 1){
                     Toast.makeText(getApplicationContext(), "Select a room",Toast.LENGTH_SHORT).show();
                 }
@@ -142,6 +144,7 @@ public class ManageRoom extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                            hostIntent.putExtra("room_id", idOfRoomChosen+"");
                             startActivity(hostIntent);
                         }
                     };

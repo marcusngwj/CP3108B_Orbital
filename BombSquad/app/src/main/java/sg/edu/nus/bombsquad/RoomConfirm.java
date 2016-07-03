@@ -79,6 +79,11 @@ public class RoomConfirm extends AppCompatActivity {
                 intentRoom.putExtra("user_id", intent.getStringExtra("user_id"));
                 intentRoom.putExtra("room_name", intent.getStringExtra("room_name"));
                 intentRoom.putExtra("room_code", intent.getStringExtra("room_code"));
+                System.out.println("ROOM CONFIRM");
+                System.out.println(intent.getStringExtra("user_id"));
+                System.out.println(intent.getStringExtra("room_name"));
+                System.out.println(intent.getStringExtra("room_code"));
+
                 startActivity(intentRoom);
             }
         });

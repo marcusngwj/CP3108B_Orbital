@@ -80,6 +80,12 @@ public class BombDepo extends AppCompatActivity {
                     intentConfirm.putExtra("user_id", intent.getStringExtra("user_id"));
                     intentConfirm.putExtra("room_name", intent.getStringExtra("room_name"));
                     intentConfirm.putExtra("room_code", intent.getStringExtra("room_code"));
+                    System.out.println("BOMB DEPO");
+                    System.out.println(intent.getStringExtra("user_id"));
+                    System.out.println(intent.getStringExtra("room_name"));
+                    System.out.println(intent.getStringExtra("room_code"));
+
+
                     global.setData(selected);
                     global.setData(selected_name);
                     startActivity(intentConfirm);
@@ -98,21 +104,23 @@ public class BombDepo extends AppCompatActivity {
                 int i = 0;
                 while (i < 100000) {
                     if (selected[i]) {
+                        CheckBox checkbox = (CheckBox)findViewById(i);
+                        LinearLayout ll = (LinearLayout) findViewById(R.id.bombDepoScroll);
+                        assert ll != null;
+                        ll.removeView(checkbox);
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Intent refresh = new Intent(BombDepo.this, BombDepo.class);
-                                refresh.putExtra("bomb", intent.getStringExtra("bomb"));
-                                refresh.putExtra("user_id", intent.getStringExtra("user_id"));
-                                refresh.putExtra("room_name", intent.getStringExtra("room_name"));
-                                refresh.putExtra("room_code", intent.getStringExtra("room_code"));
-                                startActivity(refresh);
-                                // findViewById(R.id.bombDepoScroll).invalidate();
+                                //Nothing here to see laaaaaaa
                             }
                         };
                         BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i+"", responseListener);
                         RequestQueue queue = Volley.newRequestQueue(BombDepo.this);
                         queue.add(bombDelete);
+
+                        BombDeleteRequest_Room bombDeleteFromRoom = new BombDeleteRequest_Room(intent.getStringExtra("user_id"), i+"", responseListener);
+                        queue = Volley.newRequestQueue(BombDepo.this);
+                        queue.add(bombDeleteFromRoom);
                     }
                     i++;
                 }

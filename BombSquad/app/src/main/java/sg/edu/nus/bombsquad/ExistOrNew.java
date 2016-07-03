@@ -46,6 +46,10 @@ public class ExistOrNew extends AppCompatActivity {
                                 intentDepo.putExtra("user_id", intent.getStringExtra("user_id"));
                                 intentDepo.putExtra("room_name", intent.getStringExtra("room_name"));
                                 intentDepo.putExtra("room_code", intent.getStringExtra("room_code"));
+                                System.out.println("Exist Or New");
+                                System.out.println(intent.getStringExtra("user_id"));
+                                System.out.println(intent.getStringExtra("room_name"));
+                                System.out.println(intent.getStringExtra("room_code"));
                                 ExistOrNew.this.startActivity(intentDepo);
                             }
                             else {

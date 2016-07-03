@@ -1,8 +1,6 @@
 package sg.edu.nus.bombsquad;
 
-/**
- * Created by user on 3/7/2016.
- */
+
 public class Global {
     private static Global instance;
     private String[] stringArr;

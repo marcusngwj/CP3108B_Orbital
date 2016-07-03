@@ -29,7 +29,9 @@ public class BombDepo extends AppCompatActivity {
     }
 
     private void display() {
+        final Global global = Global.getInstance();
         final boolean[] selected = new boolean[100000];
+        final String[] selected_name = new String[100000];
         final Intent intent = getIntent();
         try {
             final String bomb_name = intent.getStringExtra("bomb_name");
@@ -39,8 +41,9 @@ public class BombDepo extends AppCompatActivity {
             int i = 0;
 
             while (i < bomb.length()) {
+                final String curr_bomb = bomb.getJSONObject(i+"").getString("bomb_name");
                 CheckBox checkbox = (CheckBox)((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox,null);
-                checkbox.setText(bomb.getJSONObject(i+"").getString("bomb_name"));
+                checkbox.setText(curr_bomb);
                 checkbox.setId(Integer.parseInt(bomb.getJSONObject(i+"").getString("question_id")));
                 checkbox.setTextSize(25);
                 checkbox.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +55,7 @@ public class BombDepo extends AppCompatActivity {
                         }
                         else {
                             selected[v.getId()] = true;
+                            selected_name[v.getId()] = curr_bomb;
                         }
                     }
                 });
@@ -73,10 +77,11 @@ public class BombDepo extends AppCompatActivity {
                     JSONObject bomb = new JSONObject(intent.getStringExtra("bomb"));
                     Intent intentConfirm = new Intent(BombDepo.this, RoomConfirm.class);
                     intentConfirm.putExtra("bomb", bomb.toString());
-                    intentConfirm.putExtra("selected", selected);
                     intentConfirm.putExtra("user_id", intent.getStringExtra("user_id"));
                     intentConfirm.putExtra("room_name", intent.getStringExtra("room_name"));
                     intentConfirm.putExtra("room_code", intent.getStringExtra("room_code"));
+                    global.setData(selected);
+                    global.setData(selected_name);
                     startActivity(intentConfirm);
                 }
                 catch(JSONException e) {

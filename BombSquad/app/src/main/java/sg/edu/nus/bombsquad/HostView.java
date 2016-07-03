@@ -18,9 +18,6 @@ public class HostView extends AppCompatActivity {
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
 
         int i=0;
-        while(i<2){
-            LinearLayout ll = (LinearLayout) findViewById(R.id.history_layout);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        }
+
     }
 }

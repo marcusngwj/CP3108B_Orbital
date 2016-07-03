@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -50,6 +51,8 @@ public class ManageRoom extends AppCompatActivity {
                         else {
                             selected[v.getId()] = true;
                         }
+
+                        System.out.println(selected[v.getId()]);
                     }
                 });
                 assert ll != null;
@@ -100,7 +103,9 @@ public class ManageRoom extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int k = 0;
-                while (k < 100000) {
+                int numTrues = 0;
+                int chosenK=-1;
+                /*while (k < 100000) {
                     if (selected[k]) {
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
@@ -109,11 +114,43 @@ public class ManageRoom extends AppCompatActivity {
                                 startActivity(hostIntent);
                             }
                         };
-                        GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", intent.getStringExtra("room_id"), responseListener);
+                        GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", k+"", responseListener);
                         RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
                         queue.add(game);
                     }
                     k++;
+                }*/
+
+                //Proceed to next activity iff 1 option is selected
+                while(k < 100000){
+                    if(numTrues>1){
+                        Toast.makeText(getApplicationContext(), "Select only one",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    else if(selected[k]){
+                        numTrues++;
+                        chosenK = k;
+                    }
+                    k++;
+                }
+
+                final int idOfRoomChosen = chosenK;
+
+                if(numTrues < 1){
+                    Toast.makeText(getApplicationContext(), "Select a room",Toast.LENGTH_SHORT).show();
+                }
+                else if(numTrues == 1){
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                            hostIntent.putExtra("room_id", idOfRoomChosen+"");
+                            startActivity(hostIntent);
+                        }
+                    };
+                    GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", chosenK+"", responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
+                    queue.add(game);
                 }
 
             }

@@ -25,20 +25,20 @@ public class RoomConfirm extends AppCompatActivity {
     }
 
     private void display() {
-        final int[] id = new int[100000];
         final Intent intent = getIntent();
+        Global global = Global.getInstance();
+        final boolean[] selected = global.getBooleanArray();
+        final String[] selected_name = global.getStringArray();
         try {
             JSONObject bomb = new JSONObject(intent.getStringExtra("bomb"));
-            boolean[] selected = intent.getBooleanArrayExtra("selected");
             LinearLayout ll = (LinearLayout) findViewById(R.id.roomConfirmScroll);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             int i = 0;
             int j = 0;
             while (i < 100000) {
                 if (selected[i]) {
-                    id[j] = Integer.parseInt(bomb.getJSONObject(i+"").getString("question_id"));
                     CheckedTextView ctv = new CheckedTextView(this);
-                    ctv.setText(bomb.getJSONObject(i+"").getString("bomb_name"));
+                    ctv.setText(selected_name[i]);
                     ctv.setTextSize(20);
                     assert ll != null;
                     ll.addView(ctv, lp);
@@ -59,7 +59,7 @@ public class RoomConfirm extends AppCompatActivity {
 
                 int k = 0;
                 while(k < 100000) {
-                    if (id[k] != 0) {
+                    if (selected[k]) {
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -67,7 +67,7 @@ public class RoomConfirm extends AppCompatActivity {
                             }
                         };
                         CreateRoomRequest createRoomRequest = new CreateRoomRequest(user_id, intent.getStringExtra("room_name"),
-                                intent.getStringExtra("room_code"), id[k], responseListener);
+                                intent.getStringExtra("room_code"), k, responseListener);
                         RequestQueue queue = Volley.newRequestQueue(RoomConfirm.this);
                         queue.add(createRoomRequest);
                     }

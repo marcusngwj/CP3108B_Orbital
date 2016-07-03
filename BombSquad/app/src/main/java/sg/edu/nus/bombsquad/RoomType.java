@@ -82,9 +82,29 @@ public class RoomType extends AppCompatActivity {
         bCreateRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentCreate = new Intent(v.getContext(), CreateRoom.class);
-                intentCreate.putExtra("user_id", user_id);
-                startActivity(intentCreate);
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
+                            System.out.println(jsonResponse);
+
+                            if (success) {
+                                Intent intentCreate = new Intent(RoomType.this, CreateRoom.class);
+                                intentCreate.putExtra("room", jsonResponse.toString());
+                                intentCreate.putExtra("user_id", user_id);
+                                startActivity(intentCreate);
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                CheckUniqueCodeRequest unique = new CheckUniqueCodeRequest(responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RoomType.this);
+                queue.add(unique);
             }
         });
     }

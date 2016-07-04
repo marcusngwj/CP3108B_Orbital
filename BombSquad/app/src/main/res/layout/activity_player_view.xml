@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#44546A"
+    android:id = "@+id/playerViewRelativeLayout">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Battlefield: "
+        android:id="@+id/textViewPlayerViewBattlefield"
+        android:textColor="@color/abc_primary_text_disable_only_material_dark"
+        android:textSize="25dp"
+        android:textAlignment="gravity"
+        android:gravity="left" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textViewPlayerViewBattlefieldRoomName"
+        android:textColor="@color/abc_primary_text_disable_only_material_dark"
+        android:textSize="23dp"
+        android:layout_toEndOf="@id/textViewPlayerViewBattlefield" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textViewPlayerViewBattlefield"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:padding="5dp"
+        android:id="@+id/playerViewLinearLayout"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textViewPlayerMessage"
+            android:textColor="@color/abc_primary_text_disable_only_material_dark"
+            android:textSize="23dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

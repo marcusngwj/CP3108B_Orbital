@@ -38,10 +38,6 @@ public class PlayerView extends AppCompatActivity{
         TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(intent.getStringExtra("room_name"));
-        LinearLayout ll = (LinearLayout)findViewById(R.id.playerViewLinearLayout);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        TextView waiting = (TextView)findViewById(R.id.textViewPlayerMessage);
-        waiting.setText("Waiting for host to start game...");
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -52,6 +48,10 @@ public class PlayerView extends AppCompatActivity{
 
     class Background extends AsyncTask<String, Void, Void> {
         TextView uiUpdate = (TextView)findViewById(R.id.textViewPlayerMessage);
+
+        protected void onPreExecute(Void pre) {
+            uiUpdate.setText("Waiting for host to start game...");
+        }
 
         protected Void doInBackground(String... codes) {
             final Global global = Global.getInstance();

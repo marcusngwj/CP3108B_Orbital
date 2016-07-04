@@ -66,6 +66,7 @@ public class ManageRoom extends AppCompatActivity {
 
     }
 
+    //Red-Cross Button
     private void deleteRoom() {
         final Intent intent = getIntent();
         ImageButton redCross = (ImageButton)findViewById(R.id.RMredCross);
@@ -95,8 +96,10 @@ public class ManageRoom extends AppCompatActivity {
         });
     }
 
+    //Green-Tick Button
     private void startRoom() {
         final Intent intent = getIntent();
+        final String user_id = intent.getStringExtra("user_id");
         ImageButton greenTick = (ImageButton)findViewById(R.id.RMgreenTick);
         assert greenTick != null;
         greenTick.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class HostView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +28,43 @@ public class HostView extends AppCompatActivity {
     private void display(){
         final Intent intent = getIntent();
         final String room_id = intent.getStringExtra("room_id");
+
+        //Get question_id by using room_id
+        Response.Listener<String> responseListener = new Response.Listener<String>(){
+            String qnID;
+            @Override
+            public void onResponse(String response){
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getJSONObject(0+"").getBoolean("success");
+                    System.out.println(jsonResponse);
+                    System.out.println(success);
+
+                    //Currently can only access 1 qn per room
+                    if(success){
+                        qnID = jsonResponse.getJSONObject(0+"").getString("question_id");
+                        System.out.println("hello baby " + qnID);
+                    }
+                    else {
+                        System.out.println("Error");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public String toString(){
+                return qnID;
+            }
+
+        };
+        GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_id, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(HostView.this);
+        queue.add(getQnID);
+        System.out.println("THIS IS WAR! " + responseListener.toString());
+
 
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
         tvHostViewBattlefieldRoomName.setText(room_id+"");

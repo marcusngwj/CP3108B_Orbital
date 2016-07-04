@@ -2,6 +2,7 @@ package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -28,8 +29,10 @@ public class HostView extends AppCompatActivity {
     private void display(){
         final Intent intent = getIntent();
         final String room_id = intent.getStringExtra("room_id");
+        final Global global = Global.getInstance();
+        global.setRoom_id(room_id);
 
-        //Get question_id by using room_id
+        /*//Get question_id by using room_id
         Response.Listener<String> responseListener = new Response.Listener<String>(){
             String qnID;
             @Override
@@ -63,7 +66,7 @@ public class HostView extends AppCompatActivity {
         GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_id, responseListener);
         RequestQueue queue = Volley.newRequestQueue(HostView.this);
         queue.add(getQnID);
-        System.out.println("THIS IS WAR! " + responseListener.toString());
+        System.out.println("THIS IS WAR! " + responseListener.toString());*/
 
 
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
@@ -184,5 +187,46 @@ public class HostView extends AppCompatActivity {
 
         }
 
+    }
+
+
+
+
+    class Background extends AsyncTask<String, Void, Void>{
+        protected Void doInBackground(String... codes) {
+            final Global global = Global.getInstance();
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonResponse = new JSONObject(response);
+                        boolean success = jsonResponse.getJSONObject(0 + "").getBoolean("success");
+
+                        //Currently can only access 1 qn per room
+                        if (success) {
+                            global.setQuestion_id(jsonResponse.getJSONObject(0 + "").getString("question_id"));
+                            System.out.println("hello baby " + global.getQuestion_id());
+                        } else {
+                            System.out.println("Error");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            };
+            String room_id = global.getRoom_id();
+            GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_id, responseListener);
+            RequestQueue queue = Volley.newRequestQueue(HostView.this);
+            queue.add(getQnID);
+            return null;
+        }
+
+        protected void onPostExecute(Void update) {
+            Global global = Global.getInstance();
+            if(global.getQuestion_id()!=null){
+                global.setQuestion_id(global.getQuestion_id());
+            }
+        }
     }
 }

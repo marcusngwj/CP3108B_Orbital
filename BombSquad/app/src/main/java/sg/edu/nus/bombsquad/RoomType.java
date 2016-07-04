@@ -102,7 +102,7 @@ public class RoomType extends AppCompatActivity {
                         }
                     }
                 };
-                CheckUniqueCodeRequest unique = new CheckUniqueCodeRequest(responseListener);
+                GetAllRoomRequest unique = new GetAllRoomRequest(responseListener);
                 RequestQueue queue = Volley.newRequestQueue(RoomType.this);
                 queue.add(unique);
             }

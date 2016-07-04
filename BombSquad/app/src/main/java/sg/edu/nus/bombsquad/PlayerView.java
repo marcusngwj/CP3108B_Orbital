@@ -15,6 +15,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Handler;
 
 public class PlayerView extends AppCompatActivity{
 
@@ -28,6 +34,7 @@ public class PlayerView extends AppCompatActivity{
     private void display() {
         Intent intent = getIntent();
         String user_id = intent.getStringExtra("user_id");
+        final String room_code = intent.getStringExtra("room_code");
         TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(intent.getStringExtra("room_name"));
@@ -35,10 +42,12 @@ public class PlayerView extends AppCompatActivity{
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         TextView waiting = (TextView)findViewById(R.id.textViewPlayerMessage);
         waiting.setText("Waiting for host to start game...");
-        System.out.println("-----------------------");
-        System.out.println("test test test test");
-        System.out.println("-----------------------");
-        new Background().execute(intent.getStringExtra("room_code"));
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                new Background().execute((room_code+""));
+            }
+        }, 0, 500, TimeUnit.MILLISECONDS);
     }
 
     class Background extends AsyncTask<String, Void, Void> {
@@ -46,22 +55,19 @@ public class PlayerView extends AppCompatActivity{
 
         protected Void doInBackground(String... codes) {
             final Global global = Global.getInstance();
-
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         JSONObject responseListener = new JSONObject(response);
                         boolean success = responseListener.getBoolean("success");
-                        System.out.println(responseListener);
                         if (success){
                             global.setRoomStatus(responseListener.getString("room_status"));
-                            }
+                        }
                     }
                     catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             };
             UpdatePlayerViewRequest updatePlayer = new UpdatePlayerViewRequest(codes[0], responseListener);
@@ -72,7 +78,6 @@ public class PlayerView extends AppCompatActivity{
 
         protected void onPostExecute(Void update) {
             Global global = Global.getInstance();
-            System.out.println("global room status = " + global.getRoomStatus());
             if (global.getRoomStatus() != null && global.getRoomStatus().equals("1")) {
                 uiUpdate.setText("In room");
             }

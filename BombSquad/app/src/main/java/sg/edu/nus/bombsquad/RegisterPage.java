@@ -72,38 +72,73 @@ public class RegisterPage extends AppCompatActivity {
                     }
                 };
 
-                boolean[] success = {false, false, true, true, true};
+                boolean[] success = {false, false, true, true, true, true};
 
                 //To capitalise first character in the first name
-                Character firstChar = first_name.charAt(0);
-                if(Character.isLetter(firstChar)){
-                    first_name = Character.toUpperCase(firstChar) + first_name.substring(1);
-                    success[0] = true;
+                if(first_name.isEmpty()){
+                    editFirstName.setError("Field must not be empty");
+                    success[0] = false;
                 }
-                else{
-                    editFirstName.setError("Name has to begin with an alphabet");
+                else {
+                    Character firstChar = first_name.charAt(0);
+                    if (Character.isLetter(firstChar)) {
+                        first_name = Character.toUpperCase(firstChar) + first_name.substring(1);
+                        success[0] = true;
+                    } else {
+                        editFirstName.setError("Name has to begin with an alphabet");
+                        success[0] = false;
+                    }
                 }
 
                 //To capitalise first character in the last name
-                firstChar = last_name.charAt(0);
-                if(Character.isLetter(firstChar)){
-                    last_name = Character.toUpperCase(firstChar) + last_name.substring(1);
-                    success[1] = true;
+                if(last_name.isEmpty()){
+                    editLastName.setError("Field must not be empty");
+                    success[1] = false;
                 }
-                else{
-                    editLastName.setError("Name has to begin with an alphabet");
+                else {
+                    Character firstChar = last_name.charAt(0);
+                    if (Character.isLetter(firstChar)) {
+                        last_name = Character.toUpperCase(firstChar) + last_name.substring(1);
+                        success[1] = true;
+                    } else {
+                        editLastName.setError("Name has to begin with an alphabet");
+                        success[1] = false;
+                    }
                 }
 
                 //Simple Email verification
-                if(email.startsWith("@") || email.endsWith("@") || !email.contains("@")){
+                if(email.isEmpty()){
+                    editEmail.setError("Field must not be empty");
+                    success[2] = false;
+                }
+                else if(email.startsWith("@") || email.endsWith("@") || !email.contains("@")){
                     editEmail.setError("Missing local part or domain");
                     success[2] = false;
                 }
+                else {
+                    success[2] = true;
+                }
 
                 //Simple Mobile verification
-                if(mobile_no.startsWith("-") || mobile_no.substring(1).contains("+")){
+                if(mobile_no.isEmpty()){
+                    editMobileNo.setError("Field must not be empty");
+                    success[3] = false;
+                }
+                else if(mobile_no.startsWith("-") || mobile_no.substring(1).contains("+")){
                     editMobileNo.setError("Incorrect mobile number");
                     success[3] = false;
+                }
+                else {
+                    success[3] = true;
+                }
+
+                //Username verification
+                if(username.length()<6){
+                    editUser.setError("Username must be more than 6 characters");
+                    success[4] = false;
+                }
+                else {
+                    success[4] = true;
                 }
 
                 //To ensure password more than 8 characters
@@ -111,7 +146,7 @@ public class RegisterPage extends AppCompatActivity {
                     editPass.setError("Password must be more than 8 characters");
                     editPass.setText("");
                     editPassConfirm.setText("");
-                    success[4] = false;
+                    success[5] = false;
                 }
 
                 //To check if password matches password confirmation
@@ -119,9 +154,13 @@ public class RegisterPage extends AppCompatActivity {
                     editPassConfirm.setError("Password does not match");
                     editPass.setText("");
                     editPassConfirm.setText("");
-                    success[4] = false;
+                    success[5] = false;
                 }
-                if(success[0] && success[1] && success[2] && success[3] && success[4]) {
+                else{
+                    success[5] = true;
+                }
+
+                if(success[0] && success[1] && success[2] && success[3] && success[4] && success[5]) {
                     RegisterRequest registerRequest = new RegisterRequest(first_name, last_name, email, mobile_no, username, password, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterPage.this);
                     queue.add(registerRequest);

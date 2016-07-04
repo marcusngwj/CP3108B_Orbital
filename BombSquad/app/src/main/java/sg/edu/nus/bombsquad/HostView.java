@@ -18,6 +18,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class HostView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,17 @@ public class HostView extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(HostView.this);
         queue.add(getQnID);
         System.out.println("THIS IS WAR! " + responseListener.toString());*/
+
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                new Background().execute();
+            }
+        }, 0, 500, TimeUnit.MILLISECONDS);
+
+        if(global.getQuestion_id()!=null){
+            System.out.println("QNID: " + global.getQuestion_id());
+        }
 
 
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
@@ -192,8 +207,8 @@ public class HostView extends AppCompatActivity {
 
 
 
-    class Background extends AsyncTask<String, Void, Void>{
-        protected Void doInBackground(String... codes) {
+    class Background extends AsyncTask<Void, Void, Void>{
+        protected Void doInBackground(Void... unused) {
             final Global global = Global.getInstance();
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override

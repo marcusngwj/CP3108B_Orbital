@@ -152,7 +152,6 @@ public class ManageRoom extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
                     queue.add(game);
                 }
-
             }
         });
     }

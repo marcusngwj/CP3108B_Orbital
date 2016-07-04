@@ -37,24 +37,16 @@ public class EnterRoom extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
+                            System.out.println(jsonResponse);
+                            System.out.println(success);
 
                             if(success){
-                                /*String first_name = jsonResponse.getString("first_name");
-                                String last_name = jsonResponse.getString("last_name");
-                                String userID = jsonResponse.getString("userID");
-
-                                Intent intent = new Intent(EnterRoom.this, RoomType.class);
-                                intent.putExtra("first_name", first_name);
-                                intent.putExtra("last_name", last_name);
-                                intent.putExtra("userID", userID);*/
-
-                                //EnterRoom.this.startActivity(intent);
-
-                                AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);
-                                builder.setMessage("PASS")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
+                                Intent intent = getIntent();
+                                Intent playerIntent = new Intent(EnterRoom.this, PlayerView.class);
+                                playerIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                playerIntent.putExtra("room_name", jsonResponse.getString("room_name"));
+                                playerIntent.putExtra("room_code", jsonResponse.getString("room_code"));
+                                startActivity(playerIntent);
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);
@@ -71,7 +63,6 @@ public class EnterRoom extends AppCompatActivity {
                 EnterRoomRequest enterRoomRequest = new EnterRoomRequest(roomCode, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(EnterRoom.this);
                 queue.add(enterRoomRequest);
-
             }
         });
     }

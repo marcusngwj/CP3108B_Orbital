@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class BombDeleteRequest_Room extends StringRequest{
 
-    private static final String BOMB_DELETE_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDeleteFromRoom.php";
+    private static final String BOMB_DELETE_REQUEST_URL = "http://orbitalbombsquad.x10host.com/bombDeleteFromRoom.php";
     private Map<String, String> params;
 
     public BombDeleteRequest_Room(String user_id, String question_id, Response.Listener<String> listener) {

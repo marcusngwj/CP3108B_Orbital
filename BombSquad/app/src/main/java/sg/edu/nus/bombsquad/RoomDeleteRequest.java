@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RoomDeleteRequest extends StringRequest {
-    private static final String ROOM_DELETE_REQUEST_URL = "http://orbitalbombsquad.comlu.com/roomDelete.php";
+    private static final String ROOM_DELETE_REQUEST_URL = "http://orbitalbombsquad.x10host.com/roomDelete.php";
     private Map<String, String> params;
 
     public RoomDeleteRequest(String user_id, String room_id, Response.Listener<String> listener) {

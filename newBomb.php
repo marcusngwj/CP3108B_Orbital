@@ -1,5 +1,5 @@
 <?php
-    $con = mysqli_connect("mysql12.000webhost.com", "a6020307_squad", "orbital123", "a6020307_squad");
+    $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
     $bomb_name = $_POST["bomb_name"];
 	$question_type = $_POST["question_type"];

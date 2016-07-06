@@ -1,5 +1,5 @@
 <?php
-    $con = mysqli_connect("mysql12.000webhost.com", "a6020307_squad", "orbital123", "a6020307_squad");
+    $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
 	$user_id = $_POST["user_id"];
 	$room_id = $_POST["room_id"];

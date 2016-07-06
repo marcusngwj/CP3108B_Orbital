@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 public class LoginPage extends AppCompatActivity {
     Button bLogin,bRegister;
@@ -57,6 +58,8 @@ public class LoginPage extends AppCompatActivity {
                 final String username = editUser.getText().toString();
                 final String password = editPass.getText().toString();
                 System.out.println("Success login");
+                System.out.println(username);
+                System.out.println(password);
 
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
                     @Override

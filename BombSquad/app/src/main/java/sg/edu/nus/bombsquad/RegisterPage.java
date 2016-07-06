@@ -48,8 +48,10 @@ public class RegisterPage extends AppCompatActivity {
                     public void onResponse(String response) {
                         boolean success = true;   //To go around JSON loophole
                         try {
+                            System.out.println(response);
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean userexist = jsonResponse.getBoolean("userexist");
+                            System.out.println(jsonResponse);
 
                             if (userexist) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPage.this);

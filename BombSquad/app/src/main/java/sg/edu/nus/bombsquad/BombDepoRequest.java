@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 public class BombDepoRequest extends StringRequest {
-    private static final String BOMBDEPO_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDepo.php";
+    private static final String BOMBDEPO_REQUEST_URL = "http://orbitalbombsquad.x10host.com/bombDepo.php";
     private Map<String, String> params;
 
     public BombDepoRequest(String user_id, Response.Listener<String> listener) {

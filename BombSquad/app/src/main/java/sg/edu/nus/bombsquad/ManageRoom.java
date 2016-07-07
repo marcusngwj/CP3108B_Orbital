@@ -45,14 +45,14 @@ public class ManageRoom extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (selected[v.getId()]) {
-                            System.out.println(v.getId());
                             selected[v.getId()] = false;
                         }
                         else {
                             selected[v.getId()] = true;
                         }
 
-                        System.out.println(selected[v.getId()]);
+                        System.out.println("selected ID: " + v.getId());
+                        System.out.println("status: " + selected[v.getId()]);
                     }
                 });
                 assert ll != null;
@@ -136,6 +136,8 @@ public class ManageRoom extends AppCompatActivity {
                     }
                     k++;
                 }
+
+                System.out.println("numTrues " + numTrues);
 
                 final int idOfRoomChosen = chosenK;
 

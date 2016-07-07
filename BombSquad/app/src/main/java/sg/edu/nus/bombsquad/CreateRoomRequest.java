@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CreateRoomRequest extends StringRequest {
 
-    private static final String ROOM_CREATE_REQUEST_URL = "http://orbitalbombsquad.x10host.comcreateRoom.php";
+    private static final String ROOM_CREATE_REQUEST_URL = "http://orbitalbombsquad.x10host.com/createRoom.php";
     private Map<String, String> params;
 
     public CreateRoomRequest(String userID, String room_name, String generatedCode, int question_id, Response.Listener<String> listener){

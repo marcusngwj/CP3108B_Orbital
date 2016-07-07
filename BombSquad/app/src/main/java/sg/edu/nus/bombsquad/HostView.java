@@ -33,65 +33,35 @@ public class HostView extends AppCompatActivity {
     private void display(){
         final Intent intent = getIntent();
         final String room_id = intent.getStringExtra("room_id");
+        final String room_name = intent.getStringExtra("room_name");
         final Global global = Global.getInstance();
         global.setRoom_id(room_id);
 
-        /*//Get question_id by using room_id
-        Response.Listener<String> responseListener = new Response.Listener<String>(){
-            String qnID;
-            @Override
-            public void onResponse(String response){
-                try {
-                    JSONObject jsonResponse = new JSONObject(response);
-                    boolean success = jsonResponse.getJSONObject(0+"").getBoolean("success");
-                    System.out.println(jsonResponse);
-                    System.out.println(success);
-
-                    //Currently can only access 1 qn per room
-                    if(success){
-                        qnID = jsonResponse.getJSONObject(0+"").getString("question_id");
-                        System.out.println("hello baby " + qnID);
-                    }
-                    else {
-                        System.out.println("Error");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public String toString(){
-                return qnID;
-            }
-
-        };
-        GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_id, responseListener);
-        RequestQueue queue = Volley.newRequestQueue(HostView.this);
-        queue.add(getQnID);
-        System.out.println("THIS IS WAR! " + responseListener.toString());*/
 
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 new Background().execute();
+
+                //For now only can do 1 qn id
+                if(global.getQuestion_id()!=null){
+//                    System.out.println("QNID: " + global.getQuestion_id());
+                }
             }
         }, 0, 500, TimeUnit.MILLISECONDS);
 
-        if(global.getQuestion_id()!=null){
-            System.out.println("QNID: " + global.getQuestion_id());
-        }
 
-
+        //Display room id
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
-        tvHostViewBattlefieldRoomName.setText(room_id+"");
+        tvHostViewBattlefieldRoomName.setText(room_name+"");
 
         //Outer Container
         LinearLayout outerLL = (LinearLayout) findViewById(R.id.linearLayoutHostView);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0,0,0,50);
 
+        //While loop to display all questions in a selected room
+        //For now, this is a dummy one which only generates 2 qns
         int i = 0;
         while (i < 2) {
             //Inner container
@@ -220,7 +190,7 @@ public class HostView extends AppCompatActivity {
                         //Currently can only access 1 qn per room
                         if (success) {
                             global.setQuestion_id(jsonResponse.getJSONObject(0 + "").getString("question_id"));
-                            System.out.println("hello baby " + global.getQuestion_id());
+//                            System.out.println("hello baby " + global.getQuestion_id());
                         } else {
                             System.out.println("Error");
                         }

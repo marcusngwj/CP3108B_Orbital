@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 public class RoomRequest extends StringRequest {
-    private static final String ROOM_REQUEST_URL = "http://orbitalbombsquad.comlu.com/room.php";
+    private static final String ROOM_REQUEST_URL = "http://orbitalbombsquad.x10host.com/room.php";
     private Map<String, String> params;
 
     public RoomRequest(String user_id, Response.Listener<String> listener) {

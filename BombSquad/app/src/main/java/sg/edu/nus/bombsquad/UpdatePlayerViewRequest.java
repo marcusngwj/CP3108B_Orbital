@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 public class UpdatePlayerViewRequest extends StringRequest {
-    private static final String UPDATE_PLAYER_VIEW_REQUEST_URL = "http://orbitalbombsquad.comlu.com/updatePlayerView.php";
+    private static final String UPDATE_PLAYER_VIEW_REQUEST_URL = "http://orbitalbombsquad.x10host.com/updatePlayerView.php";
     private Map<String, String> params;
 
     public UpdatePlayerViewRequest(String room_code, Response.Listener<String> listener) {

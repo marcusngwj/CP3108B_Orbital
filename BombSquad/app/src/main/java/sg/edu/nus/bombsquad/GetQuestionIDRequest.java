@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetQuestionIDRequest extends StringRequest {
-    private static final String GET_QUESTION_ID_REQUEST_URL = "http://orbitalbombsquad.comlu.com/getQuestionID.php";
+    private static final String GET_QUESTION_ID_REQUEST_URL = "http://orbitalbombsquad.x10host.com/getQuestionID.php";
     private Map<String, String> params;
 
     public GetQuestionIDRequest(String room_id, Response.Listener<String> listener) {

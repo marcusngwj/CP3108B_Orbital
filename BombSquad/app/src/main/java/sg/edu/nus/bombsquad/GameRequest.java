@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class GameRequest extends StringRequest {
 
-    private static final String GAME_REQUEST_URL = "http://orbitalbombsquad.comlu.com/gameRequest.php";
+    private static final String GAME_REQUEST_URL = "http://http://orbitalbombsquad.x10host.com/gameRequest.php";
     private Map<String, String> params;
 
     public GameRequest(String user_id, String room_status, String room_id, Response.Listener<String> listener) {

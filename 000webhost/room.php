@@ -1,9 +1,10 @@
 <?php
-    $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
+    $con = mysqli_connect("mysql12.000webhost.com", "a6020307_squad", "orbital123", "a6020307_squad");
     
-	$room_id = $_POST["room_id"];
-    $statement = mysqli_prepare($con, "SELECT * FROM Room WHERE room_id = ?");
-    mysqli_stmt_bind_param($statement, "s", $room_id);
+	$user_id = $_POST["user_id"];
+
+    $statement = mysqli_prepare($con, "SELECT * FROM Room WHERE user_id = ? AND room_id in (SELECT room_id FROM Room GROUP BY room_id HAVING COUNT(room_id)=1)");
+    mysqli_stmt_bind_param($statement, "s", $user_id);
     mysqli_stmt_execute($statement);
     
     mysqli_stmt_store_result($statement);
@@ -21,9 +22,8 @@
 		$response[$i]["question_id"] = $question_id;
 		$response[$i]["time_left"] = $time_left;
 		$response[$i]["player_id"] = $player_id;
-			
 		$i++;
     }
-	mysqli_close($con);
+    
     echo json_encode($response);
 ?>

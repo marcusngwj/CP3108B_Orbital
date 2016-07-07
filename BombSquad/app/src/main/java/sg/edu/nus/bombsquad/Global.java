@@ -9,6 +9,8 @@ public class Global {
     private String question_id;
     private String room_id;
 
+
+
     //Modify
     public void setData(String[] arr) {
         stringArr = arr;
@@ -27,6 +29,7 @@ public class Global {
     public void setRoom_id(String string) { room_id = string; }
 
 
+
     //Retrieve
     public String[] getStringArray() {
         return stringArr;
@@ -43,6 +46,7 @@ public class Global {
     public String getQuestion_id() { return question_id; }
 
     public String getRoom_id() { return room_id; }
+
 
 
     //Others

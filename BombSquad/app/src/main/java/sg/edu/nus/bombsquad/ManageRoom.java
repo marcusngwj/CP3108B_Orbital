@@ -18,12 +18,21 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Stack;
+
 public class ManageRoom extends AppCompatActivity {
-    final boolean[] selected = new boolean[100000];
+    boolean[] selected = new boolean[100000];
+    final Global global = Global.getInstance();
+    HashMap<String, String> selectedRoomName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_room);
+        global.setData(selected);
+        selectedRoomName = new HashMap<String, String>();
+
         display();
         deleteRoom();
         startRoom();
@@ -35,20 +44,26 @@ public class ManageRoom extends AppCompatActivity {
             JSONObject room = new JSONObject(intent.getStringExtra("room"));
             LinearLayout ll = (LinearLayout) findViewById(R.id.manageRoomScroll);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            selected = global.getBooleanArray();
+
             int i = 0;
             while (i < room.length()) {
-                CheckBox checkbox = (CheckBox)((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox,null);
+                final CheckBox checkbox = (CheckBox)((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox,null);
                 checkbox.setText(room.getJSONObject(i+"").getString("room_name"));
                 checkbox.setId(Integer.parseInt(room.getJSONObject(i+"").getString("room_id")));
                 checkbox.setTextSize(25);
+                selectedRoomName.put(checkbox.getId()+"", checkbox.getText()+"");
                 checkbox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (selected[v.getId()]) {
                             selected[v.getId()] = false;
+
                         }
                         else {
                             selected[v.getId()] = true;
+                            String name = (String) checkbox.getText();
+                            System.out.println(name);
                         }
 
                         System.out.println("selected ID: " + v.getId());
@@ -150,6 +165,7 @@ public class ManageRoom extends AppCompatActivity {
                         public void onResponse(String response) {
                             Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
                             hostIntent.putExtra("room_id", idOfRoomChosen+"");
+                            hostIntent.putExtra("room_name", selectedRoomName.get(idOfRoomChosen+""));
                             startActivity(hostIntent);
                         }
                     };
@@ -160,4 +176,6 @@ public class ManageRoom extends AppCompatActivity {
             }
         });
     }
+
+
 }

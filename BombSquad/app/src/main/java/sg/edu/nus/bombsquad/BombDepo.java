@@ -85,7 +85,6 @@ public class BombDepo extends AppCompatActivity {
                     System.out.println(intent.getStringExtra("room_name"));
                     System.out.println(intent.getStringExtra("room_code"));
 
-
                     global.setData(selected);
                     global.setData(selected_name);
                     startActivity(intentConfirm);
@@ -102,6 +101,7 @@ public class BombDepo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int i = 0;
+                System.out.println("Red cross clicked");
                 while (i < 100000) {
                     if (selected[i]) {
                         CheckBox checkbox = (CheckBox)findViewById(i);
@@ -114,6 +114,8 @@ public class BombDepo extends AppCompatActivity {
                                 //Nothing here to see laaaaaaa
                             }
                         };
+                        System.out.println(intent.getStringExtra("user_id"));
+                        System.out.println("i = " + i);
                         BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i+"", responseListener);
                         RequestQueue queue = Volley.newRequestQueue(BombDepo.this);
                         queue.add(bombDelete);

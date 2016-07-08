@@ -43,6 +43,8 @@ public class RoomType extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
+                            System.out.println("TEST TEST TEST TEST TEST TEST");
+                            System.out.println("test = " + jsonResponse);
 
                             if(success){
                                 Intent intentManage = new Intent(RoomType.this, ManageRoom.class);

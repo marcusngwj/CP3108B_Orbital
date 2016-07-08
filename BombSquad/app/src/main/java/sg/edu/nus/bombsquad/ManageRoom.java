@@ -32,7 +32,6 @@ public class ManageRoom extends AppCompatActivity {
         setContentView(R.layout.activity_manage_room);
         global.setData(selected);
         selectedRoomName = new HashMap<String, String>();
-
         display();
         deleteRoom();
         startRoom();
@@ -50,7 +49,7 @@ public class ManageRoom extends AppCompatActivity {
             while (i < room.length()) {
                 final CheckBox checkbox = (CheckBox)((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox,null);
                 checkbox.setText(room.getJSONObject(i+"").getString("room_name"));
-                checkbox.setId(Integer.parseInt(room.getJSONObject(i+"").getString("room_id")));
+                checkbox.setId(Integer.parseInt(room.getJSONObject(i+"").getString("room_code")));
                 checkbox.setTextSize(25);
                 selectedRoomName.put(checkbox.getId()+"", checkbox.getText()+"");
                 checkbox.setOnClickListener(new View.OnClickListener() {
@@ -58,14 +57,12 @@ public class ManageRoom extends AppCompatActivity {
                     public void onClick(View v) {
                         if (selected[v.getId()]) {
                             selected[v.getId()] = false;
-
                         }
                         else {
                             selected[v.getId()] = true;
                             String name = (String) checkbox.getText();
                             System.out.println(name);
                         }
-
                         System.out.println("selected ID: " + v.getId());
                         System.out.println("status: " + selected[v.getId()]);
                     }
@@ -92,6 +89,8 @@ public class ManageRoom extends AppCompatActivity {
                 int j = 0;
                 while (j < 100000) {
                     if (selected[j]) {
+                        System.out.println("user_id = " + intent.getStringExtra("user_id"));
+                        System.out.println("room_code = " + j);
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -154,7 +153,7 @@ public class ManageRoom extends AppCompatActivity {
 
                 System.out.println("numTrues " + numTrues);
 
-                final int idOfRoomChosen = chosenK;
+                final int codeOfRoomChosen = chosenK;
 
                 if(numTrues < 1){
                     Toast.makeText(getApplicationContext(), "Select a room",Toast.LENGTH_SHORT).show();
@@ -164,8 +163,8 @@ public class ManageRoom extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                            hostIntent.putExtra("room_id", idOfRoomChosen+"");
-                            hostIntent.putExtra("room_name", selectedRoomName.get(idOfRoomChosen+""));
+                            hostIntent.putExtra("room_code", codeOfRoomChosen+"");
+                            hostIntent.putExtra("room_name", selectedRoomName.get(codeOfRoomChosen+""));
                             startActivity(hostIntent);
                         }
                     };

@@ -173,35 +173,46 @@ public class PlayerView extends AppCompatActivity{
     }
 
 
-    class Background extends AsyncTask<String, Void, String> {
+    class Background extends AsyncTask<String, Void, Void> {
         TextView uiUpdate = (TextView)findViewById(R.id.textViewPlayerMessage);
-        RequestQueue queue = Volley.newRequestQueue(PlayerView.this);
+        final Global global = Global.getInstance();
 
         protected void onPreExecute(Void pre) {
             uiUpdate.setText("Waiting for host to start game...");
         }
 
-        protected String doInBackground(String... codes) {
-            try {
-                OkHttpClient client = new OkHttpClient();
+        protected Void doInBackground(String... codes) {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody postData = new FormBody.Builder().add("room_code", codes[0]).build();
+            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updatePlayerView.php").post(postData).build();
 
-                RequestBody postData = new FormBody.Builder().add("type", "json").build();
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            System.out.println("FAIL");
+                        }
 
-                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updatePlayerView.php").post(postData).build();
-
-                okhttp3.Response response = client.newCall(request).execute();
-                JSONObject result = new JSONObject(response.body().string()).getJSONObject("response");
-                System.out.println(result);
-                return "";
-            } catch (Exception e) {
-                return null;
-            }
+                        @Override
+                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                            try {
+                                JSONObject result = new JSONObject(response.body().string());
+                                global.setRoomStatus(result.getString("room_status"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        return null;
         }
 
         protected void onPostExecute(Void update) {
             Global global = Global.getInstance();
             if (global.getRoomStatus() != null && global.getRoomStatus().equals("1")) {
                 uiUpdate.setText("In room");
+            }
+            if (global.getRoomStatus() != null && global.getRoomStatus().equals("0")) {
+                uiUpdate.setText("Room closed");
             }
         }
     }

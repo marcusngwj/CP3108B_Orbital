@@ -18,9 +18,17 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class HostView extends AppCompatActivity {
     @Override
@@ -30,7 +38,7 @@ public class HostView extends AppCompatActivity {
         display();
     }
 
-    private void display(){
+    private void display() {
         final Intent intent = getIntent();
         final String room_code = intent.getStringExtra("room_code");
         final String room_name = intent.getStringExtra("room_name");
@@ -44,7 +52,7 @@ public class HostView extends AppCompatActivity {
                 new Background().execute();
 
                 //For now only can do 1 qn id
-                if(global.getQuestion_id()!=null){
+                if (global.getQuestion_id() != null) {
 //                    System.out.println("QNID: " + global.getQuestion_id());
                 }
             }
@@ -53,12 +61,12 @@ public class HostView extends AppCompatActivity {
 
         //Display room id
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
-        tvHostViewBattlefieldRoomName.setText(room_name+"");
+        tvHostViewBattlefieldRoomName.setText(room_name + "");
 
         //Outer Container
         LinearLayout outerLL = (LinearLayout) findViewById(R.id.linearLayoutHostView);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0,0,0,50);
+        lp.setMargins(0, 0, 0, 50);
 
         //While loop to display all questions in a selected room
         //For now, this is a dummy one which only generates 2 qns
@@ -84,8 +92,8 @@ public class HostView extends AppCompatActivity {
             //Question & Answer_Option - LinearLayout
             LinearLayout questionLL = new LinearLayout(this);
             questionLL.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            qlp.setMargins(30,0,30,20);
+            LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            qlp.setMargins(30, 0, 30, 20);
             questionLL.setLayoutParams(qlp);
 
             //Question - Actual Question_TextView
@@ -110,8 +118,8 @@ public class HostView extends AppCompatActivity {
             tvInPossessionOf.setPadding(15, 5, 2, 2);
 
             //In possession of - EditText
-            LinearLayout.LayoutParams etIPOLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            etIPOLL.setMargins(30,0,30,20);
+            LinearLayout.LayoutParams etIPOLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            etIPOLL.setMargins(30, 0, 30, 20);
             EditText etIPO = new EditText(this);
             etIPO.setPadding(15, 15, 12, 12);
             etIPO.setWidth(30);
@@ -126,8 +134,8 @@ public class HostView extends AppCompatActivity {
             tvTimeLeft.setPadding(15, 5, 2, 2);
 
             //Time Left - EditText
-            LinearLayout.LayoutParams etTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            etTimeLeftLL.setMargins(30,0,30,35);
+            LinearLayout.LayoutParams etTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            etTimeLeftLL.setMargins(30, 0, 30, 35);
             EditText etTimeLeft = new EditText(this);
             etTimeLeft.setPadding(15, 15, 12, 12);
             etTimeLeft.setWidth(30);
@@ -170,6 +178,52 @@ public class HostView extends AppCompatActivity {
         }
     }
 
+    class Background extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... unused) {
+            final Global global = Global.getInstance();
+            final String[] question_id = global.getQuestion_id();
+            OkHttpClient client = new OkHttpClient();
+            RequestBody postData = new FormBody.Builder().add("room_code", global.getRoom_code()).build();
+            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionID.php").post(postData).build();
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            System.out.println("FAIL");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response.body().string());
+                                int i = 0;
+                                while (i < jsonResponse.length()) {
+                                    if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
+                                        question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+            return null;
+        }
+
+        protected void onPostExecute(Void update) {
+            Global global = Global.getInstance();
+            if (global.getQuestion_id() != null) {
+                global.setQuestion_id(global.getQuestion_id());
+            }
+        }
+    }
+}
+
+
+
+//Old AsyncTask Code using volley...
+/*
     //Testing using okHTTP instead of volley...
     class Background extends AsyncTask<Void, Void, Void>{
         protected Void doInBackground(Void... unused) {
@@ -216,4 +270,4 @@ public class HostView extends AppCompatActivity {
             }
         }
     }
-}
+} */

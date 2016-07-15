@@ -32,10 +32,10 @@ public class HostView extends AppCompatActivity {
 
     private void display(){
         final Intent intent = getIntent();
-        final String room_id = intent.getStringExtra("room_id");
+        final String room_code = intent.getStringExtra("room_code");
         final String room_name = intent.getStringExtra("room_name");
         final Global global = Global.getInstance();
-        global.setRoom_id(room_id);
+        global.setRoom_code(room_code);
 
 
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -64,6 +64,7 @@ public class HostView extends AppCompatActivity {
         //For now, this is a dummy one which only generates 2 qns
         int i = 0;
         while (i < 2) {
+            System.out.println(global.getQuestion_id()[i]);
             //Inner container
             LinearLayout innerLL = new LinearLayout(this);
             innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -117,7 +118,6 @@ public class HostView extends AppCompatActivity {
             etIPO.setBackgroundResource(R.drawable.white_bg_black_border);
             etIPO.setLayoutParams(etIPOLL);
 
-
             //Time Left - TextView
             TextView tvTimeLeft = new TextView(this);
             tvTimeLeft.setText("Time Left");
@@ -133,7 +133,6 @@ public class HostView extends AppCompatActivity {
             etTimeLeft.setWidth(30);
             etTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
             etTimeLeft.setLayoutParams(etTimeLeftLL);
-
 
             //LinearLayout for defuse and detonate
             LinearLayout defuseDetonateLL = new LinearLayout(this);
@@ -156,7 +155,6 @@ public class HostView extends AppCompatActivity {
             defuseDetonateLL.addView(bDefuse);
             defuseDetonateLL.addView(bDetonate);
 
-
             //Format of front-end in order
             innerLL.addView(tvQuestionHeading);
             innerLL.addView(questionLL);
@@ -169,27 +167,31 @@ public class HostView extends AppCompatActivity {
             outerLL.addView(innerLL, lp);
 
             i++;
-
         }
-
     }
 
-
-
-
+    //Testing using okHTTP instead of volley...
     class Background extends AsyncTask<Void, Void, Void>{
         protected Void doInBackground(Void... unused) {
             final Global global = Global.getInstance();
+            final String[] question_id = global.getQuestion_id();
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getJSONObject(0 + "").getBoolean("success");
+                        System.out.println("SUCCESS");
+                        System.out.println(jsonResponse);
 
                         //Currently can only access 1 qn per room
                         if (success) {
-                            global.setQuestion_id(jsonResponse.getJSONObject(0 + "").getString("question_id"));
+                            int i = 0;
+                            while (i < jsonResponse.length()) {
+                                if (jsonResponse.getJSONObject(i+"").getBoolean("success")) {
+                                    question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                }
+                            }
 //                            System.out.println("hello baby " + global.getQuestion_id());
                         } else {
                             System.out.println("Error");
@@ -200,8 +202,8 @@ public class HostView extends AppCompatActivity {
                 }
 
             };
-            String room_id = global.getRoom_id();
-            GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_id, responseListener);
+            String room_code = global.getRoom_code();
+            GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_code, responseListener);
             RequestQueue queue = Volley.newRequestQueue(HostView.this);
             queue.add(getQnID);
             return null;

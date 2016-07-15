@@ -18,6 +18,7 @@ public class UpdatePlayerViewRequest extends StringRequest {
         params.put("room_code", room_code);
 
     }
+
     @Override
     public Map<String, String> getParams(){
         return params;

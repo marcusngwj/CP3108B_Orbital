@@ -1,9 +1,9 @@
 <?php
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
-	$room_id = $_POST["room_id"];
-    $statement = mysqli_prepare($con, "SELECT * FROM Room WHERE room_id = ?");
-    mysqli_stmt_bind_param($statement, "s", $room_id);
+	$room_code = $_POST["room_code"];
+    $statement = mysqli_prepare($con, "SELECT * FROM Room WHERE room_code = ?");
+    mysqli_stmt_bind_param($statement, "s", $room_code);
     mysqli_stmt_execute($statement);
     
     mysqli_stmt_store_result($statement);
@@ -21,7 +21,6 @@
 		$response[$i]["question_id"] = $question_id;
 		$response[$i]["time_left"] = $time_left;
 		$response[$i]["player_id"] = $player_id;
-			
 		$i++;
     }
 	mysqli_close($con);

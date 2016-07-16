@@ -7,7 +7,7 @@
     mysqli_stmt_execute($statement);
     
     mysqli_stmt_store_result($statement);
-    mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code, $question_id, $time_left, $player_id);
+    mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code, $question_id, $deploy_status, $time_left, $player_id);
     
     $response = array(array(), array());
     $response["success"] = false;
@@ -19,6 +19,7 @@
 		$response[$i]["user_id"] = $user_id;
 		$response[$i]["room_code"] = $room_code;
 		$response[$i]["question_id"] = $question_id;
+	$response[$i]["deploy_status"] = $deploy_status;
 		$response[$i]["time_left"] = $time_left;
 		$response[$i]["player_id"] = $player_id;
 		$i++;

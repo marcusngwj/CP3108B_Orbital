@@ -186,6 +186,8 @@ public class PlayerView extends AppCompatActivity{
             RequestBody postData = new FormBody.Builder().add("room_code", codes[0]).build();
             Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updatePlayerView.php").post(postData).build();
 
+
+
             client.newCall(request)
                     .enqueue(new Callback() {
                         @Override

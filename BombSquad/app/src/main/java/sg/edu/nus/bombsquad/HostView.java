@@ -71,7 +71,7 @@ public class HostView extends AppCompatActivity {
         //While loop to display all questions in a selected room
         //For now, this is a dummy one which only generates 2 qns
         int i = 0;
-        while (i < 2) {
+        while (i < 1) {
             System.out.println(global.getQuestion_id()[i]);
             //Inner container
             LinearLayout innerLL = new LinearLayout(this);
@@ -149,6 +149,8 @@ public class HostView extends AppCompatActivity {
             LinearLayout.LayoutParams ddlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             ddlp.setMargins(0, 0, 40, 0);
 
+            //Deploy - Button (So host will see all the question in the room and then choose to deploy it from here)
+
             //Defuse - Button
             Button bDefuse = new Button(this);
             bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
@@ -179,9 +181,9 @@ public class HostView extends AppCompatActivity {
     }
 
     class Background extends AsyncTask<Void, Void, Void> {
+        final Global global = Global.getInstance();
+        final String[] question_id = global.getQuestion_id();
         protected Void doInBackground(Void... unused) {
-            final Global global = Global.getInstance();
-            final String[] question_id = global.getQuestion_id();
             OkHttpClient client = new OkHttpClient();
             RequestBody postData = new FormBody.Builder().add("room_code", global.getRoom_code()).build();
             Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionID.php").post(postData).build();
@@ -198,6 +200,7 @@ public class HostView extends AppCompatActivity {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response.body().string());
                                 int i = 0;
+                                //This while loop creates a lot of android run time warning(?).... will look into how to improve later...
                                 while (i < jsonResponse.length()) {
                                     if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
                                         question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
@@ -213,7 +216,7 @@ public class HostView extends AppCompatActivity {
 
         protected void onPostExecute(Void update) {
             Global global = Global.getInstance();
-            if (global.getQuestion_id() != null) {
+            if (question_id != null) {
                 global.setQuestion_id(global.getQuestion_id());
             }
         }

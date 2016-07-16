@@ -14,14 +14,7 @@
     $i = 0;
     while(mysqli_stmt_fetch($statement)){
         $response[$i]["success"] = true;
-		$response[$i]["room_id"] = $room_id;
-		$response[$i]["room_name"] = $room_name;
-		$response[$i]["user_id"] = $user_id;
-		$response[$i]["room_code"] = $room_code;
 		$response[$i]["question_id"] = $question_id;
-	$response[$i]["deploy_status"] = $deploy_status;
-		$response[$i]["time_left"] = $time_left;
-		$response[$i]["player_id"] = $player_id;
 		$i++;
     }
 	mysqli_close($con);

@@ -37,8 +37,6 @@ import okhttp3.RequestBody;
 
 public class PlayerView extends AppCompatActivity{
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,8 +183,6 @@ public class PlayerView extends AppCompatActivity{
             OkHttpClient client = new OkHttpClient();
             RequestBody postData = new FormBody.Builder().add("room_code", codes[0]).build();
             Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updatePlayerView.php").post(postData).build();
-
-
 
             client.newCall(request)
                     .enqueue(new Callback() {

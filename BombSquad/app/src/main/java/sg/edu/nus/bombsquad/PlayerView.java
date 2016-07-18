@@ -36,12 +36,19 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 public class PlayerView extends AppCompatActivity{
+    final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_view);
         display();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        scheduler.shutdown();
     }
 
     private void display() {
@@ -162,7 +169,6 @@ public class PlayerView extends AppCompatActivity{
             i++;
         }
 
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 new Background().execute((room_code+""));
@@ -208,6 +214,7 @@ public class PlayerView extends AppCompatActivity{
         protected void onPostExecute(Void update) {
             Global global = Global.getInstance();
             if (global.getRoomStatus() != null && global.getRoomStatus().equals("1")) {
+                System.out.println("In Activity");
                 uiUpdate.setText("In room");
             }
             if (global.getRoomStatus() != null && global.getRoomStatus().equals("0")) {

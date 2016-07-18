@@ -14,6 +14,7 @@ public class Global {
     private String[] question_id = new String[100000];
     private String room_code;
     private int number;
+    private String player_name;
 
 
 
@@ -40,6 +41,10 @@ public class Global {
 
     public void setNumber(int integer) { number = integer; }
 
+    public void setPlayerName (String name) {
+        player_name = name;
+    }
+
 
 
     //Retrieve
@@ -65,6 +70,9 @@ public class Global {
 
     public int getNumber() { return number; }
 
+    public String getPlayerName() {
+        return player_name;
+    }
 
 
     //Others

@@ -168,6 +168,7 @@ public class PlayerView extends AppCompatActivity{
                 new Background().execute((room_code+""));
             }
         }, 0, 500, TimeUnit.MILLISECONDS);
+
     }
 
 

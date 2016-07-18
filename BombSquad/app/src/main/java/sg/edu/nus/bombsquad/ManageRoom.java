@@ -159,11 +159,10 @@ public class ManageRoom extends AppCompatActivity {
                 }
 
                 else if(numTrues == 1){
-
+                    //Nested Response to make sure counting is done before new intent
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
                             Response.Listener<String> responseCatcher = new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -179,6 +178,8 @@ public class ManageRoom extends AppCompatActivity {
                                                 count++;
                                                 global.setNumber(count);
                                                 global.setQuestion_id(question_id);
+
+
                                             }
                                             i++;
                                         }

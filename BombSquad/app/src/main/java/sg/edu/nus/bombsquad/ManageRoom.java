@@ -151,7 +151,6 @@ public class ManageRoom extends AppCompatActivity {
                     k++;
                 }
 
-               // System.out.println("numTrues " + numTrues);
 
                 final int codeOfRoomChosen = chosenK;
 
@@ -160,13 +159,50 @@ public class ManageRoom extends AppCompatActivity {
                 }
 
                 else if(numTrues == 1){
+
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+
+                            Response.Listener<String> responseCatcher = new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject jsonResponse = new JSONObject(response);
+                                        String[] question_id = new String[jsonResponse.length()];
+                                        int count = 0;  //Count total number of questions in a room
+
+                                        int i = 0;
+                                        while (i < jsonResponse.length()) {
+                                            if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
+                                                question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                                count++;
+                                                global.setNumber(count);
+                                                global.setQuestion_id(question_id);
+                                            }
+                                            i++;
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                                    hostIntent.putExtra("room_code", codeOfRoomChosen+"");
+                                    hostIntent.putExtra("room_name", selectedRoomName.get(codeOfRoomChosen+""));
+                                    hostIntent.putExtra("numQuestion", global.getNumber()+"");
+                                    startActivity(hostIntent);
+                                }
+                            };
+                            GetQuestionIDRequest getQuestionIDRequest = new GetQuestionIDRequest(codeOfRoomChosen+"", responseCatcher);
+                            RequestQueue requestQueue = Volley.newRequestQueue(ManageRoom.this);
+                            requestQueue.add(getQuestionIDRequest);
+
+
+                            /*Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
                             hostIntent.putExtra("room_code", codeOfRoomChosen+"");
                             hostIntent.putExtra("room_name", selectedRoomName.get(codeOfRoomChosen+""));
-                            startActivity(hostIntent);
+                            startActivity(hostIntent);*/
                         }
                     };
                     GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", chosenK+"", responseListener);

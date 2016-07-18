@@ -11,11 +11,11 @@ public class RoomDeleteRequest extends StringRequest {
     private static final String ROOM_DELETE_REQUEST_URL = "http://orbitalbombsquad.x10host.com/roomDelete.php";
     private Map<String, String> params;
 
-    public RoomDeleteRequest(String user_id, String room_id, Response.Listener<String> listener) {
+    public RoomDeleteRequest(String user_id, String room_code, Response.Listener<String> listener) {
         super(Request.Method.POST, ROOM_DELETE_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("user_id", user_id);
-        params.put("room_id", room_id);
+        params.put("room_id", room_code);
     }
     @Override
     public Map<String, String> getParams(){

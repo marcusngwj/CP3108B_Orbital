@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BombDeleteRequest extends StringRequest {
-    private static final String BOMB_DELETE_REQUEST_URL = "http://orbitalbombsquad.comlu.com/bombDelete.php";
+    private static final String BOMB_DELETE_REQUEST_URL = "http://orbitalbombsquad.x10host.com/bombDelete.php";
     private Map<String, String> params;
 
     public BombDeleteRequest(String user_id, String question_id, Response.Listener<String> listener) {

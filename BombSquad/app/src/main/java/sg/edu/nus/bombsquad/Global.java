@@ -6,8 +6,8 @@ public class Global {
     private String[] stringArr;
     private boolean[] booleanArr;
     private String room_status;
-    private String question_id;
-    private String room_id;
+    private String[] question_id = new String[100000];
+    private String room_code;
 
 
 
@@ -24,9 +24,9 @@ public class Global {
         room_status = string;
     }
 
-    public void setQuestion_id(String string) { question_id = string; }
+    public void setQuestion_id(String[] arr) { question_id = arr; }
 
-    public void setRoom_id(String string) { room_id = string; }
+    public void setRoom_code(String string) { room_code = string; }
 
 
 
@@ -43,9 +43,9 @@ public class Global {
         return room_status;
     }
 
-    public String getQuestion_id() { return question_id; }
+    public String[] getQuestion_id() { return question_id; }
 
-    public String getRoom_id() { return room_id; }
+    public String getRoom_code() { return room_code; }
 
 
 

@@ -22,5 +22,5 @@
 		$response["player"] = $player;
     }
     mysqli_close($con);
-    echo json_encode($response);
+	echo json_encode($response);
 ?>

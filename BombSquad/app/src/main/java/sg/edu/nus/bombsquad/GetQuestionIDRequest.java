@@ -11,10 +11,10 @@ public class GetQuestionIDRequest extends StringRequest {
     private static final String GET_QUESTION_ID_REQUEST_URL = "http://orbitalbombsquad.x10host.com/getQuestionID.php";
     private Map<String, String> params;
 
-    public GetQuestionIDRequest(String room_id, Response.Listener<String> listener) {
+    public GetQuestionIDRequest(String room_code, Response.Listener<String> listener) {
         super(Request.Method.POST, GET_QUESTION_ID_REQUEST_URL, listener, null);
         params = new HashMap<>();
-        params.put("room_id", room_id);
+        params.put("room_code", room_code);
     }
 
     @Override

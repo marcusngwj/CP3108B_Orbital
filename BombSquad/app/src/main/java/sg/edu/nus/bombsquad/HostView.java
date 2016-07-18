@@ -86,7 +86,7 @@ public class HostView extends AppCompatActivity {
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-//                    String[][] tempArr = global.getString2DArr();
+                    String[][] tempArr = global.getString2DArr();
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
 
@@ -100,20 +100,17 @@ public class HostView extends AppCompatActivity {
                         global.getHashMapArrayList().add(questionBlock);*/
 
                         int i = global.getNumber();
-//                        tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
-//                        tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
-//
-//                        System.out.println("HELLO QN: " + tempArr[i][1]);
-//
+                        tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
+                        tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
 
-
+                        System.out.println("HELLO QN: " + tempArr[i][1]);
 
 
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-//                    global.setData(tempArr);
+                    global.setData(tempArr);
                 }
             };
             QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
@@ -148,8 +145,12 @@ public class HostView extends AppCompatActivity {
             TextView tvQuestion = new TextView(this);
 //            tvQuestion.setText("TEST QN");
 //            tvQuestion.setText(global.getHashMapArrayList().get(i).get("question"));
+//            String[][] qn2DArray = global.getString2DArr();
+//            tvQuestion.setText(qn2DArray[i][1]);
+//            System.out.println("YAHOOOOOOO: " + qn2DArray[i][1]);
 
-            tvQuestionHeading.setTextSize(20);
+
+
 
             //Answer Option - TextView
             TextView tvAnswerOption = new TextView(this);

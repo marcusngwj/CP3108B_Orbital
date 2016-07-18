@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -42,10 +44,18 @@ public class HostView extends AppCompatActivity {
         final Intent intent = getIntent();
         final String room_code = intent.getStringExtra("room_code");
         final String room_name = intent.getStringExtra("room_name");
+        final int numQuestion = Integer.valueOf(intent.getStringExtra("numQuestion"));
         final Global global = Global.getInstance();
         global.setRoom_code(room_code);
+        String[] questionID = global.getQuestion_id();
 
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        /*ArrayList<HashMap<String, String>> hashMapArrayList = new ArrayList<HashMap<String, String>>();
+        global.setData(hashMapArrayList);*/
+
+        String[][] stringArr = new String[numQuestion][6];
+        global.setData(stringArr);
+
+        /*ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 new Background().execute();
@@ -55,7 +65,7 @@ public class HostView extends AppCompatActivity {
 //                    System.out.println("QNID: " + global.getQuestion_id());
                 }
             }
-        }, 0, 500, TimeUnit.MILLISECONDS);
+        }, 0, 500, TimeUnit.MILLISECONDS);*/
 
 
         //Display room id
@@ -68,10 +78,48 @@ public class HostView extends AppCompatActivity {
         lp.setMargins(0, 0, 0, 50);
 
         //While loop to display all questions in a selected room
-        //For now, this is a dummy one which only generates 2 qns
         int i = 0;
-        while (i < 1) {
-            System.out.println(global.getQuestion_id()[i]);
+        while(i < numQuestion){
+            System.out.println("qnID: " + questionID[i]);
+            global.setNumber(i);
+
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+//                    String[][] tempArr = global.getString2DArr();
+                    try {
+                        JSONObject jsonResponse = new JSONObject(response);
+
+                        /*HashMap<String, String> questionBlock = new HashMap<String, String>();
+                        questionBlock.put("question_type", jsonResponse.getJSONObject(0+ "").getString("question_type"));
+                        questionBlock.put("question", jsonResponse.getJSONObject(0 + "").getString("question"));
+                        questionBlock.put("option_one", jsonResponse.getJSONObject(0+ "").getString("option_one"));
+                        questionBlock.put("option_two", jsonResponse.getJSONObject(0+ "").getString("option_two"));
+                        questionBlock.put("option_three", jsonResponse.getJSONObject(0+ "").getString("option_three"));
+                        questionBlock.put("option_four", jsonResponse.getJSONObject(0+ "").getString("option_four"));
+                        global.getHashMapArrayList().add(questionBlock);*/
+
+                        int i = global.getNumber();
+//                        tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
+//                        tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
+//
+//                        System.out.println("HELLO QN: " + tempArr[i][1]);
+//
+
+
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                    global.setData(tempArr);
+                }
+            };
+            QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
+            RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
+            requestQueue.add(questionAnswerOptionRequest);
+
             //Inner container
             LinearLayout innerLL = new LinearLayout(this);
             innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -83,7 +131,8 @@ public class HostView extends AppCompatActivity {
 
             //Question - Heading_TextView
             TextView tvQuestionHeading = new TextView(this);
-            tvQuestionHeading.setText("Question");
+            int questionNo = i+1;
+            tvQuestionHeading.setText("Question " + questionNo);
             tvQuestionHeading.setTextSize(20);
             tvQuestionHeading.setTextColor(Color.WHITE);
             tvQuestionHeading.setPadding(15, 5, 2, 2);
@@ -97,7 +146,9 @@ public class HostView extends AppCompatActivity {
 
             //Question - Actual Question_TextView
             TextView tvQuestion = new TextView(this);
-            tvQuestion.setText("TEMP");
+//            tvQuestion.setText("TEST QN");
+//            tvQuestion.setText(global.getHashMapArrayList().get(i).get("question"));
+
             tvQuestionHeading.setTextSize(20);
 
             //Answer Option - TextView
@@ -179,9 +230,9 @@ public class HostView extends AppCompatActivity {
         }
     }
 
-    class Background extends AsyncTask<Void, Void, Void> {
+    /*class Background extends AsyncTask<Void, Void, Void> {
         final Global global = Global.getInstance();
-        final String[] question_id = global.getQuestion_id();
+//        final String[] question_id = global.getQuestion_id();
         protected Void doInBackground(Void... unused) {
             OkHttpClient client = new OkHttpClient();
             RequestBody postData = new FormBody.Builder().add("room_code", global.getRoom_code()).build();
@@ -198,14 +249,22 @@ public class HostView extends AppCompatActivity {
                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response.body().string());
-                                System.out.println(jsonResponse.length());
+//                                System.out.println("jsonResponseLength: " + jsonResponse.length());
+//                                System.out.println("jsonResponse: " + jsonResponse);
+                                String[] question_id = new String[jsonResponse.length()];
+                                int count = 0;  //Count total number of questions in a room
+
                                 int i = 0;
                                 //This while loop creates a lot of android run time warning(?).... will look into how to improve later...
                                 while (i < jsonResponse.length()) {
                                     if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
                                         question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+
+                                        count++;
                                     }
+                                    i++;
                                 }
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -216,11 +275,16 @@ public class HostView extends AppCompatActivity {
 
         protected void onPostExecute(Void update) {
             Global global = Global.getInstance();
-            if (question_id != null) {
-                global.setQuestion_id(global.getQuestion_id());
-            }
+//            if (question_id != null) {
+//                global.setQuestion_id(global.getQuestion_id());
+//
+//
+//                for(int i=0; i<question_id.length; i++){
+//                    System.out.println("qn id is: " + question_id[i]);
+//                }*//*
+//            }
         }
-    }
+    }*/
 }
 
 

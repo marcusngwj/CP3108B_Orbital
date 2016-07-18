@@ -151,13 +151,14 @@ public class ManageRoom extends AppCompatActivity {
                     k++;
                 }
 
-                System.out.println("numTrues " + numTrues);
+               // System.out.println("numTrues " + numTrues);
 
                 final int codeOfRoomChosen = chosenK;
 
                 if(numTrues < 1){
                     Toast.makeText(getApplicationContext(), "Select a room",Toast.LENGTH_SHORT).show();
                 }
+
                 else if(numTrues == 1){
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override

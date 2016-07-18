@@ -45,7 +45,6 @@ public class HostView extends AppCompatActivity {
         final Global global = Global.getInstance();
         global.setRoom_code(room_code);
 
-
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -199,6 +198,7 @@ public class HostView extends AppCompatActivity {
                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response.body().string());
+                                System.out.println(jsonResponse.length());
                                 int i = 0;
                                 //This while loop creates a lot of android run time warning(?).... will look into how to improve later...
                                 while (i < jsonResponse.length()) {

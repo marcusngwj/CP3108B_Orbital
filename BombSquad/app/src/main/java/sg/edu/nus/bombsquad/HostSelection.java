@@ -27,6 +27,8 @@ import okhttp3.RequestBody;
 public class HostSelection extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler1 = Executors.newSingleThreadScheduledExecutor();
+    final ScheduledExecutorService scheduler2 = Executors.newSingleThreadScheduledExecutor();
+    final ScheduledExecutorService scheduler3 = Executors.newSingleThreadScheduledExecutor();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +42,48 @@ public class HostSelection extends AppCompatActivity {
     }
 
 
-    private void deployToRandom(String room_code, String question_id) {
+    private void deployToRandom(String roomCode, String questionId) {
+
+        final Global global = Global.getInstance();
+        final String room_code = roomCode;
+        final String question_id = questionId;
         Button bRandomPlayer = (Button)findViewById(R.id.buttonRandomPlayer);
         assert bRandomPlayer != null;
         bRandomPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                scheduler2.scheduleAtFixedRate(new Runnable() {
+                    public void run() {
+                        if (global.getBooleanAccess()) {
+                            final String[] player_id = global.getPlayerId();
+                            int random = (int) Math.floor(Math.random() * (player_id.length));
+                            String randomPlayer = player_id[random];
+                            Intent intent = new Intent(HostSelection.this, HostView.class);
+                            global.setBooleanAccess(false);
+                            OkHttpClient client = new OkHttpClient();
+                            RequestBody postData = new FormBody.Builder()
+                                    .add("room_code", room_code)
+                                    .add("question_id", question_id)
+                                    .add("player_id", randomPlayer)
+                                    .build();
+                            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
+                            client.newCall(request)
+                                    .enqueue(new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+                                            System.out.println("FAIL");
+                                        }
+                                        @Override
+                                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                            Intent intent = new Intent(HostSelection.this, HostView.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                            scheduler2.shutdown();
+                            startActivity(intent);
+                        }
+                    }
+                }, 0, 500, TimeUnit.MILLISECONDS);
             }
         });
     }
@@ -67,7 +104,7 @@ public class HostSelection extends AppCompatActivity {
                                 intent.putExtra("room_code", room_code);
                                 intent.putExtra("question_id", question_id);
                                 global.setBooleanAccess(false);
-                                scheduler.shutdown();
+                                scheduler1.shutdown();
                                 startActivity(intent);
 
                             }
@@ -103,7 +140,6 @@ public class HostSelection extends AppCompatActivity {
                                 String[] player_id = global.getPlayerId();
                                 while (i < result.length()-1) {
                                     player_id[i-1] = result.getJSONObject(i+"").getString("player");
-                                    System.out.println(player_id[i-1]);
                                     i++;
                                 }
                             } catch (JSONException e) {

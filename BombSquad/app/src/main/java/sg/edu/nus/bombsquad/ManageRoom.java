@@ -179,7 +179,6 @@ public class ManageRoom extends AppCompatActivity {
                                                 global.setNumber(count);
                                                 global.setQuestion_id(question_id);
 
-
                                             }
                                             i++;
                                         }

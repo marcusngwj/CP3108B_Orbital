@@ -84,6 +84,7 @@ public class Global {
 
 
 
+
     //Retrieve
     public String[] getStringArray() {
         return stringArr;
@@ -136,6 +137,7 @@ public class Global {
     public int getNumQuestion() {
         return num_question;
     }
+
 
 
 

@@ -17,7 +17,7 @@
     while(mysqli_stmt_fetch($statement)){
         $response[$i]["success"] = true;
 		$response[$i]["player"] = $player;
-		i++;
+		$i++;
     }
     mysqli_close($con);
 	echo json_encode($response);

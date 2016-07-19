@@ -37,7 +37,6 @@ import okhttp3.RequestBody;
 
 public class HostView extends AppCompatActivity {
     Global global = Global.getInstance();
-    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -31,38 +31,42 @@ public class EnterRoom extends AppCompatActivity {
             public void onClick(View v){
                 final String roomCode = etEnterRoomCode.getText().toString();
 
-                Response.Listener<String> responseListener = new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response){
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            System.out.println(jsonResponse);
-                            System.out.println(success);
+                if(roomCode.isEmpty()){
+                    etEnterRoomCode.setError("Enter a room code");
+                }
+                else {
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                boolean success = jsonResponse.getBoolean("success");
+                                System.out.println(jsonResponse);
+                                System.out.println(success);
 
-                            if(success){
-                                Intent intent = getIntent();
-                                Intent playerIntent = new Intent(EnterRoom.this, PlayerView.class);
-                                playerIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                playerIntent.putExtra("room_name", jsonResponse.getString("room_name"));
-                                playerIntent.putExtra("room_code", jsonResponse.getString("room_code"));
-                                startActivity(playerIntent);
+                                if (success) {
+                                    Intent intent = getIntent();
+                                    Intent playerIntent = new Intent(EnterRoom.this, PlayerView.class);
+                                    playerIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                    playerIntent.putExtra("room_name", jsonResponse.getString("room_name"));
+                                    playerIntent.putExtra("room_code", jsonResponse.getString("room_code"));
+                                    startActivity(playerIntent);
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);
+                                    builder.setMessage("Room Code does not exist")
+                                            .setNegativeButton("Retry", null)
+                                            .create()
+                                            .show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);
-                                builder.setMessage("Code Failed")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                };
-                EnterRoomRequest enterRoomRequest = new EnterRoomRequest(roomCode, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(EnterRoom.this);
-                queue.add(enterRoomRequest);
+                    };
+                    EnterRoomRequest enterRoomRequest = new EnterRoomRequest(roomCode, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(EnterRoom.this);
+                    queue.add(enterRoomRequest);
+                }
             }
         });
     }

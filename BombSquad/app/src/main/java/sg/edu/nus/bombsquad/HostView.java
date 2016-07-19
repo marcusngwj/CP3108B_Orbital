@@ -41,8 +41,41 @@ public class HostView extends AppCompatActivity {
         display();
     }
 
-    public void getQuestionsData(int numQuestion){
+    public void getQuestionsData(final Global global, int numQuestion, String[] questionID){
+        int i = 0;
+        while (i < numQuestion) {
+            System.out.println("qnID: " + questionID[i]);
 
+            global.setNumber(i);
+
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    String[][] tempArr = global.getString2DArr();
+                    try {
+                        JSONObject jsonResponse = new JSONObject(response);
+
+
+                        int i = global.getNumber();
+                        tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
+                        tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
+
+                        System.out.println("CHAMPIONNNN: " + tempArr[i][1]);
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    global.setData(tempArr);
+                }
+            };
+            QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
+            RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
+            requestQueue.add(questionAnswerOptionRequest);
+
+            i++;
+        }
     }
 
     private void display() {
@@ -82,13 +115,14 @@ public class HostView extends AppCompatActivity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
 
+        getQuestionsData(global, numQuestion, questionID);
+
         //While loop to display all questions in a selected room
         int i = 0;
         while (i < numQuestion) {
-            System.out.println("qnID: " + questionID[i]);
+//            System.out.println("qnID: " + questionID[i]);
 
             global.setNumber(i);
-            System.out.println(global.getNumber());
 
             /*Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
@@ -115,6 +149,8 @@ public class HostView extends AppCompatActivity {
             QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
             RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
             requestQueue.add(questionAnswerOptionRequest);*/
+
+
 
             //Inner container
             LinearLayout innerLL = new LinearLayout(this);
@@ -146,7 +182,7 @@ public class HostView extends AppCompatActivity {
 //            tvQuestion.setText(global.getHashMapArrayList().get(i).get("question"));
 //            String[][] qn2DArray = global.getString2DArr();
 //            tvQuestion.setText(qn2DArray[i][1]);
-//            System.out.println("YAHOOOOOOO: " + qn2DArray[i][1]);
+            System.out.println("HELLO MY LADY");
 
 
             //Answer Option - TextView
@@ -207,6 +243,7 @@ public class HostView extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(HostView.this, HostSelection.class);
                     String question_id = (String) bDeploy.getTag();
+                    System.out.println("question_id: " + question_id);
                     intent.putExtra("question_id", question_id);
                     intent.putExtra("room_code", global.getRoom_code());
                     HostView.this.startActivity(intent);

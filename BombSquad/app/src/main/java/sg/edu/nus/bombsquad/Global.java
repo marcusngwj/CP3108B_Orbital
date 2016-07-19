@@ -10,23 +10,29 @@ import java.util.Queue;
 
 public class Global {
     private static Global instance;
+
+    //Variables for temporary use
     private String[] stringArr;
     private String[][] string2DArr;
     private boolean[] booleanArr;
     private int[] intArr;
-    private ArrayList<HashMap<String, String>> hashMapArrayList;
-    private String room_status;
-    private String[] question_id = new String[100000];
-    private String room_code;
     private int number;
     private int counter;
     private boolean booleanVar;
+
+    
+    //Variables with defined purpose
+    private String room_name;
+    private String room_code;
+    private String room_status;
+    private int num_question;
+    private String[] question_id = new String[100000];
     private String player_name;
     private String[] player_id = new String[100000];
     private String[] player_list;
     private boolean booleanAccess;
-    private String room_name;
-    private int num_question;
+
+
 
     //Modify
     public void setData(String[] arr) {
@@ -40,8 +46,6 @@ public class Global {
     }
 
     public void setData(int[] arr) { intArr = arr; }
-
-    public void setData(ArrayList<HashMap<String, String>> arr) { hashMapArrayList = arr; }
 
     public void setRoomStatus(String string) {
         room_status = string;
@@ -97,8 +101,6 @@ public class Global {
     }
 
     public int[] getIntArr() { return intArr; }
-
-    public ArrayList<HashMap<String, String>> getHashMapArrayList() { return hashMapArrayList; }
 
     public String getRoomStatus() {
         return room_status;

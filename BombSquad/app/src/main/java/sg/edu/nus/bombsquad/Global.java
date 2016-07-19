@@ -1,6 +1,8 @@
 package sg.edu.nus.bombsquad;
 
 
+import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,6 +24,8 @@ public class Global {
     private String player_name;
     private String[] player_id = new String[100000];
     private Queue<String> player_list = new LinkedList<String>();
+    private Button[] buttons;
+    private boolean booleanAccess;
 
     //Modify
     public void setData(String[] arr) {
@@ -60,6 +64,13 @@ public class Global {
         player_id = list;
     }
 
+    public void setButtons (Button[] button) {
+        buttons = button;
+    }
+
+    public void setBooleanAccess(boolean bool) {
+        booleanAccess = bool;
+    }
 
     //Retrieve
     public String[] getStringArray() {
@@ -101,6 +112,16 @@ public class Global {
     public Queue getPlayerList() {
         return player_list;
     }
+
+    public Button[] getButtons() {
+        return buttons;
+    }
+
+    public boolean getBooleanAccess() {
+        return booleanAccess;
+    }
+
+
 
     //Others
     public static synchronized Global getInstance() {

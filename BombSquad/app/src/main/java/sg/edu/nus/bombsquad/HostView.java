@@ -34,43 +34,76 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 public class HostView extends AppCompatActivity {
+    Global global = Global.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_view);
-        display();
+
+        final Intent intent = getIntent();
+        final String room_code = intent.getStringExtra("room_code");
+        final String room_name = intent.getStringExtra("room_name");
+        final int numQuestion = Integer.valueOf(intent.getStringExtra("numQuestion"));
+//        final Global global = Global.getInstance();
+
+        global.setRoom_code(room_code);
+        final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
+
+        String[][] stringArr = new String[numQuestion][6];  //Initialising String2DArray in global
+        global.setData(stringArr);  //Initialising String2DArray in global
+
+        System.out.println("ROOM CODE: " + room_code);
+        System.out.println("ROOM NAME: " + room_name);
+        System.out.println("NUM QUESTION: " + numQuestion);
+
+        TalkToServer myTask = new TalkToServer(); // can add params for a constructor if needed
+        myTask.execute(); // here is where you would pass data to doInBackground()
+
+//        display(global, room_code, room_name, numQuestion, questionIDArray);
+
+
     }
 
-    public void getQuestionsData(final Global global, int numQuestion, String[] questionID){
+    public void getQuestionsData(int numQuestion, String[] questionIDArray){
+        System.out.println("----- INSIDE getQuestionsData -----");
+        global.setCounter(0);
+
         int i = 0;
         while (i < numQuestion) {
-            System.out.println("qnID: " + questionID[i]);
+            System.out.println("qnID: " + questionIDArray[i] + "     (INSIDE GQD)");
 
-            global.setNumber(i);
 
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    String[][] tempArr = global.getString2DArr();
+
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
+                        String[][] tempArr = global.getString2DArr();
 
-
-                        int i = global.getNumber();
-                        tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
+                        int i = global.getCounter();
+                        tempArr[i][0] = jsonResponse.getJSONObject(0 + "").getString("question_type");
                         tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
 
-                        System.out.println("CHAMPIONNNN: " + tempArr[i][1]);
 
+                        System.out.println("Inside gqd function: " + tempArr[i][1] + "     (INSIDE GQD)");
+                        global.setData(tempArr);
+                        String[][] abc = global.getString2DArr();
+                        System.out.println("global counter: " + i + "     (INSIDE GQD)");
+                        System.out.println("abc: " + abc[global.getCounter()][1] + "     (INSIDE GQD)");
+                        global.setCounter(++i);
 
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    global.setData(tempArr);
+//                    global.setData(tempArr);
+//                    String[][] abc = global.getString2DArr();
+//                    System.out.println("abc: " + abc[0][1]);
                 }
             };
-            QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
+            QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionIDArray[i], responseListener);
             RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
             requestQueue.add(questionAnswerOptionRequest);
 
@@ -78,33 +111,8 @@ public class HostView extends AppCompatActivity {
         }
     }
 
-    private void display() {
-        final Intent intent = getIntent();
-        final String room_code = intent.getStringExtra("room_code");
-        final String room_name = intent.getStringExtra("room_name");
-        final int numQuestion = Integer.valueOf(intent.getStringExtra("numQuestion"));
-        final Global global = Global.getInstance();
-        global.setRoom_code(room_code);
-        final String[] questionID = global.getQuestion_id();
-
-        /*ArrayList<HashMap<String, String>> hashMapArrayList = new ArrayList<HashMap<String, String>>();
-        global.setData(hashMapArrayList);*/
-
-        String[][] stringArr = new String[numQuestion][6];
-        global.setData(stringArr);
-
-        /*ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                new Background().execute();
-
-                //For now only can do 1 qn id
-                if (global.getQuestion_id() != null) {
-//                    System.out.println("QNID: " + global.getQuestion_id());
-                }
-            }
-        }, 0, 500, TimeUnit.MILLISECONDS);*/
-
+    private void display(String room_code, String room_name, int numQuestion, String[] questionIDArray) {
+        System.out.println("----- INSIDE display -----");
 
         //Display room id
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
@@ -115,42 +123,11 @@ public class HostView extends AppCompatActivity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
 
-        getQuestionsData(global, numQuestion, questionID);
-
         //While loop to display all questions in a selected room
         int i = 0;
         while (i < numQuestion) {
-//            System.out.println("qnID: " + questionID[i]);
 
             global.setNumber(i);
-
-            /*Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    String[][] tempArr = global.getString2DArr();
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-
-
-                        int i = global.getNumber();
-                        tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
-                        tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
-
-                        System.out.println("HELLO QN: " + tempArr[i][1]);
-
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    global.setData(tempArr);
-                }
-            };
-            QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
-            RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
-            requestQueue.add(questionAnswerOptionRequest);*/
-
-
 
             //Inner container
             LinearLayout innerLL = new LinearLayout(this);
@@ -182,7 +159,7 @@ public class HostView extends AppCompatActivity {
 //            tvQuestion.setText(global.getHashMapArrayList().get(i).get("question"));
 //            String[][] qn2DArray = global.getString2DArr();
 //            tvQuestion.setText(qn2DArray[i][1]);
-            System.out.println("HELLO MY LADY");
+            System.out.println("INSIDE DISPLAY: " + i + "     (INSIDE display)");
 
 
             //Answer Option - TextView
@@ -237,7 +214,7 @@ public class HostView extends AppCompatActivity {
             final Button bDeploy = new Button(this);
             bDeploy.setBackgroundResource(R.drawable.white_bg_black_border);
             bDeploy.setText("Deploy");
-            bDeploy.setTag(questionID[i]);
+            bDeploy.setTag(questionIDArray[i]);
             bDeploy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -279,6 +256,44 @@ public class HostView extends AppCompatActivity {
             i++;
         }
     }
+
+
+    class TalkToServer extends AsyncTask<Void, Void, Void> {
+
+        final Intent intent = getIntent();
+        final String room_code = intent.getStringExtra("room_code");
+        final String room_name = intent.getStringExtra("room_name");
+        final int numQuestion = Integer.valueOf(intent.getStringExtra("numQuestion"));
+        final Global global = Global.getInstance();
+        final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
+
+        @Override
+        protected void onPreExecute() {
+            global.setRoom_code(room_code);
+            String[][] stringArr = new String[numQuestion][6];  //Initialising String2DArray in global
+            global.setData(stringArr);  //Initialising String2DArray in global
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            getQuestionsData(numQuestion, questionIDArray);
+            String[][] tempArr = global.getString2DArr();
+            System.out.println("HELPPPPP: " + tempArr[global.getCounter()][1]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            String[][] tempArr = global.getString2DArr();
+            System.out.println("WHATTTTT: " + tempArr[0][1]);
+
+            display(room_code, room_name, numQuestion, questionIDArray);
+
+        }
+    }
+
+
 }
 
 

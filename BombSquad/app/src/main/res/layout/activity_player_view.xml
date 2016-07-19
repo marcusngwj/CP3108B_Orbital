@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/playerViewLinearLayout"
             android:gravity="center"
-            android:text="LEAVE"
+            android:text="EXIT ROOM"
             android:textAlignment="gravity"
             android:textColor="#ffffff"
             android:textSize="25dp"

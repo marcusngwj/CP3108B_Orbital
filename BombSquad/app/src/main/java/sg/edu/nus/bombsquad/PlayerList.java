@@ -43,7 +43,7 @@ public class PlayerList extends AppCompatActivity {
         final String question_id = intent.getStringExtra("question_id");
         final Global global = Global.getInstance();
         final String[] player_id = global.getPlayerId();
-        final Queue player_list = global.getPlayerList();
+        final String[] player_list = global.getPlayerList();
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.player_list);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -51,10 +51,13 @@ public class PlayerList extends AppCompatActivity {
         while (i < player_id.length) {
             final String currPlayer = player_id[i];
             Button player = new Button(this);
-            player.setText(player_list.poll().toString());
+            player.setText(player_list[i]);
             player.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    System.out.println(room_code);
+                    System.out.println(question_id);
+                    System.out.println(currPlayer);
                     OkHttpClient client = new OkHttpClient();
                     RequestBody postData = new FormBody.Builder()
                             .add("room_code", room_code)
@@ -70,7 +73,8 @@ public class PlayerList extends AppCompatActivity {
                                 }
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    System.out.println("PASSED BOMB!");
+                                    Intent intent = new Intent(PlayerList.this, HostView.class);
+                                    startActivity(intent);
                                 }
                             });
                 }

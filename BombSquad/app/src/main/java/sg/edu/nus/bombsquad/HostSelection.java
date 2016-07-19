@@ -97,11 +97,13 @@ public class HostSelection extends AppCompatActivity {
                             try {
                                 JSONObject result = new JSONObject(response.body().string());
                                 int i = 1;
-                                String[] test = new String[result.length()-2];
-                                global.setPlayerId(test);
+
+                                global.setPlayerId(new String[result.length()-2]);
+                                global.setPlayerList(new String[result.length()-2]);
                                 String[] player_id = global.getPlayerId();
                                 while (i < result.length()-1) {
                                     player_id[i-1] = result.getJSONObject(i+"").getString("player");
+                                    System.out.println(player_id[i-1]);
                                     i++;
                                 }
                             } catch (JSONException e) {
@@ -131,10 +133,12 @@ public class HostSelection extends AppCompatActivity {
     class GetPlayerList extends AsyncTask<Void, Void, Void> {
         final Global global = Global.getInstance();
         String[] player_id = global.getPlayerId();
+        String[] player_list = global.getPlayerList();
         protected Void doInBackground(Void... unused) {
             int i = 0;
             while (i < player_id.length) {
                 final String currPlayer = player_id[i];
+                final int curr = i;
                 OkHttpClient client = new OkHttpClient();
                 RequestBody postData = new FormBody.Builder().add("player_id", currPlayer).build();
                 Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getPlayerName.php").post(postData).build();
@@ -150,8 +154,7 @@ public class HostSelection extends AppCompatActivity {
                                     JSONObject result = new JSONObject(response.body().string());
                                     String first_name = result.getString("first_name");
                                     String last_name = result.getString("last_name");
-                                    Queue player_list = global.getPlayerList();
-                                    player_list.offer(first_name + " " + last_name);
+                                    player_list[curr] = first_name+ " " + last_name;
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

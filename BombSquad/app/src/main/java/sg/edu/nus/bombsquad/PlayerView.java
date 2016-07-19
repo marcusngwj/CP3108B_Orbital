@@ -39,11 +39,15 @@ import okhttp3.RequestBody;
 
 public class PlayerView extends AppCompatActivity{
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    Global global = Global.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_view);
+
+
+
         display();
     }
 

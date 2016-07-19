@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -38,6 +39,10 @@ public class HostView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_view);
         display();
+    }
+
+    public void getQuestionsData(int numQuestion){
+
     }
 
     private void display() {
@@ -79,25 +84,17 @@ public class HostView extends AppCompatActivity {
 
         //While loop to display all questions in a selected room
         int i = 0;
-        while(i < numQuestion){
+        while (i < numQuestion) {
             System.out.println("qnID: " + questionID[i]);
             global.setNumber(i);
 
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
+            /*Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     String[][] tempArr = global.getString2DArr();
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
 
-                        /*HashMap<String, String> questionBlock = new HashMap<String, String>();
-                        questionBlock.put("question_type", jsonResponse.getJSONObject(0+ "").getString("question_type"));
-                        questionBlock.put("question", jsonResponse.getJSONObject(0 + "").getString("question"));
-                        questionBlock.put("option_one", jsonResponse.getJSONObject(0+ "").getString("option_one"));
-                        questionBlock.put("option_two", jsonResponse.getJSONObject(0+ "").getString("option_two"));
-                        questionBlock.put("option_three", jsonResponse.getJSONObject(0+ "").getString("option_three"));
-                        questionBlock.put("option_four", jsonResponse.getJSONObject(0+ "").getString("option_four"));
-                        global.getHashMapArrayList().add(questionBlock);*/
 
                         int i = global.getNumber();
                         tempArr[i][0] = jsonResponse.getJSONObject(0+ "").getString("question_type");
@@ -115,7 +112,7 @@ public class HostView extends AppCompatActivity {
             };
             QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionID[i], responseListener);
             RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
-            requestQueue.add(questionAnswerOptionRequest);
+            requestQueue.add(questionAnswerOptionRequest);*/
 
             //Inner container
             LinearLayout innerLL = new LinearLayout(this);
@@ -128,7 +125,7 @@ public class HostView extends AppCompatActivity {
 
             //Question - Heading_TextView
             TextView tvQuestionHeading = new TextView(this);
-            int questionNo = i+1;
+            int questionNo = i + 1;
             tvQuestionHeading.setText("Question " + questionNo);
             tvQuestionHeading.setTextSize(20);
             tvQuestionHeading.setTextColor(Color.WHITE);
@@ -148,8 +145,6 @@ public class HostView extends AppCompatActivity {
 //            String[][] qn2DArray = global.getString2DArr();
 //            tvQuestion.setText(qn2DArray[i][1]);
 //            System.out.println("YAHOOOOOOO: " + qn2DArray[i][1]);
-
-
 
 
             //Answer Option - TextView
@@ -201,6 +196,16 @@ public class HostView extends AppCompatActivity {
             ddlp.setMargins(0, 0, 40, 0);
 
             //Deploy - Button (So host will see all the question in the room and then choose to deploy it from here)
+            Button bDeploy = new Button(this);
+            bDeploy.setBackgroundResource(R.drawable.white_bg_black_border);
+            bDeploy.setText("Deploy");
+            bDeploy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HostView.this, HostSelection.class);
+                    HostView.this.startActivity(intent);
+                }
+            });
 
             //Defuse - Button
             Button bDefuse = new Button(this);
@@ -213,6 +218,7 @@ public class HostView extends AppCompatActivity {
             bDetonate.setBackgroundResource(R.drawable.red_bg_black_border);
             bDetonate.setText("Detonate");
 
+            defuseDetonateLL.addView(bDeploy);
             defuseDetonateLL.addView(bDefuse);
             defuseDetonateLL.addView(bDetonate);
 
@@ -230,7 +236,16 @@ public class HostView extends AppCompatActivity {
             i++;
         }
     }
+}
 
+
+
+
+
+
+
+
+//Old AsyncTask code
     /*class Background extends AsyncTask<Void, Void, Void> {
         final Global global = Global.getInstance();
 //        final String[] question_id = global.getQuestion_id();
@@ -286,8 +301,6 @@ public class HostView extends AppCompatActivity {
 //            }
         }
     }*/
-}
-
 
 
 //Old AsyncTask Code using volley...

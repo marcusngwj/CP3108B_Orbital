@@ -52,7 +52,7 @@ public class HostView extends AppCompatActivity {
         final int numQuestion = Integer.valueOf(intent.getStringExtra("numQuestion"));
         final Global global = Global.getInstance();
         global.setRoom_code(room_code);
-        String[] questionID = global.getQuestion_id();
+        final String[] questionID = global.getQuestion_id();
 
         /*ArrayList<HashMap<String, String>> hashMapArrayList = new ArrayList<HashMap<String, String>>();
         global.setData(hashMapArrayList);*/
@@ -86,7 +86,9 @@ public class HostView extends AppCompatActivity {
         int i = 0;
         while (i < numQuestion) {
             System.out.println("qnID: " + questionID[i]);
+
             global.setNumber(i);
+            System.out.println(global.getNumber());
 
             /*Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
@@ -196,13 +198,17 @@ public class HostView extends AppCompatActivity {
             ddlp.setMargins(0, 0, 40, 0);
 
             //Deploy - Button (So host will see all the question in the room and then choose to deploy it from here)
-            Button bDeploy = new Button(this);
+            final Button bDeploy = new Button(this);
             bDeploy.setBackgroundResource(R.drawable.white_bg_black_border);
             bDeploy.setText("Deploy");
+            bDeploy.setTag(questionID[i]);
             bDeploy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(HostView.this, HostSelection.class);
+                    String question_id = (String) bDeploy.getTag();
+                    intent.putExtra("question_id", question_id);
+                    intent.putExtra("room_code", global.getRoom_code());
                     HostView.this.startActivity(intent);
                 }
             });

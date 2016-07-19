@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -52,12 +54,24 @@ public class PlayerView extends AppCompatActivity{
     }
 
     private void display() {
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String user_id = intent.getStringExtra("user_id");
         final String room_code = intent.getStringExtra("room_code");
         TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(intent.getStringExtra("room_name"));
+
+        //Exit button, link to RoomType
+        Button bExitPlayerView = (Button)findViewById(R.id.buttonExitPlayerView);
+        bExitPlayerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStop();
+                Intent intentLeave = new Intent(PlayerView.this, RoomType.class);
+                intentLeave.putExtra("user_id", intent.getStringExtra("user_id"));
+                startActivity(intentLeave);
+            }
+        });
 
         LinearLayout outerLL = (LinearLayout) findViewById(R.id.playerViewLinearLayout);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -156,12 +170,28 @@ public class PlayerView extends AppCompatActivity{
             //Time Left (Display countdown) - TextView
             LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
             tvTimeLeftLL.setMargins(30,0,30,35);
-            TextView tvTimeLeft = new TextView(this);
-            tvTimeLeft.setText("TEMP TIMER DISPLAY");
+            final TextView tvTimeLeft = new TextView(this);
+//            tvTimeLeft.setId(View.generateViewId());
+//            tvTimeLeft.getId();
             tvTimeLeft.setPadding(15, 15, 12, 12);
             tvTimeLeft.setWidth(30);
             tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
             tvTimeLeft.setLayoutParams(tvTimeLeftLL);
+
+            //Params: Total time(Need to retrieve from server, interval
+            //+2000 for buffer time for transition
+            final CountDownTimer timer = new CountDownTimer(5000+2000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    tvTimeLeft.setText(millisUntilFinished/1000 + "");
+                }
+
+                @Override
+                public void onFinish() {
+                    tvTimeLeft.setText("BOOM");
+                }
+
+            }.start();
 
 
             //LinearLayout for defuse and pass
@@ -171,11 +201,22 @@ public class PlayerView extends AppCompatActivity{
             LinearLayout.LayoutParams dplp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             dplp.setMargins(0, 0, 40, 0);
 
+            //To be completed
             //Defuse - Button
+            //Attempt to defuse: Check answer with server
+            //If answer is correct, bomb is defused and timer cancelled
+            //Else timer continues to countdown
             Button bDefuse = new Button(this);
             bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
             bDefuse.setText("Defuse");
             bDefuse.setLayoutParams(dplp);
+            bDefuse.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timer.cancel();
+                    tvTimeLeft.setText("Bomb has been successfully defused");
+                }
+            });
 
             //Pass - Button
             Button bPass = new Button(this);
@@ -238,7 +279,7 @@ public class PlayerView extends AppCompatActivity{
                             }
                         }
                     });
-        return null;
+            return null;
         }
 
         protected void onPostExecute(Void update) {

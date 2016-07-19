@@ -44,11 +44,10 @@ public class HostView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_view);
 
-        final Intent intent = getIntent();
-        final String room_code = intent.getStringExtra("room_code");
-        final String room_name = intent.getStringExtra("room_name");
-        final int numQuestion = Integer.valueOf(intent.getStringExtra("numQuestion"));
-//        final Global global = Global.getInstance();
+        final Global global = Global.getInstance();
+        final String room_code = global.getRoom_code();
+        final String room_name = global.getRoomName();
+        final int numQuestion = global.getNumQuestion();
 
         global.setRoom_code(room_code);
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids

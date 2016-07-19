@@ -23,9 +23,10 @@ public class Global {
     private boolean booleanVar;
     private String player_name;
     private String[] player_id = new String[100000];
-    private Queue<String> player_list = new LinkedList<String>();
-    private Button[] buttons;
+    private String[] player_list;
     private boolean booleanAccess;
+    private String room_name;
+    private int num_question;
 
     //Modify
     public void setData(String[] arr) {
@@ -64,13 +65,24 @@ public class Global {
         player_id = list;
     }
 
-    public void setButtons (Button[] button) {
-        buttons = button;
+    public void setPlayerList (String[] list) {
+        player_list = list;
     }
 
     public void setBooleanAccess(boolean bool) {
         booleanAccess = bool;
     }
+
+    public void setRoomName(String name) {
+        room_name = name;
+    }
+
+    public void setNumQuestion(int num) {
+        num_question = num;
+    }
+
+
+
 
     //Retrieve
     public String[] getStringArray() {
@@ -109,17 +121,24 @@ public class Global {
         return player_id;
     }
 
-    public Queue getPlayerList() {
+    public String[] getPlayerList() {
         return player_list;
-    }
-
-    public Button[] getButtons() {
-        return buttons;
     }
 
     public boolean getBooleanAccess() {
         return booleanAccess;
     }
+
+    public String getRoomName() {
+        return room_name;
+    }
+
+    public int getNumQuestion() {
+        return num_question;
+    }
+
+
+
 
 
 

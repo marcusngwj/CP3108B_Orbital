@@ -9,6 +9,7 @@ public class Global {
     private String[] stringArr;
     private String[][] string2DArr;
     private boolean[] booleanArr;
+    private int[] intArr;
     private ArrayList<HashMap<String, String>> hashMapArrayList;
     private String room_status;
     private String[] question_id = new String[100000];
@@ -29,6 +30,8 @@ public class Global {
     public void setData(boolean[] arr) {
         booleanArr = arr;
     }
+
+    public void setData(int[] arr) { intArr = arr; }
 
     public void setData(ArrayList<HashMap<String, String>> arr) { hashMapArrayList = arr; }
 
@@ -60,6 +63,8 @@ public class Global {
     public boolean[] getBooleanArray() {
         return booleanArr;
     }
+
+    public int[] getIntArr() { return intArr; }
 
     public ArrayList<HashMap<String, String>> getHashMapArrayList() { return hashMapArrayList; }
 

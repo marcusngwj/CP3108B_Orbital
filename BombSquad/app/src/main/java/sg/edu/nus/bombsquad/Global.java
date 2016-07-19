@@ -3,6 +3,8 @@ package sg.edu.nus.bombsquad;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Global {
     private static Global instance;
@@ -17,8 +19,8 @@ public class Global {
     private int number;
     private boolean booleanVar;
     private String player_name;
-
-
+    private String[] player_id = new String[100000];
+    private Queue<String> player_list = new LinkedList<String>();
 
     //Modify
     public void setData(String[] arr) {
@@ -51,6 +53,9 @@ public class Global {
         player_name = name;
     }
 
+    public void setPlayerId (String[] list) {
+        player_id = list;
+    }
 
 
     //Retrieve
@@ -84,6 +89,13 @@ public class Global {
         return player_name;
     }
 
+    public String[] getPlayerId() {
+        return player_id;
+    }
+
+    public Queue getPlayerList() {
+        return player_list;
+    }
 
     //Others
     public static synchronized Global getInstance() {

@@ -80,7 +80,7 @@ public class LoginPage extends AppCompatActivity {
                                 intent.putExtra("first_name", first_name);
                                 intent.putExtra("last_name", last_name);
                                 intent.putExtra("user_id", user_id);
-                                intent.putExtra("user_id", user_id);
+                                intent.putExtra("user_id", user_id);        //Unsure why there is duplicate here, to be checked
 
                                 LoginPage.this.startActivity(intent);
                             }

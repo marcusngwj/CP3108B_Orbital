@@ -14,6 +14,7 @@ public class Global {
     private String[] question_id = new String[100000];
     private String room_code;
     private int number;
+    private boolean booleanVar;
     private String player_name;
 
 
@@ -40,6 +41,8 @@ public class Global {
     public void setRoom_code(String string) { room_code = string; }
 
     public void setNumber(int integer) { number = integer; }
+
+    public void setBooleanVar(boolean var) { booleanVar = var; }
 
     public void setPlayerName (String name) {
         player_name = name;
@@ -69,6 +72,8 @@ public class Global {
     public String getRoom_code() { return room_code; }
 
     public int getNumber() { return number; }
+
+    public boolean getBooleanVar() { return booleanVar; }
 
     public String getPlayerName() {
         return player_name;

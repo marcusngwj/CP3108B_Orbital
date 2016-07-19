@@ -101,68 +101,98 @@ public class PlayerView extends AppCompatActivity{
             questionLL.addView(tvQuestion);
             questionLL.addView(tvAnswerOption);
 
+            //LinearLayout for MCQoptions
+            LinearLayout mcqOptionsLL = new LinearLayout(this);
+            mcqOptionsLL.setOrientation(LinearLayout.HORIZONTAL);
+            mcqOptionsLL.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams mcqOlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            mcqOlp.setMargins(0, 0, 15, 0);
 
-            //In possession of - TextView
-            TextView tvInPossessionOf = new TextView(this);
-            tvInPossessionOf.setText("In possession of");
-            tvInPossessionOf.setTextSize(20);
-            tvInPossessionOf.setTextColor(Color.WHITE);
-            tvInPossessionOf.setPadding(15, 5, 2, 2);
+            //Option A - Button
+            Button bOptionA = new Button(this);
+            bOptionA.setBackgroundResource(R.drawable.white_border);
+            bOptionA.setText("A");
+            bOptionA.setTextSize(20);
+            bOptionA.setTextColor(Color.WHITE);
+            bOptionA.setLayoutParams(mcqOlp);
 
-            //In possession of - EditText
-            LinearLayout.LayoutParams etIPOLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            etIPOLL.setMargins(30,0,30,20);
-            EditText etIPO = new EditText(this);
-            etIPO.setPadding(15, 15, 12, 12);
-            etIPO.setWidth(30);
-            etIPO.setBackgroundResource(R.drawable.white_bg_black_border);
-            etIPO.setLayoutParams(etIPOLL);
+            //Option B - Button
+            Button bOptionB = new Button(this);
+            bOptionB.setBackgroundResource(R.drawable.white_border);
+            bOptionB.setText("B");
+            bOptionB.setTextSize(20);
+            bOptionB.setTextColor(Color.WHITE);
+            bOptionB.setLayoutParams(mcqOlp);
 
-            //Time Left - TextView
+            //Option C - Button
+            Button bOptionC = new Button(this);
+            bOptionC.setBackgroundResource(R.drawable.white_border);
+            bOptionC.setText("C");
+            bOptionC.setTextSize(20);
+            bOptionC.setTextColor(Color.WHITE);
+            bOptionC.setLayoutParams(mcqOlp);
+
+            //Option D - Button
+            Button bOptionD = new Button(this);
+            bOptionD.setBackgroundResource(R.drawable.white_border);
+            bOptionD.setText("D");
+            bOptionD.setTextSize(20);
+            bOptionD.setTextColor(Color.WHITE);
+            bOptionD.setLayoutParams(mcqOlp);
+
+            mcqOptionsLL.addView(bOptionA);
+            mcqOptionsLL.addView(bOptionB);
+            mcqOptionsLL.addView(bOptionC);
+            mcqOptionsLL.addView(bOptionD);
+
+
+            //Time Left (Title) - TextView
+            TextView tvTimeLeftTitle = new TextView(this);
+            tvTimeLeftTitle.setText("Time Left");
+            tvTimeLeftTitle.setTextSize(20);
+            tvTimeLeftTitle.setTextColor(Color.WHITE);
+            tvTimeLeftTitle.setPadding(15, 5, 2, 2);
+
+            //Time Left (Display countdown) - TextView
+            LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+            tvTimeLeftLL.setMargins(30,0,30,35);
             TextView tvTimeLeft = new TextView(this);
-            tvTimeLeft.setText("Time Left");
-            tvTimeLeft.setTextSize(20);
-            tvTimeLeft.setTextColor(Color.WHITE);
-            tvTimeLeft.setPadding(15, 5, 2, 2);
+            tvTimeLeft.setText("TEMP TIMER DISPLAY");
+            tvTimeLeft.setPadding(15, 15, 12, 12);
+            tvTimeLeft.setWidth(30);
+            tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
+            tvTimeLeft.setLayoutParams(tvTimeLeftLL);
 
-            //Time Left - EditText
-            LinearLayout.LayoutParams etTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            etTimeLeftLL.setMargins(30,0,30,35);
-            EditText etTimeLeft = new EditText(this);
-            etTimeLeft.setPadding(15, 15, 12, 12);
-            etTimeLeft.setWidth(30);
-            etTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
-            etTimeLeft.setLayoutParams(etTimeLeftLL);
 
-            //LinearLayout for defuse and detonate
-            LinearLayout defuseDetonateLL = new LinearLayout(this);
-            defuseDetonateLL.setOrientation(LinearLayout.HORIZONTAL);
-            defuseDetonateLL.setGravity(Gravity.CENTER);
-            LinearLayout.LayoutParams ddlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ddlp.setMargins(0, 0, 40, 0);
+            //LinearLayout for defuse and pass
+            LinearLayout defusePassLL = new LinearLayout(this);
+            defusePassLL.setOrientation(LinearLayout.HORIZONTAL);
+            defusePassLL.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams dplp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            dplp.setMargins(0, 0, 40, 0);
 
             //Defuse - Button
             Button bDefuse = new Button(this);
             bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
             bDefuse.setText("Defuse");
-            bDefuse.setLayoutParams(ddlp);
+            bDefuse.setLayoutParams(dplp);
 
-            //Detonate - Button
-            Button bDetonate = new Button(this);
-            bDetonate.setBackgroundResource(R.drawable.red_bg_black_border);
-            bDetonate.setText("Detonate");
+            //Pass - Button
+            Button bPass = new Button(this);
+            bPass.setBackgroundResource(R.drawable.white_bg_black_border);
+            bPass.setText("Pass");
 
-            defuseDetonateLL.addView(bDefuse);
-            defuseDetonateLL.addView(bDetonate);
+            defusePassLL.addView(bDefuse);
+            defusePassLL.addView(bPass);
+
 
             //Format of front-end in order
             innerLL.addView(tvQuestionHeading);
             innerLL.addView(questionLL);
-            innerLL.addView(tvInPossessionOf);
-            innerLL.addView(etIPO);
+            innerLL.addView(mcqOptionsLL);
+            innerLL.addView(tvTimeLeftTitle);
             innerLL.addView(tvTimeLeft);
-            innerLL.addView(etTimeLeft);
-            innerLL.addView(defuseDetonateLL);
+            innerLL.addView(defusePassLL);
 
             outerLL.addView(innerLL, lp);
 

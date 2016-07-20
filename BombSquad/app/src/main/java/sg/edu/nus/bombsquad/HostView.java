@@ -274,33 +274,37 @@ public class HostView extends AppCompatActivity {
         innerLL.addView(tvTimeLefts[i]);
         innerLL.addView(defuseDetonateLL);
 
-
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                new UpdateHostView().execute();
-            }
-        },0, 500, TimeUnit.MILLISECONDS);
+        if (i == global.getNumQuestion()-1) {
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    if (global.getRunScheduler()) { //check if there was a response previously so that it will not run until there's a response
+                        new UpdateHostView().execute();
+                    }
+                }
+            }, 0, 600, TimeUnit.MILLISECONDS);
+        }
         return innerLL;
     }
 
-    //NEED TO THINK ABOUT HOW TO CHANGE THIS.... IT ANYHOW JUMPS :(
     class UpdateHostView extends AsyncTask<Void, Void, Void> {
         final TextView[] possession = global.getHostViewPossession();
         final int[] playerPossessBomb = global.getPlayerPossessBomb();
         final TextView[] tvTimeLefts = global.getTvTimeLefts();
         final int[] timeLefts = global.getTimeLefts();
 
-
         public Void doInBackground(Void... unused) {
+            global.setRunScheduler(false); //if no response, scheduler will not run
             global.setCounter1(0);
+            OkHttpClient client = new OkHttpClient();
+            FormBody.Builder postDataBuilder = new FormBody.Builder();
+            Request.Builder requestBuilder = new Request.Builder();
             while (global.getCounter1() < global.getNumQuestion()) {
-                OkHttpClient client = new OkHttpClient();
-                RequestBody postData = new FormBody.Builder()
+                final int count = global.getCounter1(); //so that the indx of arr in OnResponse is static
+                RequestBody postData = postDataBuilder
                         .add("room_code", global.getRoomCode())
                         .add("question_id", global.getQuestion_id()[global.getCounter1()])
                         .build();
-                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateHostView.php").post(postData).build();
-
+                Request request = requestBuilder.url("http://orbitalbombsquad.x10host.com/updateHostView.php").post(postData).build();
                 client.newCall(request)
                         .enqueue(new Callback() {
                             @Override
@@ -311,8 +315,9 @@ public class HostView extends AppCompatActivity {
                             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                 try {
                                     JSONObject result = new JSONObject(response.body().string());
-                                    playerPossessBomb[global.getCounter1()] = Integer.parseInt(result.getString("player_id"));
-                                    timeLefts[global.getCounter1()] = Integer.parseInt(result.getString("time_left"));
+                                    playerPossessBomb[count] = Integer.parseInt(result.getString("player_id"));
+                                    timeLefts[count] = Integer.parseInt(result.getString("time_left"));
+                                    global.setRunScheduler(true); //to indicate in scheduler that a response was received
                                     global.setUpdateHostViewBoolean(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();

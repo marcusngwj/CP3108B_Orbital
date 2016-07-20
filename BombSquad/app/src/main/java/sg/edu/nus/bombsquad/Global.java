@@ -57,6 +57,7 @@ public class Global {
     private int[] timeLefts;
     private TextView[] tvTimeLefts;
     private boolean updateHostViewBoolean;
+    private boolean runScheduler = true;
 
 
 
@@ -152,6 +153,10 @@ public class Global {
 
     public void setUpdateHostViewBoolean(Boolean bool) {
         updateHostViewBoolean = bool;
+    }
+
+    public void setRunScheduler(Boolean bool) {
+        runScheduler = true;
     }
 
 
@@ -252,6 +257,10 @@ public class Global {
 
     public boolean getUpdateHostViewBoolean() {
         return updateHostViewBoolean;
+    }
+
+    public boolean getRunScheduler() {
+        return runScheduler;
     }
 
 

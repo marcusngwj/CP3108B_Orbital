@@ -20,4 +20,5 @@
 		$response["player_id"] = $player_id;
     }
     echo json_encode($response);
+	mysqli_close($con);
 ?>

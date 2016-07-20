@@ -112,7 +112,6 @@ public class PlayerList extends AppCompatActivity {
                                 }
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    System.out.println(global.getTimeLeft());
                                 }
                             });
                     if (global.getTimeLeft() == 0) {

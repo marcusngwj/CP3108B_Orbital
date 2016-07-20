@@ -69,6 +69,7 @@ public class HostView extends AppCompatActivity {
 
     protected void onStop() {
         super.onStop();
+        global.setUpdateHostViewBoolean(false);
         scheduler.shutdown();
 
     }
@@ -324,7 +325,6 @@ public class HostView extends AppCompatActivity {
             return null;
         }
         public void onPostExecute(Void unused) {
-            System.out.println("TEST");
             int i = 0;
             if (global.getUpdateHostViewBoolean()) {
                 while (i < global.getNumQuestion()) {

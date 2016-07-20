@@ -17,7 +17,7 @@
     while(mysqli_stmt_fetch($statement)){
         $response["success"] = true;
 		$response["time_left"] = $time_left;
-		$response["player_id"] = $user_id;
+		$response["player_id"] = $player_id;
     }
     echo json_encode($response);
 ?>

@@ -12,6 +12,17 @@ import java.util.Queue;
 public class Global {
     private static Global instance;
 
+    //Definite constant variables
+    private int id_etAnswerOption_constant = 1000000;
+    private int id_BOptionA_constant = 65000000;
+    private int id_BOptionB_constant = 66000000;
+    private int id_BOptionC_constant = 67000000;
+    private int id_BOptionD_constant = 68000000;
+    private int id_TVTimeLeft_constant = 2000000;
+    private int id_BDefuse_constant = 3000000;
+    private int id_BPass_constant = 4000000;
+
+
     //Variables for temporary use
     private String[] stringArr;
     private String[][] string2DArr;
@@ -38,6 +49,7 @@ public class Global {
     private boolean playerStatus;
     private int timeLeft;
     private String currQuestionId;
+    private boolean answerIsCorrect;
 
 
 
@@ -111,7 +123,7 @@ public class Global {
         currQuestionId = id;
     }
 
-
+    public void setAnswerIsCorrect(boolean bool) { answerIsCorrect = bool; }
 
 
 
@@ -188,6 +200,23 @@ public class Global {
     public String getCurrQuestionId() {
         return currQuestionId;
     }
+
+    public boolean getAnswerIsCorrect() {return answerIsCorrect; }
+
+
+
+
+
+
+    //Retrieve definite constant variable
+    public int getId_etAnswerOption_constant() { return id_etAnswerOption_constant; }
+    public int getId_BOptionA_constant() { return id_BOptionA_constant; }
+    public int getId_BOptionB_constant() { return id_BOptionB_constant; }
+    public int getId_BOptionC_constant() { return id_BOptionC_constant; }
+    public int getId_BOptionD_constant() { return id_BOptionD_constant; }
+    public int getId_TVTimeLeft_constant() { return id_TVTimeLeft_constant; }
+    public int getId_BDefuse_constant() { return id_BDefuse_constant; }
+    public int getId_BPass_constant() { return id_BPass_constant; }
 
 
 

@@ -20,6 +20,7 @@ public class Global {
     private int number;
     private int counter;
     private boolean booleanVar;
+    private String string;
 
     
     //Variables with defined purpose
@@ -34,7 +35,7 @@ public class Global {
     private String[] player_list;
     private boolean booleanAccess;
     private LinearLayout[] questionLayoutArray;
-    private int viewId;
+
 
 
 
@@ -57,6 +58,8 @@ public class Global {
     public void setCounter(int newCount) { counter = newCount; }
 
     public void setBooleanVar(boolean var) { booleanVar = var; }
+
+    public void setString(String line) { string = line; }
 
     public void setUserId(String id) { user_id = id; }
 
@@ -94,7 +97,7 @@ public class Global {
 
     public void setQuestionLayoutArray(LinearLayout[] arr) { questionLayoutArray = arr; }
 
-    public void setViewId(int id) { viewId = id; }
+
 
 
 
@@ -122,6 +125,8 @@ public class Global {
     public int getCounter() { return counter; }
 
     public boolean getBooleanVar() { return booleanVar; }
+
+    public String getString() { return string; }
 
     public String getUserId() { return user_id; }
 
@@ -159,7 +164,7 @@ public class Global {
 
     public LinearLayout[] getQuestionLayoutArray() { return questionLayoutArray; }
 
-    public int getViewId() { return  viewId; }
+
 
 
 

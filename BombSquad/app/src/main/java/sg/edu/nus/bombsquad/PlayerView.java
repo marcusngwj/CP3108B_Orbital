@@ -98,8 +98,16 @@ public class PlayerView extends AppCompatActivity{
         int i = 0;
         while (i < numQuestion) {
             outerLL.addView(qnLayoutArr[i], lp);
+
+            EditText etTemp = (EditText)findViewById(i + 1000000);
+            if(etTemp!=null){
+                etTemp.setText("YAY");
+            }
+
             i++;
         }
+
+
 
 
         scheduler.scheduleAtFixedRate(new Runnable() {

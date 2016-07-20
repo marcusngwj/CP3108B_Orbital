@@ -3,6 +3,7 @@ package sg.edu.nus.bombsquad;
 
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,8 +39,8 @@ public class Global {
     private boolean playerStatus;
     private int timeLeft;
     private String currQuestionId;
-
-
+    private TextView[] hostViewPossession;
+    private int[] playerPossessBomb;
 
 
     //Modify
@@ -109,6 +110,14 @@ public class Global {
 
     public void setCurrQuestionId(String id) {
         currQuestionId = id;
+    }
+
+    public void setHostViewPossession(TextView[] tv) {
+        hostViewPossession = tv;
+    }
+
+    public void setPlayerPossessBomb(int[] arr) {
+        playerPossessBomb = arr;
     }
 
 
@@ -189,6 +198,13 @@ public class Global {
         return currQuestionId;
     }
 
+    public TextView[] getHostViewPossession() {
+        return hostViewPossession;
+    }
+
+    public int[] getPlayerPossessBomb() {
+        return playerPossessBomb;
+    }
 
 
 

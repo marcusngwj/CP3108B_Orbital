@@ -37,6 +37,7 @@ import okhttp3.RequestBody;
 
 public class HostView extends AppCompatActivity {
     Global global = Global.getInstance();
+    final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,9 @@ public class HostView extends AppCompatActivity {
         final String room_code = global.getRoomCode();
         final String room_name = global.getRoomName();
         final int numQuestion = global.getNumQuestion();
-
         global.setRoomCode(room_code);
+        global.setHostViewPossession(new TextView[numQuestion]);
+        global.setPlayerPossessBomb(new int[numQuestion]);
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
 
         String[][] stringArr = new String[numQuestion][8];  //Initialising String2DArray in global
@@ -60,11 +62,6 @@ public class HostView extends AppCompatActivity {
 
 
         display(room_code, room_name, numQuestion, questionIDArray);
-
-    }
-
-    protected void onStop() {
-        super.onStop();
 
     }
 
@@ -81,6 +78,12 @@ public class HostView extends AppCompatActivity {
         lp.setMargins(0, 0, 0, 50);
 
         getQuestionsData(numQuestion, questionIDArray, outerLL, lp);
+
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                new UpdateHostView().execute();
+            }
+        },0, 500, TimeUnit.MILLISECONDS);
     }
 
 
@@ -130,6 +133,7 @@ public class HostView extends AppCompatActivity {
 
     //To create an individual box that contain details of a particular question
     private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, String[] questionIDArray, final String[][] createQnBoxArr){
+        TextView[] possession = global.getHostViewPossession();
         //Inner container
         LinearLayout innerLL = new LinearLayout(this);
         innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -182,6 +186,7 @@ public class HostView extends AppCompatActivity {
 
         //In possession of - TextView
         TextView tvInPossessionOf = new TextView(this);
+
         tvInPossessionOf.setText("In possession of");
         tvInPossessionOf.setTextSize(20);
         tvInPossessionOf.setTextColor(Color.WHITE);
@@ -190,11 +195,11 @@ public class HostView extends AppCompatActivity {
         //In possession of - EditText
         LinearLayout.LayoutParams etIPOLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         etIPOLL.setMargins(30, 0, 30, 20);
-        EditText etIPO = new EditText(this);
-        etIPO.setPadding(15, 15, 12, 12);
-        etIPO.setWidth(30);
-        etIPO.setBackgroundResource(R.drawable.white_bg_black_border);
-        etIPO.setLayoutParams(etIPOLL);
+        possession[i] = new TextView(this);
+        possession[i].setPadding(15, 15, 12, 12);
+        possession[i].setWidth(30);
+        possession[i].setBackgroundResource(R.drawable.white_bg_black_border);
+        possession[i].setLayoutParams(etIPOLL);
 
         //Time Left - TextView
         TextView tvTimeLeft = new TextView(this);
@@ -259,14 +264,57 @@ public class HostView extends AppCompatActivity {
         innerLL.addView(tvQuestionHeading);
         innerLL.addView(questionLL);
         innerLL.addView(tvInPossessionOf);
-        innerLL.addView(etIPO);
+        innerLL.addView(possession[i]);
         innerLL.addView(tvTimeLeft);
         innerLL.addView(etTimeLeft);
         innerLL.addView(defuseDetonateLL);
 
         return innerLL;
     }
-    
+
+
+
+    class UpdateHostView extends AsyncTask<Void, Void, Void> {
+        TextView[] possession = global.getHostViewPossession();
+        int[] playerPossessBomb = global.getPlayerPossessBomb();
+
+        public Void doInBackground(Void... unused) {
+            System.out.println("I AM HEREEEEE");
+            int i = 0;
+            while (i < global.getNumQuestion()) {
+                System.out.println(global.getRoomCode());
+                System.out.println(global.getQuestion_id()[i]);
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", global.getRoomCode())
+                        .add("question_id", global.getQuestion_id()[i])
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateHostView.php").post(postData).build();
+
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                try {
+                                    JSONObject result = new JSONObject(response.body().string());
+                                    System.out.println("time left = " + result.getString("time_left"));
+                                    System.out.println("player_id = " + result.getString("player_id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                i++;
+            }
+            return null;
+        }
+        public void onPostExecute(Void unused) {
+        }
+    }
 
 }
 

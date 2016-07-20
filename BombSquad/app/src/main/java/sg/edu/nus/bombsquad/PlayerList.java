@@ -41,6 +41,7 @@ public class PlayerList extends AppCompatActivity {
         Intent intent = getIntent();
         final String room_code = intent.getStringExtra("room_code");
         final String question_id = intent.getStringExtra("question_id");
+        final String time_left = intent.getStringExtra("time_left");
         final Global global = Global.getInstance();
         final String[] player_id = global.getPlayerId();
         final String[] player_list = global.getPlayerList();
@@ -63,6 +64,7 @@ public class PlayerList extends AppCompatActivity {
                             .add("room_code", room_code)
                             .add("question_id", question_id)
                             .add("player_id", currPlayer)
+                            .add("time_left", time_left)
                             .build();
                     Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
                     client.newCall(request)
@@ -73,6 +75,7 @@ public class PlayerList extends AppCompatActivity {
                                 }
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    new UpdateTime().execute(time_left);
                                     Intent intent = new Intent(PlayerList.this, HostView.class);
                                     startActivity(intent);
                                 }
@@ -82,6 +85,42 @@ public class PlayerList extends AppCompatActivity {
             assert ll != null;
             ll.addView(player, lp);
             i++;
+        }
+    }
+
+    class UpdateTime extends AsyncTask<String, Void, Void> {
+        final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        final Global global = Global.getInstance();
+        protected Void doInBackground(String... times) {
+            final String time = times[0];
+            global.setTimeLeft(Integer.parseInt(time) + 1);
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    global.setTimeLeft(global.getTimeLeft()-1);
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody postData = new FormBody.Builder()
+                            .add("room_code", global.getRoomCode())
+                            .add("question_id", global.getCurrQuestionId())
+                            .add("time_left", Integer.toString(global.getTimeLeft()))
+                            .build();
+                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateTimeLeft.php").post(postData).build();
+                    client.newCall(request)
+                            .enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    System.out.println("FAIL");
+                                }
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    System.out.println(global.getTimeLeft());
+                                }
+                            });
+                    if (global.getTimeLeft() == 0) {
+                        scheduler.shutdown();
+                    }
+                }
+            }, 0, 1, TimeUnit.SECONDS);
+            return null;
         }
     }
 }

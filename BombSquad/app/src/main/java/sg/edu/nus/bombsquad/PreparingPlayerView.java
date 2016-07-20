@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -86,12 +87,12 @@ public class PreparingPlayerView extends AppCompatActivity {
                             tempArr[i][5] = jsonResponse.getJSONObject(0 + "").getString("option_four");
                             tempArr[i][6] = jsonResponse.getJSONObject(0 + "").getString("answer");
 
-                            layoutArr[i] = createQuestionBox(i, questionIDArray);
-
                             global.setData(tempArr);
-                            global.setQuestionLayoutArray(layoutArr);
-                            global.setCounter(++i);
 
+                            layoutArr[i] = createQuestionBox(i);
+                            global.setQuestionLayoutArray(layoutArr);
+
+                            global.setCounter(++i);
 
                             if(i==numQuestion){
                                 dialog.dismiss();
@@ -113,7 +114,7 @@ public class PreparingPlayerView extends AppCompatActivity {
         }
 
         //To create an individual box that contain details of a particular question
-        private LinearLayout createQuestionBox(int i, String[] questionIDArray){
+        private LinearLayout createQuestionBox(int i){
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 0, 0, 50);
 
@@ -142,16 +143,28 @@ public class PreparingPlayerView extends AppCompatActivity {
 
             //Question - Actual Question_TextView
             TextView tvQuestion = new TextView(PreparingPlayerView.this);
-            tvQuestion.setText("TEMP");
-            tvQuestionHeading.setTextSize(20);
+            String[][] createQnBoxArr = global.getString2DArr();
+            String qn = createQnBoxArr[i][1];
+            tvQuestion.setText(qn);
+            tvQuestion.setTextSize(20);
+            questionLL.addView(tvQuestion);
 
             //Answer Option - TextView
-            TextView tvAnswerOption = new TextView(PreparingPlayerView.this);
-            tvAnswerOption.setText("change");
-            tvAnswerOption.setTextSize(20);
-
-            questionLL.addView(tvQuestion);
-            questionLL.addView(tvAnswerOption);
+            String qnType = createQnBoxArr[i][0];
+            if(qnType.equals("Multiple Choice")){
+                TextView tvAnswerOption = new TextView(PreparingPlayerView.this);
+                String result = "";
+                for(int j=2; j<6; j++){
+                    result += createQnBoxArr[i][j] + "\n";
+                }
+                tvAnswerOption.setText(result);
+                tvAnswerOption.setTextSize(20);
+                questionLL.addView(tvAnswerOption);
+            }
+            else{
+                EditText etAnswerOption = new EditText(PreparingPlayerView.this);
+                questionLL.addView(etAnswerOption);
+            }
 
             //LinearLayout for MCQoptions
             LinearLayout mcqOptionsLL = new LinearLayout(PreparingPlayerView.this);
@@ -160,37 +173,91 @@ public class PreparingPlayerView extends AppCompatActivity {
             LinearLayout.LayoutParams mcqOlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             mcqOlp.setMargins(0, 0, 15, 0);
 
+            final String correctAnswer = createQnBoxArr[i][6];
+
             //Option A - Button
-            Button bOptionA = new Button(PreparingPlayerView.this);
+            final Button bOptionA = new Button(PreparingPlayerView.this);
             bOptionA.setBackgroundResource(R.drawable.white_border);
             bOptionA.setText("A");
+            bOptionA.setTag(createQnBoxArr[i][2]);
             bOptionA.setTextSize(20);
             bOptionA.setTextColor(Color.WHITE);
             bOptionA.setLayoutParams(mcqOlp);
+            bOptionA.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String optionA = (String)bOptionA.getTag();
+                    if(optionA.equals(correctAnswer)){
+                        global.setBooleanVar(true);
+                    }
+                    else{
+                        global.setBooleanVar(false);
+                    }
+                }
+            });
 
             //Option B - Button
-            Button bOptionB = new Button(PreparingPlayerView.this);
+            final Button bOptionB = new Button(PreparingPlayerView.this);
             bOptionB.setBackgroundResource(R.drawable.white_border);
             bOptionB.setText("B");
+            bOptionB.setTag(createQnBoxArr[i][3]);
             bOptionB.setTextSize(20);
             bOptionB.setTextColor(Color.WHITE);
             bOptionB.setLayoutParams(mcqOlp);
+            bOptionB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String optionB = (String)bOptionB.getTag();
+                    if(optionB.equals(correctAnswer)){
+                        global.setBooleanVar(true);
+                    }
+                    else{
+                        global.setBooleanVar(false);
+                    }
+                }
+            });
 
             //Option C - Button
-            Button bOptionC = new Button(PreparingPlayerView.this);
+            final Button bOptionC = new Button(PreparingPlayerView.this);
             bOptionC.setBackgroundResource(R.drawable.white_border);
             bOptionC.setText("C");
+            bOptionC.setTag(createQnBoxArr[i][4]);
             bOptionC.setTextSize(20);
             bOptionC.setTextColor(Color.WHITE);
             bOptionC.setLayoutParams(mcqOlp);
+            bOptionC.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String optionC = (String)bOptionC.getTag();
+                    if(optionC.equals(correctAnswer)){
+                        global.setBooleanVar(true);
+                    }
+                    else{
+                        global.setBooleanVar(false);
+                    }
+                }
+            });
 
             //Option D - Button
-            Button bOptionD = new Button(PreparingPlayerView.this);
+            final Button bOptionD = new Button(PreparingPlayerView.this);
             bOptionD.setBackgroundResource(R.drawable.white_border);
             bOptionD.setText("D");
+            bOptionD.setTag(createQnBoxArr[i][5]);
             bOptionD.setTextSize(20);
             bOptionD.setTextColor(Color.WHITE);
             bOptionD.setLayoutParams(mcqOlp);
+            bOptionD.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String optionD = (String)bOptionD.getTag();
+                    if(optionD.equals(correctAnswer)){
+                        global.setBooleanVar(true);
+                    }
+                    else{
+                        global.setBooleanVar(false);
+                    }
+                }
+            });
 
             mcqOptionsLL.addView(bOptionA);
             mcqOptionsLL.addView(bOptionB);
@@ -218,7 +285,7 @@ public class PreparingPlayerView extends AppCompatActivity {
 
             //Params: Total time(Need to retrieve from server, interval
             //+2000 for buffer time for transition
-            final CountDownTimer timer = new CountDownTimer(5000+2000, 1000) {
+            final CountDownTimer timer = new CountDownTimer(15000+2000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     tvTimeLeft.setText(millisUntilFinished/1000 + "");
@@ -251,8 +318,10 @@ public class PreparingPlayerView extends AppCompatActivity {
             bDefuse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    timer.cancel();
-                    tvTimeLeft.setText("Bomb has been successfully defused");
+                    if(global.getBooleanVar()) {
+                        timer.cancel();
+                        tvTimeLeft.setText("Bomb has been successfully defused");
+                    }
                 }
             });
 
@@ -268,7 +337,9 @@ public class PreparingPlayerView extends AppCompatActivity {
             //Format of front-end in order
             innerLL.addView(tvQuestionHeading);
             innerLL.addView(questionLL);
-            innerLL.addView(mcqOptionsLL);
+            if(qnType.equals("Multiple Choice")){
+                innerLL.addView(mcqOptionsLL);
+            }
             innerLL.addView(tvTimeLeftTitle);
             innerLL.addView(tvTimeLeft);
             innerLL.addView(defusePassLL);

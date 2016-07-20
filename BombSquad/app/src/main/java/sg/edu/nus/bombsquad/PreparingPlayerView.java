@@ -118,6 +118,9 @@ public class PreparingPlayerView extends AppCompatActivity {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 0, 0, 50);
 
+            //Creating Id
+            final int idETAnswerOption = i + 1000000;   //id for etAnswerOption
+
             //Inner container
             LinearLayout innerLL = new LinearLayout(PreparingPlayerView.this);
             innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -165,6 +168,7 @@ public class PreparingPlayerView extends AppCompatActivity {
             }
             else{
                 EditText etAnswerOption = new EditText(PreparingPlayerView.this);
+                etAnswerOption.setId(idETAnswerOption);
                 questionLL.addView(etAnswerOption);
             }
 
@@ -341,22 +345,27 @@ public class PreparingPlayerView extends AppCompatActivity {
             bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
             bDefuse.setText("Defuse");
             bDefuse.setLayoutParams(dplp);
-            bDefuse.setOnClickListener(new View.OnClickListener() {
+
+            /*bDefuse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String qnType = createQnBoxArr[i][0];
                     String correctAnswer = createQnBoxArr[i][6];
+                    System.out.println("new ID: " + idETAnswerOption);
+
+
+
                     if(qnType.equals("Multiple Choice") && global.getBooleanVar() ) {
                         timer.cancel();
                         tvTimeLeft.setText("Bomb has been successfully defused");
                     }
-                    else{
+                    else {
                         timer.cancel();
                         tvTimeLeft.setText("Bomb has been successfully defused");
                     }
                     global.setBooleanVar(false);    //To reset after each question
                 }
-            });
+            });*/
 
             //Pass - Button
             Button bPass = new Button(PreparingPlayerView.this);

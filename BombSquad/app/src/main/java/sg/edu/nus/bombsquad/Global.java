@@ -34,6 +34,7 @@ public class Global {
     private String[] player_list;
     private boolean booleanAccess;
     private LinearLayout[] questionLayoutArray;
+    private int viewId;
 
 
 
@@ -92,6 +93,8 @@ public class Global {
     }
 
     public void setQuestionLayoutArray(LinearLayout[] arr) { questionLayoutArray = arr; }
+
+    public void setViewId(int id) { viewId = id; }
 
 
 
@@ -155,6 +158,8 @@ public class Global {
     }
 
     public LinearLayout[] getQuestionLayoutArray() { return questionLayoutArray; }
+
+    public int getViewId() { return  viewId; }
 
 
 

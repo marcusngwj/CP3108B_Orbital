@@ -34,7 +34,9 @@ public class Global {
     private String[] player_list;
     private boolean booleanAccess;
     private LinearLayout[] questionLayoutArray;
-
+    private boolean playerStatus;
+    private int timeLeft;
+    private String currQuestionId;
 
 
 
@@ -93,6 +95,17 @@ public class Global {
 
     public void setQuestionLayoutArray(LinearLayout[] arr) { questionLayoutArray = arr; }
 
+    public void setPlayerExist(boolean bool) {
+        playerStatus = bool;
+    }
+
+    public void setTimeLeft(int time) {
+        timeLeft = time;
+    }
+
+    public void setCurrQuestionId(String id) {
+        currQuestionId = id;
+    }
 
 
 
@@ -156,7 +169,17 @@ public class Global {
 
     public LinearLayout[] getQuestionLayoutArray() { return questionLayoutArray; }
 
+    public boolean playerExist() {
+        return playerStatus;
+    }
 
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public String getCurrQuestionId() {
+        return currQuestionId;
+    }
 
 
 

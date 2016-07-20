@@ -3,10 +3,12 @@ package sg.edu.nus.bombsquad;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,25 +37,38 @@ public class HostSelection extends AppCompatActivity {
         setContentView(R.layout.activity_host_selection);
         Intent intent = getIntent();
         String question_id = intent.getStringExtra("question_id");
+        String time_limit = intent.getStringExtra("time_limit");
         String room_code = intent.getStringExtra("room_code");
         new GetPlayerInRoom().execute((room_code+""));
-        deployToRandom(room_code, question_id);
-        deployToSelected(room_code, question_id);
+        deployToRandom(room_code, question_id, time_limit);
+        deployToSelected(room_code, question_id, time_limit);
     }
 
 
-    private void deployToRandom(String roomCode, String questionId) {
+    private void deployToRandom(String roomCode, String questionId, String timeLeft) {
 
         final Global global = Global.getInstance();
         final String room_code = roomCode;
         final String question_id = questionId;
+        final String time_left = timeLeft;
         Button bRandomPlayer = (Button)findViewById(R.id.buttonRandomPlayer);
         assert bRandomPlayer != null;
         bRandomPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!global.playerExist()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
+                    builder.setMessage("There are no players in the room")
+                            .create()
+                            .show();
+                    System.out.println("I AM HEREEEEE");
+                    global.setBooleanAccess(false);
+                }
                 scheduler2.scheduleAtFixedRate(new Runnable() {
                     public void run() {
+                        if (!global.playerExist()) {
+                            scheduler2.shutdown();;
+                        }
                         if (global.getBooleanAccess()) {
                             final String[] player_id = global.getPlayerId();
                             int random = (int) Math.floor(Math.random() * (player_id.length));
@@ -65,6 +80,7 @@ public class HostSelection extends AppCompatActivity {
                                     .add("room_code", room_code)
                                     .add("question_id", question_id)
                                     .add("player_id", randomPlayer)
+                                    .add("time_left", time_left)
                                     .build();
                             Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
                             client.newCall(request)
@@ -88,28 +104,42 @@ public class HostSelection extends AppCompatActivity {
         });
     }
 
-    private void deployToSelected(String roomCode, String questionId) {
+    private void deployToSelected(String roomCode, String questionId, String timeLeft) {
         final Global global = Global.getInstance();
         final String room_code = roomCode;
         final String question_id = questionId;
+        final String time_left = timeLeft;
         Button bSelectPlayer = (Button)findViewById(R.id.buttonSelectPlayer);
         assert bSelectPlayer != null;
         bSelectPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    scheduler1.scheduleAtFixedRate(new Runnable() {
-                        public void run() {
-                            if (global.getBooleanAccess()) {
-                                Intent intent = new Intent(HostSelection.this, PlayerList.class);
-                                intent.putExtra("room_code", room_code);
-                                intent.putExtra("question_id", question_id);
-                                global.setBooleanAccess(false);
-                                scheduler1.shutdown();
-                                startActivity(intent);
-
-                            }
+                if (!global.playerExist()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
+                    builder.setMessage("There are no players in the room")
+                            .create()
+                            .show();
+                    System.out.println("I AM HEREEEEE");
+                    global.setBooleanAccess(false);
+                }
+                scheduler1.scheduleAtFixedRate(new Runnable() {
+                    public void run() {
+                        if (!global.playerExist()) {
+                            scheduler1.shutdown();
                         }
-                    }, 0, 500, TimeUnit.MILLISECONDS);
+                        if (global.getBooleanAccess() && global.playerExist()) {
+                            Intent intent = new Intent(HostSelection.this, PlayerList.class);
+                            intent.putExtra("room_code", room_code);
+                            intent.putExtra("question_id", question_id);
+                            intent.putExtra("time_left", time_left);
+                            global.setBooleanAccess(false);
+                            scheduler1.shutdown();
+                            startActivity(intent);
+
+                        }
+                    }
+                }, 0, 500, TimeUnit.MILLISECONDS);
+
             }
         });
 
@@ -174,6 +204,11 @@ public class HostSelection extends AppCompatActivity {
             int i = 0;
             while (i < player_id.length) {
                 final String currPlayer = player_id[i];
+                if (currPlayer == null) {
+                    global.setPlayerExist(false);
+                    return null;
+                }
+                global.setPlayerExist(true);
                 final int curr = i;
                 OkHttpClient client = new OkHttpClient();
                 RequestBody postData = new FormBody.Builder().add("player_id", currPlayer).build();

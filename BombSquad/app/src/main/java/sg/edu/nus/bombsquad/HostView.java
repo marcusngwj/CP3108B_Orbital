@@ -51,7 +51,7 @@ public class HostView extends AppCompatActivity {
         global.setRoomCode(room_code);
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
 
-        String[][] stringArr = new String[numQuestion][7];  //Initialising String2DArray in global
+        String[][] stringArr = new String[numQuestion][8];  //Initialising String2DArray in global
         global.setData(stringArr);  //Initialising String2DArray in global
 
         System.out.println("ROOM CODE: " + room_code);
@@ -60,6 +60,11 @@ public class HostView extends AppCompatActivity {
 
 
         display(room_code, room_name, numQuestion, questionIDArray);
+
+    }
+
+    protected void onStop() {
+        super.onStop();
 
     }
 
@@ -104,6 +109,7 @@ public class HostView extends AppCompatActivity {
                         tempArr[i][4] = jsonResponse.getJSONObject(0 + "").getString("option_three");
                         tempArr[i][5] = jsonResponse.getJSONObject(0 + "").getString("option_four");
                         tempArr[i][6] = jsonResponse.getJSONObject(0 + "").getString("answer");
+                        tempArr[i][7] = jsonResponse.getJSONObject(0 + "").getString("time_limit");
 
                         outerLL.addView(createQuestionBox(lp, i, questionIDArray, tempArr));
                         global.setCounter(++i);
@@ -123,7 +129,7 @@ public class HostView extends AppCompatActivity {
 
 
     //To create an individual box that contain details of a particular question
-    private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, String[] questionIDArray, String[][] createQnBoxArr){
+    private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, String[] questionIDArray, final String[][] createQnBoxArr){
         //Inner container
         LinearLayout innerLL = new LinearLayout(this);
         innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -218,6 +224,7 @@ public class HostView extends AppCompatActivity {
         bDeploy.setBackgroundResource(R.drawable.white_bg_black_border);
         bDeploy.setText("Deploy");
         bDeploy.setTag(questionIDArray[i]);
+        final int idx = i;
         bDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,6 +232,8 @@ public class HostView extends AppCompatActivity {
                 String question_id = (String) bDeploy.getTag();
                 System.out.println("question_id: " + question_id);
                 intent.putExtra("question_id", question_id);
+                global.setCurrQuestionId(question_id);
+                intent.putExtra("time_limit", createQnBoxArr[idx][7]);
                 intent.putExtra("room_code", global.getRoomCode());
                 HostView.this.startActivity(intent);
             }
@@ -260,12 +269,6 @@ public class HostView extends AppCompatActivity {
     
 
 }
-
-
-
-
-
-
 
 
 //Old AsyncTask code

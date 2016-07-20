@@ -165,8 +165,8 @@ public class PreparingPlayerView extends AppCompatActivity {
             }
             else{
                 EditText etAnswerOption = new EditText(PreparingPlayerView.this);
-                etAnswerOption.setId(View.generateViewId());
-                global.setViewId(etAnswerOption.getId());
+//                etAnswerOption.setId(View.generateViewId());
+//                global.setViewId(etAnswerOption.getId());
                 questionLL.addView(etAnswerOption);
             }
 

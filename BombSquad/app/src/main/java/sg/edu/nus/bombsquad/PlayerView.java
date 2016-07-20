@@ -40,14 +40,16 @@ import okhttp3.RequestBody;
 public class PlayerView extends AppCompatActivity{
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     Global global = Global.getInstance();
+    final String user_id = global.getUserId();
+    final String room_code = global.getRoomCode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_view);
 
-        System.out.println("name: " + global.getRoomName());
-        System.out.println("roomCode: " + global.getRoomCode());
+        System.out.println("Room Name: " + global.getRoomName());
+        System.out.println("Room Code: " + global.getRoomCode());
 
         display();
     }
@@ -60,8 +62,7 @@ public class PlayerView extends AppCompatActivity{
 
     private void display() {
         final Intent intent = getIntent();
-        String user_id = intent.getStringExtra("user_id");
-        final String room_code = intent.getStringExtra("room_code");
+        
         TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(intent.getStringExtra("room_name"));

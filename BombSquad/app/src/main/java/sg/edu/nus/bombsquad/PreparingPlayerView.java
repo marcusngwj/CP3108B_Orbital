@@ -118,6 +118,17 @@ public class PreparingPlayerView extends AppCompatActivity {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 0, 0, 50);
 
+            //Creating Id
+            final int idETAnswerOption = i + global.getId_etAnswerOption_constant();   //id for etAnswerOption
+            final int idBOptionA = i + global.getId_BOptionA_constant();    //id for bOptionA
+            final int idBOptionB = i + global.getId_BOptionB_constant();    //id for bOptionB
+            final int idBOptionC = i + global.getId_BOptionC_constant();    //id for bOptionC
+            final int idBOptionD = i + global.getId_BOptionD_constant();    //id for bOptionD
+            final int idTVTimeLeft = i + global.getId_TVTimeLeft_constant();   //id for tvTimeLeft
+            final int idBDefuse = i + global.getId_BDefuse_constant();  //id for bDefuse
+            final int idBPass = i + global.getId_BPass_constant();    //id for bPass
+
+
             //Inner container
             LinearLayout innerLL = new LinearLayout(PreparingPlayerView.this);
             innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -165,6 +176,7 @@ public class PreparingPlayerView extends AppCompatActivity {
             }
             else{
                 EditText etAnswerOption = new EditText(PreparingPlayerView.this);
+                etAnswerOption.setId(idETAnswerOption);
                 questionLL.addView(etAnswerOption);
             }
 
@@ -219,10 +231,10 @@ public class PreparingPlayerView extends AppCompatActivity {
                 public void onClick(View v) {
                     String optionA = (String)bOptionA.getTag();
                     if(optionA.equals(correctAnswer)){
-                        global.setBooleanVar(true);
+                        global.setAnswerIsCorrect(true);
                     }
                     else{
-                        global.setBooleanVar(false);
+                        global.setAnswerIsCorrect(false);
                     }
                     bOptionA.setBackgroundResource(R.drawable.green_border);
                     bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -237,10 +249,10 @@ public class PreparingPlayerView extends AppCompatActivity {
                 public void onClick(View v) {
                     String optionB = (String)bOptionB.getTag();
                     if(optionB.equals(correctAnswer)){
-                        global.setBooleanVar(true);
+                        global.setAnswerIsCorrect(true);
                     }
                     else{
-                        global.setBooleanVar(false);
+                        global.setAnswerIsCorrect(false);
                     }
                     bOptionA.setBackgroundResource(R.drawable.white_border);
                     bOptionB.setBackgroundResource(R.drawable.green_border);
@@ -255,10 +267,10 @@ public class PreparingPlayerView extends AppCompatActivity {
                 public void onClick(View v) {
                     String optionC = (String)bOptionC.getTag();
                     if(optionC.equals(correctAnswer)){
-                        global.setBooleanVar(true);
+                        global.setAnswerIsCorrect(true);
                     }
                     else{
-                        global.setBooleanVar(false);
+                        global.setAnswerIsCorrect(false);
                     }
                     bOptionA.setBackgroundResource(R.drawable.white_border);
                     bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -273,10 +285,10 @@ public class PreparingPlayerView extends AppCompatActivity {
                 public void onClick(View v) {
                     String optionD = (String)bOptionD.getTag();
                     if(optionD.equals(correctAnswer)){
-                        global.setBooleanVar(true);
+                        global.setAnswerIsCorrect(true);
                     }
                     else{
-                        global.setBooleanVar(false);
+                        global.setAnswerIsCorrect(false);
                     }
                     bOptionA.setBackgroundResource(R.drawable.white_border);
                     bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -302,8 +314,6 @@ public class PreparingPlayerView extends AppCompatActivity {
             LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
             tvTimeLeftLL.setMargins(30,0,30,35);
             final TextView tvTimeLeft = new TextView(PreparingPlayerView.this);
-//            tvTimeLeft.setId(View.generateViewId());
-//            tvTimeLeft.getId();
             tvTimeLeft.setPadding(15, 15, 12, 12);
             tvTimeLeft.setWidth(30);
             tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
@@ -338,25 +348,31 @@ public class PreparingPlayerView extends AppCompatActivity {
             //If answer is correct, bomb is defused and timer cancelled
             //Else timer continues to countdown
             Button bDefuse = new Button(PreparingPlayerView.this);
+            bDefuse.setId(idBDefuse);
             bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
             bDefuse.setText("Defuse");
             bDefuse.setLayoutParams(dplp);
-            bDefuse.setOnClickListener(new View.OnClickListener() {
+
+            /*bDefuse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String qnType = createQnBoxArr[i][0];
                     String correctAnswer = createQnBoxArr[i][6];
+                    System.out.println("new ID: " + idETAnswerOption);
+
+
+
                     if(qnType.equals("Multiple Choice") && global.getBooleanVar() ) {
                         timer.cancel();
                         tvTimeLeft.setText("Bomb has been successfully defused");
                     }
-                    else{
+                    else {
                         timer.cancel();
                         tvTimeLeft.setText("Bomb has been successfully defused");
                     }
                     global.setBooleanVar(false);    //To reset after each question
                 }
-            });
+            });*/
 
             //Pass - Button
             Button bPass = new Button(PreparingPlayerView.this);

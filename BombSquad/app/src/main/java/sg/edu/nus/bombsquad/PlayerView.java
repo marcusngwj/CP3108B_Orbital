@@ -44,7 +44,7 @@ public class PlayerView extends AppCompatActivity{
     final String room_code = global.getRoomCode();
     final int numQuestion = global.getNumQuestion();
     final String[] questionIDArray = global.getQuestion_id();
-    final String[][] qnDetailArray = global.getString2DArr();
+    final String[][] createQnBoxArr = global.getString2DArr();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +54,11 @@ public class PlayerView extends AppCompatActivity{
         System.out.println("Room Name: " + global.getRoomName());
         System.out.println("Room Code: " + global.getRoomCode());
 
+        //while-loop FOR CHECKING ONLY
         int i=0;
         while (i < numQuestion) {
             System.out.println("qnID: " + questionIDArray[i]);
-            System.out.println("qn: " + qnDetailArray[i][1]);
+            System.out.println("qn: " + createQnBoxArr[i][1]);
             i++;
         }
 
@@ -98,8 +99,12 @@ public class PlayerView extends AppCompatActivity{
         int i = 0;
         while (i < numQuestion) {
             outerLL.addView(qnLayoutArr[i], lp);
+
+            withinABox(i);
+
             i++;
         }
+
 
 
         scheduler.scheduleAtFixedRate(new Runnable() {
@@ -110,7 +115,38 @@ public class PlayerView extends AppCompatActivity{
 
     }
 
+    private void withinABox(final int i){
+        /*final TextView tvTimeLeft = (TextView)findViewById(i + global.getId_TVTimeLeft_constant());
+        final String stringTimeLeft = tvTimeLeft.getText().toString();*/
 
+
+        EditText etAnswerOption = (EditText)findViewById(i + global.getId_etAnswerOption_constant());
+
+
+        Button bDefuse = (Button)findViewById(i + global.getId_BDefuse_constant());
+        String userAnswer = "";
+        if(etAnswerOption!=null){
+            userAnswer = etAnswerOption.getText().toString();
+        }
+        final String finalUserAnswer = userAnswer;
+        /*bDefuse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String qnType = createQnBoxArr[i][0];
+                String correctAnswer = createQnBoxArr[i][6];
+
+                if(qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && !stringTimeLeft.equals("BOOM")) {
+                    tvTimeLeft.setText("Bomb has been successfully defused");
+                }
+                else if(!qnType.equals("Multiple Choice") && finalUserAnswer.equalsIgnoreCase(correctAnswer) && !stringTimeLeft.equals("BOOM")){
+                    tvTimeLeft.setText("Bomb has been successfully defused");
+                }
+                global.setAnswerIsCorrect(false);    //To reset after each question
+            }
+        });*/
+
+
+    }
 
     class Background extends AsyncTask<String, Void, Void> {
         TextView uiUpdate = (TextView)findViewById(R.id.textViewPlayerMessage);

@@ -20,6 +20,7 @@ public class Global {
     private int number;
     private int counter;
     private boolean booleanVar;
+    private String string;
 
     
     //Variables with defined purpose
@@ -37,6 +38,7 @@ public class Global {
     private boolean playerStatus;
     private int timeLeft;
     private String currQuestionId;
+
 
 
 
@@ -58,6 +60,8 @@ public class Global {
     public void setCounter(int newCount) { counter = newCount; }
 
     public void setBooleanVar(boolean var) { booleanVar = var; }
+
+    public void setString(String line) { string = line; }
 
     public void setUserId(String id) { user_id = id; }
 
@@ -114,6 +118,8 @@ public class Global {
 
 
 
+
+
     //Retrieve
     public String[] getStringArray() {
         return stringArr;
@@ -132,6 +138,8 @@ public class Global {
     public int getCounter() { return counter; }
 
     public boolean getBooleanVar() { return booleanVar; }
+
+    public String getString() { return string; }
 
     public String getUserId() { return user_id; }
 
@@ -180,6 +188,8 @@ public class Global {
     public String getCurrQuestionId() {
         return currQuestionId;
     }
+
+
 
 
 

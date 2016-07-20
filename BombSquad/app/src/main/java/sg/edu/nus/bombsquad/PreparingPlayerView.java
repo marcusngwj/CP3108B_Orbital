@@ -114,7 +114,7 @@ public class PreparingPlayerView extends AppCompatActivity {
         }
 
         //To create an individual box that contain details of a particular question
-        private LinearLayout createQuestionBox(int i){
+        private LinearLayout createQuestionBox(final int i){
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 0, 0, 50);
 
@@ -143,19 +143,21 @@ public class PreparingPlayerView extends AppCompatActivity {
 
             //Question - Actual Question_TextView
             TextView tvQuestion = new TextView(PreparingPlayerView.this);
-            String[][] createQnBoxArr = global.getString2DArr();
+            final String[][] createQnBoxArr = global.getString2DArr();
             String qn = createQnBoxArr[i][1];
             tvQuestion.setText(qn);
             tvQuestion.setTextSize(20);
             questionLL.addView(tvQuestion);
 
             //Answer Option - TextView
-            String qnType = createQnBoxArr[i][0];
+            final String qnType = createQnBoxArr[i][0];
             if(qnType.equals("Multiple Choice")){
                 TextView tvAnswerOption = new TextView(PreparingPlayerView.this);
                 String result = "";
+                char option = 65;
                 for(int j=2; j<6; j++){
-                    result += createQnBoxArr[i][j] + "\n";
+                    result += option + ". " + createQnBoxArr[i][j] + "\n";
+                    option++;
                 }
                 tvAnswerOption.setText(result);
                 tvAnswerOption.setTextSize(20);
@@ -163,6 +165,8 @@ public class PreparingPlayerView extends AppCompatActivity {
             }
             else{
                 EditText etAnswerOption = new EditText(PreparingPlayerView.this);
+                etAnswerOption.setId(View.generateViewId());
+                global.setViewId(etAnswerOption.getId());
                 questionLL.addView(etAnswerOption);
             }
 
@@ -285,7 +289,7 @@ public class PreparingPlayerView extends AppCompatActivity {
 
             //Params: Total time(Need to retrieve from server, interval
             //+2000 for buffer time for transition
-            final CountDownTimer timer = new CountDownTimer(15000+2000, 1000) {
+            final CountDownTimer timer = new CountDownTimer(60000+2000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     tvTimeLeft.setText(millisUntilFinished/1000 + "");
@@ -318,10 +322,20 @@ public class PreparingPlayerView extends AppCompatActivity {
             bDefuse.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(global.getBooleanVar()) {
+                    String qnType = createQnBoxArr[i][0];
+                    String correctAnswer = createQnBoxArr[i][6];
+//                    EditText tempET = (EditText)findViewById(global.getViewId());
+//                    System.out.println("EDIT TEXT ID: " + global.getViewId());
+//                    String longAnsweField = tempET.getText().toString();
+                    if(qnType.equals("Multiple Choice") && global.getBooleanVar() ) {
                         timer.cancel();
                         tvTimeLeft.setText("Bomb has been successfully defused");
                     }
+//                    else if(longAnsweField.equalsIgnoreCase(correctAnswer)){
+//                        timer.cancel();
+//                        tvTimeLeft.setText("Bomb has been successfully defused");
+//                    }
+                    global.setBooleanVar(false);    //To reset after each question
                 }
             });
 

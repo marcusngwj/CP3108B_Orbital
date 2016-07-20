@@ -46,7 +46,8 @@ public class PlayerView extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_view);
 
-
+        System.out.println("name: " + global.getRoomName());
+        System.out.println("roomCode: " + global.getRoomCode());
 
         display();
     }

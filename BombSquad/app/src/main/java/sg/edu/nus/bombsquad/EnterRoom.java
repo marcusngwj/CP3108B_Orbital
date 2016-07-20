@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EnterRoom extends AppCompatActivity {
+    Global global = Global.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,9 @@ public class EnterRoom extends AppCompatActivity {
                                     playerIntent.putExtra("user_id", intent.getStringExtra("user_id"));
                                     playerIntent.putExtra("room_name", jsonResponse.getString("room_name"));
                                     playerIntent.putExtra("room_code", jsonResponse.getString("room_code"));
+
+                                    global.setRoomName(jsonResponse.getString("room_name"));
+                                    global.setRoomCode(jsonResponse.getString("room_code"));
                                     startActivity(playerIntent);
                                 } else {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);

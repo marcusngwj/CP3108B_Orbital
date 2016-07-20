@@ -2,6 +2,7 @@ package sg.edu.nus.bombsquad;
 
 
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class Global {
     private String[] player_id = new String[100000];
     private String[] player_list;
     private boolean booleanAccess;
+    private LinearLayout[] questionLayoutArray;
 
 
 
@@ -88,6 +90,8 @@ public class Global {
     public void setBooleanAccess(boolean bool) {
         booleanAccess = bool;
     }
+
+    public void setQuestionLayoutArray(LinearLayout[] arr) { questionLayoutArray = arr; }
 
 
 
@@ -149,6 +153,8 @@ public class Global {
     public boolean getBooleanAccess() {
         return booleanAccess;
     }
+
+    public LinearLayout[] getQuestionLayoutArray() { return questionLayoutArray; }
 
 
 

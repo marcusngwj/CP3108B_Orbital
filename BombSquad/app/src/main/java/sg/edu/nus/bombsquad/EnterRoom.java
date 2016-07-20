@@ -29,13 +29,12 @@ public class EnterRoom extends AppCompatActivity {
         assert bReadyForBattle != null;
         bReadyForBattle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 final String roomCode = etEnterRoomCode.getText().toString();
 
-                if(roomCode.isEmpty()){
+                if (roomCode.isEmpty()) {
                     etEnterRoomCode.setError("Enter a room code");
-                }
-                else {
+                } else {
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -46,15 +45,43 @@ public class EnterRoom extends AppCompatActivity {
                                 System.out.println(success);
 
                                 if (success) {
-                                    Intent intent = getIntent();
-                                    Intent playerIntent = new Intent(EnterRoom.this, PlayerView.class);
-                                    playerIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                    playerIntent.putExtra("room_name", jsonResponse.getString("room_name"));
-                                    playerIntent.putExtra("room_code", jsonResponse.getString("room_code"));
-
                                     global.setRoomName(jsonResponse.getString("room_name"));
                                     global.setRoomCode(jsonResponse.getString("room_code"));
-                                    startActivity(playerIntent);
+                                    Response.Listener<String> responseCatcher = new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            try {
+                                                JSONObject jsonResponse = new JSONObject(response);
+                                                String[] question_id = new String[jsonResponse.length()];
+                                                int count = 0;  //Count total number of questions in a room
+
+                                                int i = 0;
+                                                while (i < jsonResponse.length()) {
+                                                    if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
+                                                        question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                                        count++;
+                                                        global.setNumber(count);
+                                                        global.setQuestion_id(question_id);
+
+                                                    }
+                                                    i++;
+                                                }
+
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            Intent playerIntent = new Intent(EnterRoom.this, PreparingPlayerView.class);
+                                            global.setNumQuestion(global.getNumber());
+                                            startActivity(playerIntent);
+
+
+                                        }
+                                    };
+                                    GetQuestionIDRequest getQuestionIDRequest = new GetQuestionIDRequest(roomCode + "", responseCatcher);
+                                    RequestQueue requestQueue = Volley.newRequestQueue(EnterRoom.this);
+                                    requestQueue.add(getQuestionIDRequest);
+
                                 } else {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);
                                     builder.setMessage("Room Code does not exist")

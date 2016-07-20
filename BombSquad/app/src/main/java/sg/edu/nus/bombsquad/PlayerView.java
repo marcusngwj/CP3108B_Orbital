@@ -42,6 +42,9 @@ public class PlayerView extends AppCompatActivity{
     Global global = Global.getInstance();
     final String user_id = global.getUserId();
     final String room_code = global.getRoomCode();
+    final int numQuestion = global.getNumQuestion();
+    final String[] questionIDArray = global.getQuestion_id();
+    final String[][] qnDetailArray = global.getString2DArr();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,13 @@ public class PlayerView extends AppCompatActivity{
 
         System.out.println("Room Name: " + global.getRoomName());
         System.out.println("Room Code: " + global.getRoomCode());
+
+        int i=0;
+        while (i < numQuestion) {
+            System.out.println("qnID: " + questionIDArray[i]);
+            System.out.println("qn: " + qnDetailArray[i][1]);
+            i++;
+        }
 
         display();
     }
@@ -83,168 +93,14 @@ public class PlayerView extends AppCompatActivity{
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0,0,0,50);
 
+
+        LinearLayout[] qnLayoutArr = global.getQuestionLayoutArray();
         int i = 0;
-        while (i < 1) {
-            //Inner container
-            LinearLayout innerLL = new LinearLayout(this);
-            innerLL.setOrientation(LinearLayout.VERTICAL);
-            innerLL.setBackgroundResource(R.drawable.white_border_transparent_background);
-            innerLL.setPadding(15, 15, 15, 50);
-            innerLL.setId(i);
-            innerLL.setLayoutParams(lp);
-
-
-            //Question - Heading_TextView
-            TextView tvQuestionHeading = new TextView(this);
-            tvQuestionHeading.setText("Question");
-            tvQuestionHeading.setTextSize(20);
-            tvQuestionHeading.setTextColor(Color.WHITE);
-            tvQuestionHeading.setPadding(15, 5, 2, 2);
-
-            //Question & Answer_Option - LinearLayout
-            LinearLayout questionLL = new LinearLayout(this);
-            questionLL.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            qlp.setMargins(30,0,30,20);
-            questionLL.setLayoutParams(qlp);
-
-            //Question - Actual Question_TextView
-            TextView tvQuestion = new TextView(this);
-            tvQuestion.setText("TEMP");
-            tvQuestionHeading.setTextSize(20);
-
-            //Answer Option - TextView
-            TextView tvAnswerOption = new TextView(this);
-            tvAnswerOption.setText("change");
-            tvAnswerOption.setTextSize(20);
-
-            questionLL.addView(tvQuestion);
-            questionLL.addView(tvAnswerOption);
-
-            //LinearLayout for MCQoptions
-            LinearLayout mcqOptionsLL = new LinearLayout(this);
-            mcqOptionsLL.setOrientation(LinearLayout.HORIZONTAL);
-            mcqOptionsLL.setGravity(Gravity.CENTER);
-            LinearLayout.LayoutParams mcqOlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            mcqOlp.setMargins(0, 0, 15, 0);
-
-            //Option A - Button
-            Button bOptionA = new Button(this);
-            bOptionA.setBackgroundResource(R.drawable.white_border);
-            bOptionA.setText("A");
-            bOptionA.setTextSize(20);
-            bOptionA.setTextColor(Color.WHITE);
-            bOptionA.setLayoutParams(mcqOlp);
-
-            //Option B - Button
-            Button bOptionB = new Button(this);
-            bOptionB.setBackgroundResource(R.drawable.white_border);
-            bOptionB.setText("B");
-            bOptionB.setTextSize(20);
-            bOptionB.setTextColor(Color.WHITE);
-            bOptionB.setLayoutParams(mcqOlp);
-
-            //Option C - Button
-            Button bOptionC = new Button(this);
-            bOptionC.setBackgroundResource(R.drawable.white_border);
-            bOptionC.setText("C");
-            bOptionC.setTextSize(20);
-            bOptionC.setTextColor(Color.WHITE);
-            bOptionC.setLayoutParams(mcqOlp);
-
-            //Option D - Button
-            Button bOptionD = new Button(this);
-            bOptionD.setBackgroundResource(R.drawable.white_border);
-            bOptionD.setText("D");
-            bOptionD.setTextSize(20);
-            bOptionD.setTextColor(Color.WHITE);
-            bOptionD.setLayoutParams(mcqOlp);
-
-            mcqOptionsLL.addView(bOptionA);
-            mcqOptionsLL.addView(bOptionB);
-            mcqOptionsLL.addView(bOptionC);
-            mcqOptionsLL.addView(bOptionD);
-
-
-            //Time Left (Title) - TextView
-            TextView tvTimeLeftTitle = new TextView(this);
-            tvTimeLeftTitle.setText("Time Left");
-            tvTimeLeftTitle.setTextSize(20);
-            tvTimeLeftTitle.setTextColor(Color.WHITE);
-            tvTimeLeftTitle.setPadding(15, 5, 2, 2);
-
-            //Time Left (Display countdown) - TextView
-            LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            tvTimeLeftLL.setMargins(30,0,30,35);
-            final TextView tvTimeLeft = new TextView(this);
-//            tvTimeLeft.setId(View.generateViewId());
-//            tvTimeLeft.getId();
-            tvTimeLeft.setPadding(15, 15, 12, 12);
-            tvTimeLeft.setWidth(30);
-            tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
-            tvTimeLeft.setLayoutParams(tvTimeLeftLL);
-
-            //Params: Total time(Need to retrieve from server, interval
-            //+2000 for buffer time for transition
-            final CountDownTimer timer = new CountDownTimer(5000+2000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    tvTimeLeft.setText(millisUntilFinished/1000 + "");
-                }
-
-                @Override
-                public void onFinish() {
-                    tvTimeLeft.setText("BOOM");
-                }
-
-            }.start();
-
-
-            //LinearLayout for defuse and pass
-            LinearLayout defusePassLL = new LinearLayout(this);
-            defusePassLL.setOrientation(LinearLayout.HORIZONTAL);
-            defusePassLL.setGravity(Gravity.CENTER);
-            LinearLayout.LayoutParams dplp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            dplp.setMargins(0, 0, 40, 0);
-
-            //To be completed
-            //Defuse - Button
-            //Attempt to defuse: Check answer with server
-            //If answer is correct, bomb is defused and timer cancelled
-            //Else timer continues to countdown
-            Button bDefuse = new Button(this);
-            bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
-            bDefuse.setText("Defuse");
-            bDefuse.setLayoutParams(dplp);
-            bDefuse.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    timer.cancel();
-                    tvTimeLeft.setText("Bomb has been successfully defused");
-                }
-            });
-
-            //Pass - Button
-            Button bPass = new Button(this);
-            bPass.setBackgroundResource(R.drawable.white_bg_black_border);
-            bPass.setText("Pass");
-
-            defusePassLL.addView(bDefuse);
-            defusePassLL.addView(bPass);
-
-
-            //Format of front-end in order
-            innerLL.addView(tvQuestionHeading);
-            innerLL.addView(questionLL);
-            innerLL.addView(mcqOptionsLL);
-            innerLL.addView(tvTimeLeftTitle);
-            innerLL.addView(tvTimeLeft);
-            innerLL.addView(defusePassLL);
-
-            outerLL.addView(innerLL, lp);
-
+        while (i < numQuestion) {
+            outerLL.addView(qnLayoutArr[i], lp);
             i++;
         }
+
 
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -253,6 +109,7 @@ public class PlayerView extends AppCompatActivity{
         }, 0, 500, TimeUnit.MILLISECONDS);
 
     }
+
 
 
     class Background extends AsyncTask<String, Void, Void> {
@@ -300,6 +157,21 @@ public class PlayerView extends AppCompatActivity{
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

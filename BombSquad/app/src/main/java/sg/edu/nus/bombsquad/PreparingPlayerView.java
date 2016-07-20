@@ -165,8 +165,6 @@ public class PreparingPlayerView extends AppCompatActivity {
             }
             else{
                 EditText etAnswerOption = new EditText(PreparingPlayerView.this);
-//                etAnswerOption.setId(View.generateViewId());
-//                global.setViewId(etAnswerOption.getId());
                 questionLL.addView(etAnswerOption);
             }
 
@@ -187,6 +185,35 @@ public class PreparingPlayerView extends AppCompatActivity {
             bOptionA.setTextSize(20);
             bOptionA.setTextColor(Color.WHITE);
             bOptionA.setLayoutParams(mcqOlp);
+
+            //Option B - Button
+            final Button bOptionB = new Button(PreparingPlayerView.this);
+            bOptionB.setBackgroundResource(R.drawable.white_border);
+            bOptionB.setText("B");
+            bOptionB.setTag(createQnBoxArr[i][3]);
+            bOptionB.setTextSize(20);
+            bOptionB.setTextColor(Color.WHITE);
+            bOptionB.setLayoutParams(mcqOlp);
+
+            //Option C - Button
+            final Button bOptionC = new Button(PreparingPlayerView.this);
+            bOptionC.setBackgroundResource(R.drawable.white_border);
+            bOptionC.setText("C");
+            bOptionC.setTag(createQnBoxArr[i][4]);
+            bOptionC.setTextSize(20);
+            bOptionC.setTextColor(Color.WHITE);
+            bOptionC.setLayoutParams(mcqOlp);
+
+            //Option D - Button
+            final Button bOptionD = new Button(PreparingPlayerView.this);
+            bOptionD.setBackgroundResource(R.drawable.white_border);
+            bOptionD.setText("D");
+            bOptionD.setTag(createQnBoxArr[i][5]);
+            bOptionD.setTextSize(20);
+            bOptionD.setTextColor(Color.WHITE);
+            bOptionD.setLayoutParams(mcqOlp);
+
+            //Button A onClickListener
             bOptionA.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -197,17 +224,14 @@ public class PreparingPlayerView extends AppCompatActivity {
                     else{
                         global.setBooleanVar(false);
                     }
+                    bOptionA.setBackgroundResource(R.drawable.green_border);
+                    bOptionB.setBackgroundResource(R.drawable.white_border);
+                    bOptionC.setBackgroundResource(R.drawable.white_border);
+                    bOptionD.setBackgroundResource(R.drawable.white_border);
                 }
             });
 
-            //Option B - Button
-            final Button bOptionB = new Button(PreparingPlayerView.this);
-            bOptionB.setBackgroundResource(R.drawable.white_border);
-            bOptionB.setText("B");
-            bOptionB.setTag(createQnBoxArr[i][3]);
-            bOptionB.setTextSize(20);
-            bOptionB.setTextColor(Color.WHITE);
-            bOptionB.setLayoutParams(mcqOlp);
+            //Button B onClickListener
             bOptionB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -218,17 +242,14 @@ public class PreparingPlayerView extends AppCompatActivity {
                     else{
                         global.setBooleanVar(false);
                     }
+                    bOptionA.setBackgroundResource(R.drawable.white_border);
+                    bOptionB.setBackgroundResource(R.drawable.green_border);
+                    bOptionC.setBackgroundResource(R.drawable.white_border);
+                    bOptionD.setBackgroundResource(R.drawable.white_border);
                 }
             });
 
-            //Option C - Button
-            final Button bOptionC = new Button(PreparingPlayerView.this);
-            bOptionC.setBackgroundResource(R.drawable.white_border);
-            bOptionC.setText("C");
-            bOptionC.setTag(createQnBoxArr[i][4]);
-            bOptionC.setTextSize(20);
-            bOptionC.setTextColor(Color.WHITE);
-            bOptionC.setLayoutParams(mcqOlp);
+            //Button C onClickListener
             bOptionC.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -239,17 +260,14 @@ public class PreparingPlayerView extends AppCompatActivity {
                     else{
                         global.setBooleanVar(false);
                     }
+                    bOptionA.setBackgroundResource(R.drawable.white_border);
+                    bOptionB.setBackgroundResource(R.drawable.white_border);
+                    bOptionC.setBackgroundResource(R.drawable.green_border);
+                    bOptionD.setBackgroundResource(R.drawable.white_border);
                 }
             });
 
-            //Option D - Button
-            final Button bOptionD = new Button(PreparingPlayerView.this);
-            bOptionD.setBackgroundResource(R.drawable.white_border);
-            bOptionD.setText("D");
-            bOptionD.setTag(createQnBoxArr[i][5]);
-            bOptionD.setTextSize(20);
-            bOptionD.setTextColor(Color.WHITE);
-            bOptionD.setLayoutParams(mcqOlp);
+            //Button D onClickListener
             bOptionD.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -260,6 +278,10 @@ public class PreparingPlayerView extends AppCompatActivity {
                     else{
                         global.setBooleanVar(false);
                     }
+                    bOptionA.setBackgroundResource(R.drawable.white_border);
+                    bOptionB.setBackgroundResource(R.drawable.white_border);
+                    bOptionC.setBackgroundResource(R.drawable.white_border);
+                    bOptionD.setBackgroundResource(R.drawable.green_border);
                 }
             });
 
@@ -324,17 +346,14 @@ public class PreparingPlayerView extends AppCompatActivity {
                 public void onClick(View v) {
                     String qnType = createQnBoxArr[i][0];
                     String correctAnswer = createQnBoxArr[i][6];
-//                    EditText tempET = (EditText)findViewById(global.getViewId());
-//                    System.out.println("EDIT TEXT ID: " + global.getViewId());
-//                    String longAnsweField = tempET.getText().toString();
                     if(qnType.equals("Multiple Choice") && global.getBooleanVar() ) {
                         timer.cancel();
                         tvTimeLeft.setText("Bomb has been successfully defused");
                     }
-//                    else if(longAnsweField.equalsIgnoreCase(correctAnswer)){
-//                        timer.cancel();
-//                        tvTimeLeft.setText("Bomb has been successfully defused");
-//                    }
+                    else{
+                        timer.cancel();
+                        tvTimeLeft.setText("Bomb has been successfully defused");
+                    }
                     global.setBooleanVar(false);    //To reset after each question
                 }
             });

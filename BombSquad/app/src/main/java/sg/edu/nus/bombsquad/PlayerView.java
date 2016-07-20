@@ -75,7 +75,7 @@ public class PlayerView extends AppCompatActivity{
         
         TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
-        room_name.setText(intent.getStringExtra("room_name"));
+        room_name.setText(global.getRoomName());
 
         //Exit button, link to RoomType
         Button bExitPlayerView = (Button)findViewById(R.id.buttonExitPlayerView);

@@ -50,7 +50,9 @@ public class HostView extends AppCompatActivity {
         final int numQuestion = global.getNumQuestion();
         global.setRoomCode(room_code);
         global.setHostViewPossession(new TextView[numQuestion]);
+        global.setTvTimeLefts(new TextView[numQuestion]);
         global.setPlayerPossessBomb(new int[numQuestion]);
+        global.setTimeLefts(new int[numQuestion]);
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
 
         String[][] stringArr = new String[numQuestion][8];  //Initialising String2DArray in global
@@ -62,6 +64,12 @@ public class HostView extends AppCompatActivity {
 
 
         display(room_code, room_name, numQuestion, questionIDArray);
+
+    }
+
+    protected void onStop() {
+        super.onStop();
+        scheduler.shutdown();
 
     }
 
@@ -79,11 +87,6 @@ public class HostView extends AppCompatActivity {
 
         getQuestionsData(numQuestion, questionIDArray, outerLL, lp);
 
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                new UpdateHostView().execute();
-            }
-        },0, 500, TimeUnit.MILLISECONDS);
     }
 
 
@@ -134,6 +137,7 @@ public class HostView extends AppCompatActivity {
     //To create an individual box that contain details of a particular question
     private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, String[] questionIDArray, final String[][] createQnBoxArr){
         TextView[] possession = global.getHostViewPossession();
+        TextView[] tvTimeLefts = global.getTvTimeLefts();
         //Inner container
         LinearLayout innerLL = new LinearLayout(this);
         innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -211,11 +215,11 @@ public class HostView extends AppCompatActivity {
         //Time Left - EditText
         LinearLayout.LayoutParams etTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         etTimeLeftLL.setMargins(30, 0, 30, 35);
-        EditText etTimeLeft = new EditText(this);
-        etTimeLeft.setPadding(15, 15, 12, 12);
-        etTimeLeft.setWidth(30);
-        etTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
-        etTimeLeft.setLayoutParams(etTimeLeftLL);
+        tvTimeLefts[i] = new TextView(this);
+        tvTimeLefts[i].setPadding(15, 15, 12, 12);
+        tvTimeLefts[i].setWidth(30);
+        tvTimeLefts[i].setBackgroundResource(R.drawable.white_bg_black_border);
+        tvTimeLefts[i].setLayoutParams(etTimeLeftLL);
 
         //LinearLayout for defuse and detonate
         LinearLayout defuseDetonateLL = new LinearLayout(this);
@@ -266,28 +270,33 @@ public class HostView extends AppCompatActivity {
         innerLL.addView(tvInPossessionOf);
         innerLL.addView(possession[i]);
         innerLL.addView(tvTimeLeft);
-        innerLL.addView(etTimeLeft);
+        innerLL.addView(tvTimeLefts[i]);
         innerLL.addView(defuseDetonateLL);
 
+
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                new UpdateHostView().execute();
+            }
+        },0, 500, TimeUnit.MILLISECONDS);
         return innerLL;
     }
 
-
-
+    //NEED TO THINK ABOUT HOW TO CHANGE THIS.... IT ANYHOW JUMPS :(
     class UpdateHostView extends AsyncTask<Void, Void, Void> {
-        TextView[] possession = global.getHostViewPossession();
-        int[] playerPossessBomb = global.getPlayerPossessBomb();
+        final TextView[] possession = global.getHostViewPossession();
+        final int[] playerPossessBomb = global.getPlayerPossessBomb();
+        final TextView[] tvTimeLefts = global.getTvTimeLefts();
+        final int[] timeLefts = global.getTimeLefts();
+
 
         public Void doInBackground(Void... unused) {
-            System.out.println("I AM HEREEEEE");
-            int i = 0;
-            while (i < global.getNumQuestion()) {
-                System.out.println(global.getRoomCode());
-                System.out.println(global.getQuestion_id()[i]);
+            global.setCounter1(0);
+            while (global.getCounter1() < global.getNumQuestion()) {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody postData = new FormBody.Builder()
                         .add("room_code", global.getRoomCode())
-                        .add("question_id", global.getQuestion_id()[i])
+                        .add("question_id", global.getQuestion_id()[global.getCounter1()])
                         .build();
                 Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateHostView.php").post(postData).build();
 
@@ -301,18 +310,30 @@ public class HostView extends AppCompatActivity {
                             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                 try {
                                     JSONObject result = new JSONObject(response.body().string());
-                                    System.out.println("time left = " + result.getString("time_left"));
-                                    System.out.println("player_id = " + result.getString("player_id"));
+                                    playerPossessBomb[global.getCounter1()] = Integer.parseInt(result.getString("player_id"));
+                                    timeLefts[global.getCounter1()] = Integer.parseInt(result.getString("time_left"));
+                                    global.setUpdateHostViewBoolean(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         });
-                i++;
+                global.setCounter1(global.getCounter1()+1);
             }
+            global.setCounter1(0);
             return null;
         }
         public void onPostExecute(Void unused) {
+            System.out.println("TEST");
+            int i = 0;
+            if (global.getUpdateHostViewBoolean()) {
+                while (i < global.getNumQuestion()) {
+                    possession[i].setText(Integer.toString(playerPossessBomb[i]));
+                    tvTimeLefts[i].setText(Integer.toString(timeLefts[i]));
+                    i++;
+                }
+                global.setUpdateHostViewBoolean(false);
+            }
         }
     }
 

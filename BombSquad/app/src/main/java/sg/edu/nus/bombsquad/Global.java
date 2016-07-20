@@ -31,6 +31,7 @@ public class Global {
     private int[] intArr;
     private int number;
     private int counter;
+    private int counter1;
     private boolean booleanVar;
     private String string;
 
@@ -53,6 +54,9 @@ public class Global {
     private boolean answerIsCorrect;
     private TextView[] hostViewPossession;
     private int[] playerPossessBomb;
+    private int[] timeLefts;
+    private TextView[] tvTimeLefts;
+    private boolean updateHostViewBoolean;
 
 
 
@@ -73,6 +77,8 @@ public class Global {
     public void setNumber(int integer) { number = integer; }
 
     public void setCounter(int newCount) { counter = newCount; }
+
+    public void setCounter1(int count) { counter1 = count;}
 
     public void setBooleanVar(boolean var) { booleanVar = var; }
 
@@ -136,6 +142,18 @@ public class Global {
         playerPossessBomb = arr;
     }
 
+    public void setTimeLefts(int[] arr) {
+        timeLefts = arr;
+    }
+
+    public void setTvTimeLefts(TextView[] arr) {
+        tvTimeLefts = arr;
+    }
+
+    public void setUpdateHostViewBoolean(Boolean bool) {
+        updateHostViewBoolean = bool;
+    }
+
 
 
 
@@ -159,6 +177,8 @@ public class Global {
     public int getNumber() { return number; }
 
     public int getCounter() { return counter; }
+
+    public int getCounter1() { return counter1; }
 
     public boolean getBooleanVar() { return booleanVar; }
 
@@ -221,6 +241,20 @@ public class Global {
     public int[] getPlayerPossessBomb() {
         return playerPossessBomb;
     }
+
+    public int[] getTimeLefts() {
+        return timeLefts;
+    }
+
+    public TextView[] getTvTimeLefts() {
+        return tvTimeLefts;
+    }
+
+    public boolean getUpdateHostViewBoolean() {
+        return updateHostViewBoolean;
+    }
+
+
 
 
 

@@ -53,7 +53,7 @@ public class Global {
 
     public void setQuestion_id(String[] arr) { question_id = arr; }
 
-    public void setRoom_code(String string) { room_code = string; }
+    public void setRoomCode(String string) { room_code = string; }
 
     public void setNumber(int integer) { number = integer; }
 
@@ -108,7 +108,7 @@ public class Global {
 
     public String[] getQuestion_id() { return question_id; }
 
-    public String getRoom_code() { return room_code; }
+    public String getRoomCode() { return room_code; }
 
     public int getNumber() { return number; }
 

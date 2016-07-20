@@ -188,7 +188,7 @@ public class ManageRoom extends AppCompatActivity {
                                     }
 
                                     Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                                    global.setRoom_code(codeOfRoomChosen+"");
+                                    global.setRoomCode(codeOfRoomChosen+"");
                                     global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
                                     global.setNumQuestion(global.getNumber());
                                     startActivity(hostIntent);

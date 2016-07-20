@@ -44,11 +44,11 @@ public class HostView extends AppCompatActivity {
         setContentView(R.layout.activity_host_view);
 
         final Global global = Global.getInstance();
-        final String room_code = global.getRoom_code();
+        final String room_code = global.getRoomCode();
         final String room_name = global.getRoomName();
         final int numQuestion = global.getNumQuestion();
 
-        global.setRoom_code(room_code);
+        global.setRoomCode(room_code);
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
 
         String[][] stringArr = new String[numQuestion][7];  //Initialising String2DArray in global
@@ -225,7 +225,7 @@ public class HostView extends AppCompatActivity {
                 String question_id = (String) bDeploy.getTag();
                 System.out.println("question_id: " + question_id);
                 intent.putExtra("question_id", question_id);
-                intent.putExtra("room_code", global.getRoom_code());
+                intent.putExtra("room_code", global.getRoomCode());
                 HostView.this.startActivity(intent);
             }
         });

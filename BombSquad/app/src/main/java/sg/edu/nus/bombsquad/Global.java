@@ -62,6 +62,7 @@ public class Global {
     private TextView[] tvTimeLefts;
     private boolean updateHostViewBoolean;
     private boolean runScheduler = true;
+    private QuestionDetail[] questionBank;
 
     //okhttp
     private OkHttpClient client = new OkHttpClient();
@@ -166,8 +167,7 @@ public class Global {
         runScheduler = true;
     }
 
-
-
+    public void setQuestionBank(QuestionDetail[] questionBank) { this.questionBank = questionBank; }
 
 
 
@@ -271,6 +271,9 @@ public class Global {
         return runScheduler;
     }
 
+
+    public QuestionDetail[] getQuestionBank() { return questionBank; }
+
     public OkHttpClient getClient() {
         return client;
     }
@@ -278,6 +281,7 @@ public class Global {
     public Request.Builder getRBuilder() {
         return requestBuilder;
     }
+
 
 
 

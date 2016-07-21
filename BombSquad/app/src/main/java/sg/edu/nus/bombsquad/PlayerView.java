@@ -44,8 +44,7 @@ public class PlayerView extends AppCompatActivity {
     final String user_id = global.getUserId();
     final String room_code = global.getRoomCode();
     final int numQuestion = global.getNumQuestion();
-    final String[] questionIDArray = global.getQuestion_id();
-    final String[][] createQnBoxArr = global.getString2DArr();
+    final QuestionDetail[] questionBank = global.getQuestionBank();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +60,8 @@ public class PlayerView extends AppCompatActivity {
         System.out.println("Room Code: " + global.getRoomCode());
 
         for (int i = 0; i < numQuestion; i++) {
-            System.out.println("qnID: " + questionIDArray[i]);
-            System.out.println("qn: " + createQnBoxArr[i][1]);
+            System.out.println("qnID: " + questionBank[i].getQuestion_id());
+            System.out.println("qn: " + questionBank[i]);
         }
 
         display();
@@ -96,17 +95,16 @@ public class PlayerView extends AppCompatActivity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
 
-        LinearLayout[] qnLayoutArr = global.getQuestionLayoutArray();   //Layout for individual qn
         //Initial qn shown to player
-        outerLL.addView(qnLayoutArr[0], lp);
-        withinABox(0, qnLayoutArr);
+        outerLL.addView(questionBank[0].getLayout(), lp);
+        withinABox(0);
 
         //Subsequent qn follows
         for (int i = 1; i < numQuestion; i++) {
-            outerLL.addView(qnLayoutArr[i], lp);
-            qnLayoutArr[i].setVisibility(View.GONE);
+            outerLL.addView(questionBank[i].getLayout(), lp);
+            questionBank[i].getLayout().setVisibility(View.GONE);
 
-            withinABox(i, qnLayoutArr);
+            withinABox(i);
         }
 
 
@@ -120,9 +118,9 @@ public class PlayerView extends AppCompatActivity {
     }
 
     //Things happening inside a box of question
-    private void withinABox(final int i, final LinearLayout[] qnLayoutArr) {
-        final TextView tvTimeLeft = (TextView) findViewById(i + global.getId_TVTimeLeft_constant());
-        long timeInitial = Long.valueOf(createQnBoxArr[i][7]) * 1000;
+    private void withinABox(final int i) {
+        final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
+        long timeInitial = Long.valueOf(questionBank[i].getTime_limit()) * 1000;
 
         //Params: Total time(Need to retrieve from server, interval +2000 for buffer time for transition
         final CountDownTimer timer = new CountDownTimer(timeInitial + 2000, 1000) {
@@ -143,24 +141,24 @@ public class PlayerView extends AppCompatActivity {
         }.start();
 
 
-        final Button bDefuse = (Button) findViewById(i + global.getId_BDefuse_constant());
+        final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String qnType = createQnBoxArr[i][0];
-                String correctAnswer = createQnBoxArr[i][6];
+                String qnType = questionBank[i].getQuestion_type();
+                String correctAnswer = questionBank[i].getCorrectAnswer();
                 String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
 
                 //Reading string from user
-                EditText etAnswerOption = (EditText) findViewById(i + global.getId_etAnswerOption_constant());
+                EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
                 if (etAnswerOption != null) {
                     userAnswer = etAnswerOption.getText().toString();
                     System.out.println(userAnswer);
                 }
 
                 //If answer is correct for any type of question
-                if ((qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
+                if ((qnType.equals("Multiple Choice") && questionBank[i].getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
                         (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING"))) {
                     timer.cancel();
                     tvTimeLeft.setText("Bomb has been successfully defused");
@@ -168,12 +166,12 @@ public class PlayerView extends AppCompatActivity {
 
                     //If is not last question
                     if (i < numQuestion - 1) {
-                        qnLayoutArr[i].setVisibility(View.GONE);
-                        qnLayoutArr[i + 1].setVisibility(View.VISIBLE);
+                        questionBank[i].getLayout().setVisibility(View.GONE);
+                        questionBank[i+1].getLayout().setVisibility(View.VISIBLE);
                     }
                 }
 
-                global.setAnswerIsCorrect(false);    //To reset user's MCQ choice after each question
+//                global.setAnswerIsCorrect(false);    //To reset user's MCQ choice after each question
             }
         });
 

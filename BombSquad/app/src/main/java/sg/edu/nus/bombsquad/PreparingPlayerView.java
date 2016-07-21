@@ -90,11 +90,8 @@ public class PreparingPlayerView extends AppCompatActivity {
                             String correctAnswer = jsonResponse.getJSONObject(0 + "").getString("answer");
                             String time_limit = jsonResponse.getJSONObject(0 + "").getString("time_limit");
                             String points_awarded = jsonResponse.getJSONObject(0 + "").getString("points_awarded");
-
-                            //Got error when trying to grab points_deducted
-//                            String points_deducted = jsonResponse.getJSONObject(0 + "").getString("points_deducted");
+                            String points_deducted = jsonResponse.getJSONObject(0 + "").getString("points_deducted");
                             String num_pass = jsonResponse.getJSONObject(0 + "").getString("num_pass");
-                            String points_deducted = "2";
 
                             questionBank[i] = new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
                                     question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,

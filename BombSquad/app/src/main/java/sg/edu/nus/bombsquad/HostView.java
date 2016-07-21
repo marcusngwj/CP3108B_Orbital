@@ -297,9 +297,10 @@ public class HostView extends AppCompatActivity {
         public Void doInBackground(Void... unused) {
             global.setRunScheduler(false); //if no response, scheduler will not run
             global.setCounter1(0);
-            OkHttpClient client = new OkHttpClient();
+
+            OkHttpClient client = global.getClient();
             FormBody.Builder postDataBuilder = new FormBody.Builder();
-            Request.Builder requestBuilder = new Request.Builder();
+            Request.Builder requestBuilder = global.getRBuilder();
             while (global.getCounter1() < global.getNumQuestion()) {
                 final int count = global.getCounter1(); //so that the indx of arr in OnResponse is static
                 RequestBody postData = postDataBuilder
@@ -322,7 +323,9 @@ public class HostView extends AppCompatActivity {
                                     global.setRunScheduler(true); //to indicate in scheduler that a response was received
                                     global.setUpdateHostViewBoolean(true);
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    //e.printStackTrace();
+                                } finally {
+                                    response.body().close();
                                 }
                             }
                         });

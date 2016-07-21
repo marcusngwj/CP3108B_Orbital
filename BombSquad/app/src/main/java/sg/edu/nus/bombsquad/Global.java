@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 public class Global {
     private static Global instance;
 
@@ -60,6 +64,9 @@ public class Global {
     private boolean runScheduler = true;
     private QuestionDetail[] questionBank;
 
+    //okhttp
+    private OkHttpClient client = new OkHttpClient();
+    private Request.Builder requestBuilder = new Request.Builder();
 
 
 
@@ -264,7 +271,22 @@ public class Global {
         return runScheduler;
     }
 
+
     public QuestionDetail[] getQuestionBank() { return questionBank; }
+
+    public OkHttpClient getClient() {
+        return client;
+    }
+
+    public Request.Builder getRBuilder() {
+        return requestBuilder;
+    }
+
+
+
+
+
+
 
     //Retrieve definite constant variable
     public int getId_etAnswerOption_constant() { return id_etAnswerOption_constant; }

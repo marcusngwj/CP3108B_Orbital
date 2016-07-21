@@ -3,6 +3,7 @@ package sg.edu.nus.bombsquad;
 
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,10 +31,11 @@ public class Global {
     private int[] intArr;
     private int number;
     private int counter;
+    private int counter1;
     private boolean booleanVar;
     private String string;
 
-    
+
     //Variables with defined purpose
     private String user_id;
     private String room_name;
@@ -50,6 +52,12 @@ public class Global {
     private int timeLeft;
     private String currQuestionId;
     private boolean answerIsCorrect;
+    private TextView[] hostViewPossession;
+    private int[] playerPossessBomb;
+    private int[] timeLefts;
+    private TextView[] tvTimeLefts;
+    private boolean updateHostViewBoolean;
+    private boolean runScheduler = true;
 
 
 
@@ -70,6 +78,8 @@ public class Global {
     public void setNumber(int integer) { number = integer; }
 
     public void setCounter(int newCount) { counter = newCount; }
+
+    public void setCounter1(int count) { counter1 = count;}
 
     public void setBooleanVar(boolean var) { booleanVar = var; }
 
@@ -125,6 +135,30 @@ public class Global {
 
     public void setAnswerIsCorrect(boolean bool) { answerIsCorrect = bool; }
 
+    public void setHostViewPossession(TextView[] tv) {
+        hostViewPossession = tv;
+    }
+
+    public void setPlayerPossessBomb(int[] arr) {
+        playerPossessBomb = arr;
+    }
+
+    public void setTimeLefts(int[] arr) {
+        timeLefts = arr;
+    }
+
+    public void setTvTimeLefts(TextView[] arr) {
+        tvTimeLefts = arr;
+    }
+
+    public void setUpdateHostViewBoolean(Boolean bool) {
+        updateHostViewBoolean = bool;
+    }
+
+    public void setRunScheduler(Boolean bool) {
+        runScheduler = true;
+    }
+
 
 
 
@@ -148,6 +182,8 @@ public class Global {
     public int getNumber() { return number; }
 
     public int getCounter() { return counter; }
+
+    public int getCounter1() { return counter1; }
 
     public boolean getBooleanVar() { return booleanVar; }
 
@@ -202,6 +238,32 @@ public class Global {
     }
 
     public boolean getAnswerIsCorrect() {return answerIsCorrect; }
+
+    public TextView[] getHostViewPossession() {
+        return hostViewPossession;
+    }
+
+    public int[] getPlayerPossessBomb() {
+        return playerPossessBomb;
+    }
+
+    public int[] getTimeLefts() {
+        return timeLefts;
+    }
+
+    public TextView[] getTvTimeLefts() {
+        return tvTimeLefts;
+    }
+
+    public boolean getUpdateHostViewBoolean() {
+        return updateHostViewBoolean;
+    }
+
+    public boolean getRunScheduler() {
+        return runScheduler;
+    }
+
+
 
 
 

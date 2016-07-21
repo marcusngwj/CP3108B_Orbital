@@ -54,6 +54,8 @@ public class RoomConfirm extends AppCompatActivity {
         catch(JSONException e) {
             e.printStackTrace();
         }
+
+        //Button: create room
         Button createRoom = (Button)findViewById(R.id.createRoom);
         assert createRoom != null;
         createRoom.setOnClickListener(new View.OnClickListener() {

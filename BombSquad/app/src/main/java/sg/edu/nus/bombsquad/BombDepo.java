@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -45,10 +46,10 @@ public class BombDepo extends AppCompatActivity {
             int i = 0;
 
             while (i < bomb.length()) {
-                final String curr_bomb = bomb.getJSONObject(i+"").getString("bomb_name");
-                CheckBox checkbox = (CheckBox)((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox,null);
+                final String curr_bomb = bomb.getJSONObject(i + "").getString("bomb_name");
+                CheckBox checkbox = (CheckBox) ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.checkbox, null);
                 checkbox.setText(curr_bomb);
-                checkbox.setId(Integer.parseInt(bomb.getJSONObject(i+"").getString("question_id")));
+                checkbox.setId(Integer.parseInt(bomb.getJSONObject(i + "").getString("question_id")));
                 checkbox.setTextSize(25);
                 checkbox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -56,8 +57,7 @@ public class BombDepo extends AppCompatActivity {
                         if (selected[v.getId()]) {
                             System.out.println(v.getId());
                             selected[v.getId()] = false;
-                        }
-                        else {
+                        } else {
                             selected[v.getId()] = true;
                             selected_name[v.getId()] = curr_bomb;
                         }
@@ -68,13 +68,12 @@ public class BombDepo extends AppCompatActivity {
                 i++;
             }
 
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
         //GreenTick - Button
-        ImageButton greenTick = (ImageButton)findViewById(R.id.greenTick);
+        ImageButton greenTick = (ImageButton) findViewById(R.id.greenTick);
         assert greenTick != null;
         greenTick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,23 +85,34 @@ public class BombDepo extends AppCompatActivity {
                     intentConfirm.putExtra("user_id", intent.getStringExtra("user_id"));
                     intentConfirm.putExtra("room_name", intent.getStringExtra("room_name"));
                     intentConfirm.putExtra("room_code", intent.getStringExtra("room_code"));
-                    System.out.println("BOMB DEPO");
+                    System.out.println("GREEN TICK");
                     System.out.println(intent.getStringExtra("user_id"));
                     System.out.println(intent.getStringExtra("room_name"));
                     System.out.println(intent.getStringExtra("room_code"));
 
-                    global.setData(selected);
-                    global.setData(selected_name);
-                    startActivity(intentConfirm);
-                }
-                catch(JSONException e) {
+                    //To check if anything is selected
+                    boolean empty = true;
+                    for (String name : selected_name) {
+                        if (name != null) {
+                            empty = false;
+                        }
+                    }
+                    if (empty) {
+                        Toast.makeText(getApplicationContext(), "Please select at least one", Toast.LENGTH_SHORT).show();
+                    } else {
+                        startActivity(intentConfirm);
+                        global.setData(selected);
+                        global.setData(selected_name);
+                    }
+
+                } catch (JSONException e) {
                     System.out.println("JSON ERROR");
                 }
             }
         });
 
         //RedCross - Button
-        ImageButton redCross = (ImageButton)findViewById(R.id.redCross);
+        ImageButton redCross = (ImageButton) findViewById(R.id.redCross);
         assert redCross != null;
         redCross.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +121,7 @@ public class BombDepo extends AppCompatActivity {
                 System.out.println("Red cross clicked");
                 while (i < 100000) {
                     if (selected[i]) {
-                        CheckBox checkbox = (CheckBox)findViewById(i);
+                        CheckBox checkbox = (CheckBox) findViewById(i);
                         LinearLayout ll = (LinearLayout) findViewById(R.id.bombDepoScroll);
                         assert ll != null;
                         ll.removeView(checkbox);
@@ -123,11 +133,11 @@ public class BombDepo extends AppCompatActivity {
                         };
                         System.out.println(intent.getStringExtra("user_id"));
                         System.out.println("i = " + i);
-                        BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i+"", responseListener);
+                        BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i + "", responseListener);
                         RequestQueue queue = Volley.newRequestQueue(BombDepo.this);
                         queue.add(bombDelete);
 
-                        BombDeleteRequest_Room bombDeleteFromRoom = new BombDeleteRequest_Room(intent.getStringExtra("user_id"), i+"", responseListener);
+                        BombDeleteRequest_Room bombDeleteFromRoom = new BombDeleteRequest_Room(intent.getStringExtra("user_id"), i + "", responseListener);
                         queue = Volley.newRequestQueue(BombDepo.this);
                         queue.add(bombDeleteFromRoom);
                     }

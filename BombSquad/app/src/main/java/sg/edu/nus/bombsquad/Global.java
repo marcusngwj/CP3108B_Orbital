@@ -37,7 +37,7 @@ public class Global {
 
 
     //Variables with defined purpose
-    private String user_id;
+    private String user_id; //DO NOT EDIT (Should remain constant throughout everything)
     private String room_name;
     private String room_code;
     private String room_status;
@@ -166,6 +166,7 @@ public class Global {
 
 
 
+
     //Retrieve
     public String[] getStringArray() {
         return stringArr;
@@ -262,6 +263,7 @@ public class Global {
     public boolean getRunScheduler() {
         return runScheduler;
     }
+
 
 
 

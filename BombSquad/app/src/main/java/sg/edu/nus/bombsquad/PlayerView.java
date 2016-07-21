@@ -55,10 +55,10 @@ public class PlayerView extends AppCompatActivity {
         //To avoid automatically appear android keyboard when activity start
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: PlayerView");
         System.out.println("Room Name: " + global.getRoomName());
         System.out.println("Room Code: " + global.getRoomCode());
-
-        //while-loop FOR CHECKING ONLY
 
         for (int i = 0; i < numQuestion; i++) {
             System.out.println("qnID: " + questionIDArray[i]);
@@ -75,7 +75,6 @@ public class PlayerView extends AppCompatActivity {
     }
 
     private void display() {
-
         TextView room_name = (TextView) findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(global.getRoomName());
@@ -92,14 +91,17 @@ public class PlayerView extends AppCompatActivity {
             }
         });
 
+        //Layout of PlayerView
         LinearLayout outerLL = (LinearLayout) findViewById(R.id.playerViewLinearLayout);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
 
-        LinearLayout[] qnLayoutArr = global.getQuestionLayoutArray();
+        LinearLayout[] qnLayoutArr = global.getQuestionLayoutArray();   //Layout for individual qn
+        //Initial qn shown to player
         outerLL.addView(qnLayoutArr[0], lp);
         withinABox(0, qnLayoutArr);
 
+        //Subsequent qn follows
         for (int i = 1; i < numQuestion; i++) {
             outerLL.addView(qnLayoutArr[i], lp);
             qnLayoutArr[i].setVisibility(View.GONE);
@@ -117,11 +119,11 @@ public class PlayerView extends AppCompatActivity {
 
     }
 
+    //Things happening inside a box of question
     private void withinABox(final int i, final LinearLayout[] qnLayoutArr) {
         final TextView tvTimeLeft = (TextView) findViewById(i + global.getId_TVTimeLeft_constant());
 
-        //Params: Total time(Need to retrieve from server, interval
-        //+2000 for buffer time for transition
+        //Params: Total time(Need to retrieve from server, interval +2000 for buffer time for transition
         final CountDownTimer timer = new CountDownTimer(60000 + 2000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -149,6 +151,7 @@ public class PlayerView extends AppCompatActivity {
                 String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
 
+                //Reading string from user
                 EditText etAnswerOption = (EditText) findViewById(i + global.getId_etAnswerOption_constant());
                 if (etAnswerOption != null) {
                     userAnswer = etAnswerOption.getText().toString();
@@ -158,20 +161,18 @@ public class PlayerView extends AppCompatActivity {
                 //If answer is correct for any type of question
                 if ((qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
                         (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING"))) {
-
                     timer.cancel();
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     System.out.println("Bomb " + (i + 1) + " has been successfully defused");
 
                     //If is not last question
-                    if(i<numQuestion-1){
+                    if (i < numQuestion - 1) {
                         qnLayoutArr[i].setVisibility(View.GONE);
-                        qnLayoutArr[i+1].setVisibility(View.VISIBLE);
+                        qnLayoutArr[i + 1].setVisibility(View.VISIBLE);
                     }
-
                 }
 
-                global.setAnswerIsCorrect(false);    //To reset after each question
+                global.setAnswerIsCorrect(false);    //To reset user's MCQ choice after each question
             }
         });
 

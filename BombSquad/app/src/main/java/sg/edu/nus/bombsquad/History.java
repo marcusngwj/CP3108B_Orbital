@@ -16,6 +16,10 @@ public class History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: History");
+
         display();
     }
 

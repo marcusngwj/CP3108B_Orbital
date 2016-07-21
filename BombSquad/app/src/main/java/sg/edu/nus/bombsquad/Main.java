@@ -13,6 +13,9 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: Main");
+
         //To be removed and replaced with splash screen
         Button buttonToNext=(Button)findViewById(R.id.buttonMain);
         if (buttonToNext != null) {

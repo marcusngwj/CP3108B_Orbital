@@ -58,6 +58,8 @@ public class HostView extends AppCompatActivity {
         String[][] stringArr = new String[numQuestion][8];  //Initialising String2DArray in global
         global.setData(stringArr);  //Initialising String2DArray in global
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: HostView");
         System.out.println("ROOM CODE: " + room_code);
         System.out.println("ROOM NAME: " + room_name);
         System.out.println("NUM QUESTION: " + numQuestion);

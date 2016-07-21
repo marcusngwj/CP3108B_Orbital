@@ -35,6 +35,10 @@ public class HostSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_selection);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: HostSelection");
+
         Intent intent = getIntent();
         String question_id = intent.getStringExtra("question_id");
         String time_limit = intent.getStringExtra("time_limit");

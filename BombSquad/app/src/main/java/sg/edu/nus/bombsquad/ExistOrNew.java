@@ -20,6 +20,10 @@ public class ExistOrNew extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exist_or_new);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: ExistOrNew");
+
         existingBomb();
         newBomb();
 

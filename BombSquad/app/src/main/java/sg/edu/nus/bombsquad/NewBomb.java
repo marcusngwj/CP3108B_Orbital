@@ -31,6 +31,10 @@ public class NewBomb extends AppCompatActivity {
         final String user_id = intent.getStringExtra("user_id");
         final String roomCode = intent.getStringExtra("roomCode");
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: NewBomb");
+        System.out.println("Room Code: " + roomCode);
+
         //Bomb Name
         final EditText etBombName = (EditText) findViewById(R.id.editTextBombName);
 

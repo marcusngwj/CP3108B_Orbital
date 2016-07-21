@@ -22,6 +22,9 @@ public class RegisterPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: RegisterPage");
+
         final EditText editFirstName = (EditText) findViewById(R.id.editTextFirstName);
         final EditText editLastName = (EditText) findViewById(R.id.editTextLastName);
         final EditText editEmail = (EditText) findViewById(R.id.editTextEmail);

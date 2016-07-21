@@ -30,6 +30,10 @@ public class ManageRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_room);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: ManageRoom");
+
         global.setData(selected);
         selectedRoomName = new HashMap<String, String>();
         display();

@@ -34,6 +34,10 @@ public class PlayerList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: PlayerList");
+
         display();
 
     }

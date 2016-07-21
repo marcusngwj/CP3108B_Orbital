@@ -31,6 +31,10 @@ public class CreateRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: CreateRoom");
+
         setUpRoom();
     }
 

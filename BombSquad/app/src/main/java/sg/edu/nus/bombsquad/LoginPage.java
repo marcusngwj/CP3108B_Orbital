@@ -26,6 +26,10 @@ public class LoginPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: LoginPage");
+
         onLogin();
         onRegister();
     }

@@ -23,6 +23,9 @@ public class EnterRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_room);
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: EnterRoom");
+
         final EditText etEnterRoomCode = (EditText) findViewById(R.id.editTextEnterRoomCode);
         final Button bReadyForBattle = (Button) findViewById(R.id.buttonReadyForBattle);
 

@@ -35,6 +35,9 @@ public class PreparingPlayerView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preparing_player_view);
 
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: PreparingPlayerView");
+
         String[][] temp2DArr = new String[numQuestion][7];
         global.setData(temp2DArr);
 

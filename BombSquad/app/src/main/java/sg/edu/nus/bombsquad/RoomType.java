@@ -24,6 +24,10 @@ public class RoomType extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_type);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: RoomType");
+
         manageRoom();
         createRoom();
         enterRoom();

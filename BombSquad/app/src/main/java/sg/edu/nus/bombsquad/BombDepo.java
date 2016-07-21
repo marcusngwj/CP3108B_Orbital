@@ -25,6 +25,10 @@ public class BombDepo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bomb_depo);
+
+        //To show on Android Monitor onCreate
+        System.out.println("Activity Name: BombDepo");
+
         display();
     }
 
@@ -68,6 +72,8 @@ public class BombDepo extends AppCompatActivity {
         catch (JSONException e) {
             e.printStackTrace();
         }
+
+        //GreenTick - Button
         ImageButton greenTick = (ImageButton)findViewById(R.id.greenTick);
         assert greenTick != null;
         greenTick.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +101,7 @@ public class BombDepo extends AppCompatActivity {
             }
         });
 
+        //RedCross - Button
         ImageButton redCross = (ImageButton)findViewById(R.id.redCross);
         assert redCross != null;
         redCross.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +118,7 @@ public class BombDepo extends AppCompatActivity {
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                //Nothing here to see laaaaaaa
+                                //Nothing here to see 
                             }
                         };
                         System.out.println(intent.getStringExtra("user_id"));

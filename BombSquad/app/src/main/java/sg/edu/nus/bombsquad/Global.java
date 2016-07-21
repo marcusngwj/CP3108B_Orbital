@@ -58,6 +58,7 @@ public class Global {
     private TextView[] tvTimeLefts;
     private boolean updateHostViewBoolean;
     private boolean runScheduler = true;
+    private QuestionDetail[] questionBank;
 
 
 
@@ -159,8 +160,7 @@ public class Global {
         runScheduler = true;
     }
 
-
-
+    public void setQuestionBank(QuestionDetail[] questionBank) { this.questionBank = questionBank; }
 
 
 
@@ -264,13 +264,7 @@ public class Global {
         return runScheduler;
     }
 
-
-
-
-
-
-
-
+    public QuestionDetail[] getQuestionBank() { return questionBank; }
 
     //Retrieve definite constant variable
     public int getId_etAnswerOption_constant() { return id_etAnswerOption_constant; }

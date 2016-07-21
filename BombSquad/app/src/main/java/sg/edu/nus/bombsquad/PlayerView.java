@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -51,15 +52,17 @@ public class PlayerView extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_view);
 
+        //To avoid automatically appear android keyboard when activity start
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         System.out.println("Room Name: " + global.getRoomName());
         System.out.println("Room Code: " + global.getRoomCode());
 
         //while-loop FOR CHECKING ONLY
-        int i=0;
-        while (i < numQuestion) {
+
+        for(int i=0; i < numQuestion; i++) {
             System.out.println("qnID: " + questionIDArray[i]);
             System.out.println("qn: " + createQnBoxArr[i][1]);
-            i++;
         }
 
         display();
@@ -72,8 +75,7 @@ public class PlayerView extends AppCompatActivity{
     }
 
     private void display() {
-        final Intent intent = getIntent();
-        
+
         TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(global.getRoomName());
@@ -85,7 +87,7 @@ public class PlayerView extends AppCompatActivity{
             public void onClick(View v) {
                 onStop();
                 Intent intentLeave = new Intent(PlayerView.this, RoomType.class);
-                intentLeave.putExtra("user_id", intent.getStringExtra("user_id"));
+                intentLeave.putExtra("user_id", global.getUserId());
                 startActivity(intentLeave);
             }
         });
@@ -94,59 +96,90 @@ public class PlayerView extends AppCompatActivity{
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0,0,0,50);
 
-
         LinearLayout[] qnLayoutArr = global.getQuestionLayoutArray();
-        int i = 0;
-        while (i < numQuestion) {
+
+        for(int i=0; i < numQuestion; i++) {
             outerLL.addView(qnLayoutArr[i], lp);
+            System.out.println("WHAT IS I: " + i);
 
             withinABox(i);
 
-            i++;
+//            while(global.getGoToNextQn()==false);
+
+//            qnLayoutArr[i].setVisibility(View.GONE);
+
         }
 
 
 
-        scheduler.scheduleAtFixedRate(new Runnable() {
+        /*scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 new Background().execute((room_code+""));
             }
-        }, 0, 500, TimeUnit.MILLISECONDS);
+        }, 0, 500, TimeUnit.MILLISECONDS);*/
 
     }
 
     private void withinABox(final int i){
-        /*final TextView tvTimeLeft = (TextView)findViewById(i + global.getId_TVTimeLeft_constant());
-        final String stringTimeLeft = tvTimeLeft.getText().toString();*/
+        final TextView tvTimeLeft = (TextView)findViewById(i + global.getId_TVTimeLeft_constant());
+
+        //Params: Total time(Need to retrieve from server, interval
+        //+2000 for buffer time for transition
+        final CountDownTimer timer = new CountDownTimer(60000+2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tvTimeLeft.setText(millisUntilFinished/1000 + "");
+                tvTimeLeft.setTag("RUNNING");
+                System.out.println("Timer for qn " + (i+1) + " is " + tvTimeLeft.getTag());
+            }
+
+            @Override
+            public void onFinish() {
+                tvTimeLeft.setText("BOOM");
+                tvTimeLeft.setTag("FINISHED");
+                System.out.println("Timer for qn " + (i+1) + " has " + tvTimeLeft.getTag() + " counting down");
+            }
+
+        }.start();
 
 
-        EditText etAnswerOption = (EditText)findViewById(i + global.getId_etAnswerOption_constant());
-
-
-        Button bDefuse = (Button)findViewById(i + global.getId_BDefuse_constant());
-        String userAnswer = "";
-        if(etAnswerOption!=null){
-            userAnswer = etAnswerOption.getText().toString();
-        }
-        final String finalUserAnswer = userAnswer;
-        /*bDefuse.setOnClickListener(new View.OnClickListener() {
+        final Button bDefuse = (Button)findViewById(i + global.getId_BDefuse_constant());
+        bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String qnType = createQnBoxArr[i][0];
                 String correctAnswer = createQnBoxArr[i][6];
+                String timerStatus = tvTimeLeft.getTag()+"";
+                String userAnswer = "";
 
-                if(qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && !stringTimeLeft.equals("BOOM")) {
-                    tvTimeLeft.setText("Bomb has been successfully defused");
+                EditText etAnswerOption = (EditText)findViewById(i + global.getId_etAnswerOption_constant());
+                if(etAnswerOption!=null){
+                    userAnswer = etAnswerOption.getText().toString();
+                    System.out.println(userAnswer);
                 }
-                else if(!qnType.equals("Multiple Choice") && finalUserAnswer.equalsIgnoreCase(correctAnswer) && !stringTimeLeft.equals("BOOM")){
+
+                if(qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && timerStatus.equals("RUNNING")) {
+                    timer.cancel();
                     tvTimeLeft.setText("Bomb has been successfully defused");
+                    System.out.println("Bomb " + (i+1) + " has been successfully defused");
                 }
+                else if(!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING")){
+                    timer.cancel();
+                    tvTimeLeft.setText("Bomb has been successfully defused");
+                    System.out.println("Bomb " + (i+1) + " has been successfully defused");
+                }
+
                 global.setAnswerIsCorrect(false);    //To reset after each question
             }
-        });*/
+        });
 
 
     }
+
+
+
+
+
 
     class Background extends AsyncTask<String, Void, Void> {
         TextView uiUpdate = (TextView)findViewById(R.id.textViewPlayerMessage);

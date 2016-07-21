@@ -28,7 +28,7 @@
 		$response[$i]["answer"] = $answer;
 		$response[$i]["time_limit"] = $time_limit;
 		$response[$i]["points_awarded"] = $points_awarded;
-		$response[$i]["points deducted"] = $points_deducted;
+		$response[$i]["points_deducted"] = $points_deducted;
 		$response[$i]["num_pass"] = $num_pass;
 		$response[$i]["user_id"] = $user_id;
 		$i++;

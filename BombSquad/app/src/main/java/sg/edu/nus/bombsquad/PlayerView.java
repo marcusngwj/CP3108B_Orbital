@@ -122,9 +122,10 @@ public class PlayerView extends AppCompatActivity {
     //Things happening inside a box of question
     private void withinABox(final int i, final LinearLayout[] qnLayoutArr) {
         final TextView tvTimeLeft = (TextView) findViewById(i + global.getId_TVTimeLeft_constant());
+        long timeInitial = Long.valueOf(createQnBoxArr[i][7]) * 1000;
 
         //Params: Total time(Need to retrieve from server, interval +2000 for buffer time for transition
-        final CountDownTimer timer = new CountDownTimer(60000 + 2000, 1000) {
+        final CountDownTimer timer = new CountDownTimer(timeInitial + 2000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 tvTimeLeft.setText(millisUntilFinished / 1000 + "");

@@ -38,7 +38,7 @@ public class PreparingPlayerView extends AppCompatActivity {
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: PreparingPlayerView");
 
-        String[][] temp2DArr = new String[numQuestion][7];
+        String[][] temp2DArr = new String[numQuestion][8];
         global.setData(temp2DArr);
 
         Task task = new Task();
@@ -89,6 +89,7 @@ public class PreparingPlayerView extends AppCompatActivity {
                             tempArr[i][4] = jsonResponse.getJSONObject(0 + "").getString("option_three");
                             tempArr[i][5] = jsonResponse.getJSONObject(0 + "").getString("option_four");
                             tempArr[i][6] = jsonResponse.getJSONObject(0 + "").getString("answer");
+                            tempArr[i][7] = jsonResponse.getJSONObject(0 + "").getString("time_limit");
 
                             global.setData(tempArr);
 

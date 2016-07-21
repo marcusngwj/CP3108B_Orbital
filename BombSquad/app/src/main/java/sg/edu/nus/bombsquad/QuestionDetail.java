@@ -86,7 +86,6 @@ public class QuestionDetail {
         final int idBDefuse = i + ID_BDEFUSE_CONSTANT;  //id for bDefuse
         final int idBPass = i + ID_BPASS_CONSTANT;    //id for bPass
 
-
         //Container
         LinearLayout innerLL = new LinearLayout(context);
         innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -335,9 +334,7 @@ public class QuestionDetail {
         this.bOptionD = bOptionD;
     }
 
-    public void setTvTimeLeftTitle(TextView tvTimeLeftTitle) {
-        this.tvTimeLeftTitle = tvTimeLeftTitle;
-    }
+    public void setTvTimeLeftTitle(TextView tvTimeLeftTitle) { this.tvTimeLeftTitle = tvTimeLeftTitle; }
 
     public void setTvTimeLeft(TextView tvTimeLeft) {
         this.tvTimeLeft = tvTimeLeft;
@@ -387,17 +384,13 @@ public class QuestionDetail {
         this.points_awarded = points_awarded;
     }
 
-    public void setPoints_deducted(String points_deducted) {
-        this.points_deducted = points_deducted;
-    }
+    public void setPoints_deducted(String points_deducted) { this.points_deducted = points_deducted; }
 
     public void setNum_pass(String num_pass) {
         this.num_pass = num_pass;
     }
 
-    public void setAnswerIsCorrect(boolean answerIsCorrect) {
-        this.answerIsCorrect = answerIsCorrect;
-    }
+    public void setAnswerIsCorrect(boolean answerIsCorrect) { this.answerIsCorrect = answerIsCorrect; }
 
 
 

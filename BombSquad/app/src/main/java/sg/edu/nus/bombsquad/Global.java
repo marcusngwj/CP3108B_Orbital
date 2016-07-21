@@ -1,15 +1,8 @@
 package sg.edu.nus.bombsquad;
 
 
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,18 +10,7 @@ import okhttp3.Request;
 public class Global {
     private static Global instance;
 
-    //Definite constant variables
-    private int id_etAnswerOption_constant = 1000000;
-    private int id_BOptionA_constant = 65000000;
-    private int id_BOptionB_constant = 66000000;
-    private int id_BOptionC_constant = 67000000;
-    private int id_BOptionD_constant = 68000000;
-    private int id_TVTimeLeft_constant = 2000000;
-    private int id_BDefuse_constant = 3000000;
-    private int id_BPass_constant = 4000000;
-
-
-    //Variables for temporary use
+    /*---------- Variables for temporary use ----------*/
     private String[] stringArr;
     private String[][] string2DArr;
     private boolean[] booleanArr;
@@ -39,8 +21,7 @@ public class Global {
     private boolean booleanVar;
     private String string;
 
-
-    //Variables with defined purpose
+    /*---------- Variables with defined purpose ----------*/
     private String user_id; //DO NOT EDIT (Should remain constant throughout everything)
     private String room_name;
     private String room_code;
@@ -51,11 +32,9 @@ public class Global {
     private String[] player_id = new String[100000];
     private String[] player_list;
     private boolean booleanAccess;
-    private LinearLayout[] questionLayoutArray;
     private boolean playerStatus;
     private int timeLeft;
     private String currQuestionId;
-    private boolean answerIsCorrect;
     private TextView[] hostViewPossession;
     private int[] playerPossessBomb;
     private int[] timeLefts;
@@ -64,22 +43,18 @@ public class Global {
     private boolean runScheduler = true;
     private QuestionDetail[] questionBank;
 
-    //okhttp
+    /*---------- okgttp ----------*/
     private OkHttpClient client = new OkHttpClient();
     private Request.Builder requestBuilder = new Request.Builder();
 
 
 
-    //Modify
-    public void setData(String[] arr) {
-        stringArr = arr;
-    }
+    /*---------- Modify ----------*/
+    public void setData(String[] arr) { stringArr = arr; }
 
     public void setData(String[][] arr) { string2DArr = arr; }
 
-    public void setData(boolean[] arr) {
-        booleanArr = arr;
-    }
+    public void setData(boolean[] arr) { booleanArr = arr; }
 
     public void setData(int[] arr) { intArr = arr; }
 
@@ -95,77 +70,41 @@ public class Global {
 
     public void setUserId(String id) { user_id = id; }
 
-    public void setRoomName(String name) {
-        room_name = name;
-    }
+    public void setRoomName(String name) { room_name = name; }
 
     public void setRoomCode(String string) { room_code = string; }
 
-    public void setRoomStatus(String string) {
-        room_status = string;
-    }
+    public void setRoomStatus(String string) { room_status = string; }
 
-    public void setNumQuestion(int num) {
-        num_question = num;
-    }
+    public void setNumQuestion(int num) { num_question = num; }
 
     public void setQuestion_id(String[] arr) { question_id = arr; }
 
-    public void setPlayerName (String name) {
-        player_name = name;
-    }
+    public void setPlayerName (String name) { player_name = name; }
 
-    public void setPlayerId (String[] list) {
-        player_id = list;
-    }
+    public void setPlayerId (String[] list) { player_id = list; }
 
-    public void setPlayerList (String[] list) {
-        player_list = list;
-    }
+    public void setPlayerList (String[] list) { player_list = list; }
 
-    public void setBooleanAccess(boolean bool) {
-        booleanAccess = bool;
-    }
+    public void setBooleanAccess(boolean bool) { booleanAccess = bool; }
 
-    public void setQuestionLayoutArray(LinearLayout[] arr) { questionLayoutArray = arr; }
+    public void setPlayerExist(boolean bool) { playerStatus = bool; }
 
-    public void setPlayerExist(boolean bool) {
-        playerStatus = bool;
-    }
+    public void setTimeLeft(int time) { timeLeft = time; }
 
-    public void setTimeLeft(int time) {
-        timeLeft = time;
-    }
+    public void setCurrQuestionId(String id) { currQuestionId = id; }
 
-    public void setCurrQuestionId(String id) {
-        currQuestionId = id;
-    }
+    public void setHostViewPossession(TextView[] tv) { hostViewPossession = tv; }
 
-    public void setAnswerIsCorrect(boolean bool) { answerIsCorrect = bool; }
+    public void setPlayerPossessBomb(int[] arr) { playerPossessBomb = arr; }
 
-    public void setHostViewPossession(TextView[] tv) {
-        hostViewPossession = tv;
-    }
+    public void setTimeLefts(int[] arr) { timeLefts = arr; }
 
-    public void setPlayerPossessBomb(int[] arr) {
-        playerPossessBomb = arr;
-    }
+    public void setTvTimeLefts(TextView[] arr) { tvTimeLefts = arr; }
 
-    public void setTimeLefts(int[] arr) {
-        timeLefts = arr;
-    }
+    public void setUpdateHostViewBoolean(Boolean bool) { updateHostViewBoolean = bool; }
 
-    public void setTvTimeLefts(TextView[] arr) {
-        tvTimeLefts = arr;
-    }
-
-    public void setUpdateHostViewBoolean(Boolean bool) {
-        updateHostViewBoolean = bool;
-    }
-
-    public void setRunScheduler(Boolean bool) {
-        runScheduler = true;
-    }
+    public void setRunScheduler(Boolean bool) { runScheduler = true; }
 
     public void setQuestionBank(QuestionDetail[] questionBank) { this.questionBank = questionBank; }
 
@@ -174,16 +113,12 @@ public class Global {
 
 
 
-    //Retrieve
-    public String[] getStringArray() {
-        return stringArr;
-    }
+    /*---------- Retrieve ----------*/
+    public String[] getStringArray() { return stringArr; }
 
     public String[][] getString2DArr() { return  string2DArr; }
 
-    public boolean[] getBooleanArray() {
-        return booleanArr;
-    }
+    public boolean[] getBooleanArray() { return booleanArr; }
 
     public int[] getIntArr() { return intArr; }
 
@@ -199,108 +134,47 @@ public class Global {
 
     public String getUserId() { return user_id; }
 
-    public String getRoomName() {
-        return room_name;
-    }
+    public String getRoomName() { return room_name; }
 
     public String getRoomCode() { return room_code; }
 
-    public String getRoomStatus() {
-        return room_status;
-    }
+    public String getRoomStatus() { return room_status; }
 
-    public int getNumQuestion() {
-        return num_question;
-    }
+    public int getNumQuestion() { return num_question; }
 
     public String[] getQuestion_id() { return question_id; }
 
-    public String getPlayerName() {
-        return player_name;
-    }
+    public String getPlayerName() { return player_name; }
 
-    public String[] getPlayerId() {
-        return player_id;
-    }
+    public String[] getPlayerId() { return player_id; }
 
-    public String[] getPlayerList() {
-        return player_list;
-    }
+    public String[] getPlayerList() { return player_list; }
 
-    public boolean getBooleanAccess() {
-        return booleanAccess;
-    }
+    public boolean getBooleanAccess() { return booleanAccess; }
 
-    public LinearLayout[] getQuestionLayoutArray() { return questionLayoutArray; }
+    public boolean playerExist() { return playerStatus; }
 
-    public boolean playerExist() {
-        return playerStatus;
-    }
+    public int getTimeLeft() { return timeLeft; }
 
-    public int getTimeLeft() {
-        return timeLeft;
-    }
+    public String getCurrQuestionId() { return currQuestionId; }
 
-    public String getCurrQuestionId() {
-        return currQuestionId;
-    }
+    public TextView[] getHostViewPossession() { return hostViewPossession; }
 
-    public boolean getAnswerIsCorrect() {return answerIsCorrect; }
+    public int[] getPlayerPossessBomb() { return playerPossessBomb; }
 
-    public TextView[] getHostViewPossession() {
-        return hostViewPossession;
-    }
+    public int[] getTimeLefts() { return timeLefts; }
 
-    public int[] getPlayerPossessBomb() {
-        return playerPossessBomb;
-    }
+    public TextView[] getTvTimeLefts() { return tvTimeLefts; }
 
-    public int[] getTimeLefts() {
-        return timeLefts;
-    }
+    public boolean getUpdateHostViewBoolean() { return updateHostViewBoolean; }
 
-    public TextView[] getTvTimeLefts() {
-        return tvTimeLefts;
-    }
-
-    public boolean getUpdateHostViewBoolean() {
-        return updateHostViewBoolean;
-    }
-
-    public boolean getRunScheduler() {
-        return runScheduler;
-    }
-
+    public boolean getRunScheduler() { return runScheduler; }
 
     public QuestionDetail[] getQuestionBank() { return questionBank; }
 
-    public OkHttpClient getClient() {
-        return client;
-    }
+    public OkHttpClient getClient() { return client; }
 
-    public Request.Builder getRBuilder() {
-        return requestBuilder;
-    }
-
-
-
-
-
-
-
-    //Retrieve definite constant variable
-    public int getId_etAnswerOption_constant() { return id_etAnswerOption_constant; }
-    public int getId_BOptionA_constant() { return id_BOptionA_constant; }
-    public int getId_BOptionB_constant() { return id_BOptionB_constant; }
-    public int getId_BOptionC_constant() { return id_BOptionC_constant; }
-    public int getId_BOptionD_constant() { return id_BOptionD_constant; }
-    public int getId_TVTimeLeft_constant() { return id_TVTimeLeft_constant; }
-    public int getId_BDefuse_constant() { return id_BDefuse_constant; }
-    public int getId_BPass_constant() { return id_BPass_constant; }
-
-
-
-
+    public Request.Builder getRBuilder() { return requestBuilder; }
 
 
 

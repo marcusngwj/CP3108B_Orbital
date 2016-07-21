@@ -61,7 +61,12 @@ public class PlayerView extends AppCompatActivity {
 
         for (int i = 0; i < numQuestion; i++) {
             System.out.println("qnID: " + questionBank[i].getQuestion_id());
-            System.out.println("qn: " + questionBank[i]);
+            System.out.println("qn: " + questionBank[i].getQuestion());
+            System.out.println("bomb name: " + questionBank[i].getBomb_name());
+            System.out.println("Initial time: " + questionBank[i].getTime_limit());
+            System.out.println("Points awarded: " + questionBank[i].getPoints_awarded());
+            System.out.println("Points deducted: " + questionBank[i].getPoints_deducted());
+            System.out.println("Num Pass: " + questionBank[i].getNum_pass());
         }
 
         display();
@@ -119,6 +124,7 @@ public class PlayerView extends AppCompatActivity {
 
     //Things happening inside a box of question
     private void withinABox(final int i) {
+        //To display timer
         final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
         long timeInitial = Long.valueOf(questionBank[i].getTime_limit()) * 1000;
 
@@ -140,7 +146,7 @@ public class PlayerView extends AppCompatActivity {
 
         }.start();
 
-
+        //Button: Defusing a bomb
         final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override

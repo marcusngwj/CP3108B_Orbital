@@ -143,7 +143,7 @@ public class PreparingPlayerView extends AppCompatActivity {
 
             //Question - Heading_TextView
             TextView tvQuestionHeading = new TextView(PreparingPlayerView.this);
-            tvQuestionHeading.setText("Question");
+            tvQuestionHeading.setText("Question " + (i+1));
             tvQuestionHeading.setTextSize(20);
             tvQuestionHeading.setTextColor(Color.WHITE);
             tvQuestionHeading.setPadding(15, 5, 2, 2);

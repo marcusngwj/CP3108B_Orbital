@@ -153,7 +153,7 @@ public class PreparingPlayerView extends AppCompatActivity {
             questionLL.setLayoutParams(qlp);
 
             //Question - Actual Question_TextView
-            TextView tvQuestion = new TextView(PreparingPlayerView.this);
+            final TextView tvQuestion = new TextView(PreparingPlayerView.this);
             final String[][] createQnBoxArr = global.getString2DArr();
             String qn = createQnBoxArr[i][1];
             tvQuestion.setText(qn);
@@ -314,25 +314,11 @@ public class PreparingPlayerView extends AppCompatActivity {
             LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
             tvTimeLeftLL.setMargins(30,0,30,35);
             final TextView tvTimeLeft = new TextView(PreparingPlayerView.this);
+            tvTimeLeft.setId(i + global.getId_TVTimeLeft_constant());
             tvTimeLeft.setPadding(15, 15, 12, 12);
             tvTimeLeft.setWidth(30);
             tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
             tvTimeLeft.setLayoutParams(tvTimeLeftLL);
-
-            //Params: Total time(Need to retrieve from server, interval
-            //+2000 for buffer time for transition
-            final CountDownTimer timer = new CountDownTimer(60000+2000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    tvTimeLeft.setText(millisUntilFinished/1000 + "");
-                }
-
-                @Override
-                public void onFinish() {
-                    tvTimeLeft.setText("BOOM");
-                }
-
-            }.start();
 
 
             //LinearLayout for defuse and pass
@@ -342,37 +328,12 @@ public class PreparingPlayerView extends AppCompatActivity {
             LinearLayout.LayoutParams dplp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             dplp.setMargins(0, 0, 40, 0);
 
-            //To be completed
             //Defuse - Button
-            //Attempt to defuse: Check answer with server
-            //If answer is correct, bomb is defused and timer cancelled
-            //Else timer continues to countdown
             Button bDefuse = new Button(PreparingPlayerView.this);
             bDefuse.setId(idBDefuse);
             bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
             bDefuse.setText("Defuse");
             bDefuse.setLayoutParams(dplp);
-
-            /*bDefuse.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String qnType = createQnBoxArr[i][0];
-                    String correctAnswer = createQnBoxArr[i][6];
-                    System.out.println("new ID: " + idETAnswerOption);
-
-
-
-                    if(qnType.equals("Multiple Choice") && global.getBooleanVar() ) {
-                        timer.cancel();
-                        tvTimeLeft.setText("Bomb has been successfully defused");
-                    }
-                    else {
-                        timer.cancel();
-                        tvTimeLeft.setText("Bomb has been successfully defused");
-                    }
-                    global.setBooleanVar(false);    //To reset after each question
-                }
-            });*/
 
             //Pass - Button
             Button bPass = new Button(PreparingPlayerView.this);

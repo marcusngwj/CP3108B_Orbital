@@ -96,6 +96,7 @@ public class HostSelection extends AppCompatActivity {
                                         @Override
                                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                             Intent intent = new Intent(HostSelection.this, HostView.class);
+                                            new UpdateTime().execute(time_left);
                                             startActivity(intent);
                                         }
                                     });
@@ -123,7 +124,6 @@ public class HostSelection extends AppCompatActivity {
                     builder.setMessage("There are no players in the room")
                             .create()
                             .show();
-                    System.out.println("I AM HEREEEEE");
                     global.setBooleanAccess(false);
                 }
                 scheduler1.scheduleAtFixedRate(new Runnable() {
@@ -238,6 +238,42 @@ public class HostSelection extends AppCompatActivity {
                         });
                 i++;
             }
+            return null;
+        }
+    }
+
+    class UpdateTime extends AsyncTask<String, Void, Void> {
+        final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        final Global global = Global.getInstance();
+        protected Void doInBackground(String... times) {
+            final String time = times[0];
+            global.setTimeLeft(Integer.parseInt(time) + 1);
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    global.setTimeLeft(global.getTimeLeft()-1);
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody postData = new FormBody.Builder()
+                            .add("room_code", global.getRoomCode())
+                            .add("question_id", global.getCurrQuestionId())
+                            .add("time_left", Integer.toString(global.getTimeLeft()))
+                            .build();
+                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateTimeLeft.php").post(postData).build();
+                    client.newCall(request)
+                            .enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    System.out.println("FAIL");
+                                }
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    response.body().close();
+                                }
+                            });
+                    if (global.getTimeLeft() == 0) {
+                        scheduler.shutdown();
+                    }
+                }
+            }, 0, 1, TimeUnit.SECONDS);
             return null;
         }
     }

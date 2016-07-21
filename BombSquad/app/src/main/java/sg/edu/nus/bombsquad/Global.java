@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 public class Global {
     private static Global instance;
 
@@ -59,6 +63,9 @@ public class Global {
     private boolean updateHostViewBoolean;
     private boolean runScheduler = true;
 
+    //okhttp
+    private OkHttpClient client = new OkHttpClient();
+    private Request.Builder requestBuilder = new Request.Builder();
 
 
 
@@ -264,8 +271,13 @@ public class Global {
         return runScheduler;
     }
 
+    public OkHttpClient getClient() {
+        return client;
+    }
 
-
+    public Request.Builder getRBuilder() {
+        return requestBuilder;
+    }
 
 
 

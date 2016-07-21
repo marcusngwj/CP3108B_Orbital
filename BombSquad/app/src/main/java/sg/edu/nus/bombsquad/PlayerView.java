@@ -38,7 +38,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class PlayerView extends AppCompatActivity{
+public class PlayerView extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     Global global = Global.getInstance();
     final String user_id = global.getUserId();
@@ -60,7 +60,7 @@ public class PlayerView extends AppCompatActivity{
 
         //while-loop FOR CHECKING ONLY
 
-        for(int i=0; i < numQuestion; i++) {
+        for (int i = 0; i < numQuestion; i++) {
             System.out.println("qnID: " + questionIDArray[i]);
             System.out.println("qn: " + createQnBoxArr[i][1]);
         }
@@ -76,12 +76,12 @@ public class PlayerView extends AppCompatActivity{
 
     private void display() {
 
-        TextView room_name = (TextView)findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
+        TextView room_name = (TextView) findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(global.getRoomName());
 
         //Exit button, link to RoomType
-        Button bExitPlayerView = (Button)findViewById(R.id.buttonExitPlayerView);
+        Button bExitPlayerView = (Button) findViewById(R.id.buttonExitPlayerView);
         bExitPlayerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,20 +94,17 @@ public class PlayerView extends AppCompatActivity{
 
         LinearLayout outerLL = (LinearLayout) findViewById(R.id.playerViewLinearLayout);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0,0,0,50);
+        lp.setMargins(0, 0, 0, 50);
 
         LinearLayout[] qnLayoutArr = global.getQuestionLayoutArray();
+        outerLL.addView(qnLayoutArr[0], lp);
+        withinABox(0, qnLayoutArr);
 
-        for(int i=0; i < numQuestion; i++) {
+        for (int i = 1; i < numQuestion; i++) {
             outerLL.addView(qnLayoutArr[i], lp);
-            System.out.println("WHAT IS I: " + i);
+            qnLayoutArr[i].setVisibility(View.GONE);
 
-            withinABox(i);
-
-//            while(global.getGoToNextQn()==false);
-
-//            qnLayoutArr[i].setVisibility(View.GONE);
-
+            withinABox(i, qnLayoutArr);
         }
 
 
@@ -120,53 +117,58 @@ public class PlayerView extends AppCompatActivity{
 
     }
 
-    private void withinABox(final int i){
-        final TextView tvTimeLeft = (TextView)findViewById(i + global.getId_TVTimeLeft_constant());
+    private void withinABox(final int i, final LinearLayout[] qnLayoutArr) {
+        final TextView tvTimeLeft = (TextView) findViewById(i + global.getId_TVTimeLeft_constant());
 
         //Params: Total time(Need to retrieve from server, interval
         //+2000 for buffer time for transition
-        final CountDownTimer timer = new CountDownTimer(60000+2000, 1000) {
+        final CountDownTimer timer = new CountDownTimer(60000 + 2000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                tvTimeLeft.setText(millisUntilFinished/1000 + "");
+                tvTimeLeft.setText(millisUntilFinished / 1000 + "");
                 tvTimeLeft.setTag("RUNNING");
-                System.out.println("Timer for qn " + (i+1) + " is " + tvTimeLeft.getTag());
+                System.out.println("Timer for qn " + (i + 1) + " is " + tvTimeLeft.getTag());
             }
 
             @Override
             public void onFinish() {
                 tvTimeLeft.setText("BOOM");
                 tvTimeLeft.setTag("FINISHED");
-                System.out.println("Timer for qn " + (i+1) + " has " + tvTimeLeft.getTag() + " counting down");
+                System.out.println("Timer for qn " + (i + 1) + " has " + tvTimeLeft.getTag() + " counting down");
             }
 
         }.start();
 
 
-        final Button bDefuse = (Button)findViewById(i + global.getId_BDefuse_constant());
+        final Button bDefuse = (Button) findViewById(i + global.getId_BDefuse_constant());
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String qnType = createQnBoxArr[i][0];
                 String correctAnswer = createQnBoxArr[i][6];
-                String timerStatus = tvTimeLeft.getTag()+"";
+                String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
 
-                EditText etAnswerOption = (EditText)findViewById(i + global.getId_etAnswerOption_constant());
-                if(etAnswerOption!=null){
+                EditText etAnswerOption = (EditText) findViewById(i + global.getId_etAnswerOption_constant());
+                if (etAnswerOption != null) {
                     userAnswer = etAnswerOption.getText().toString();
                     System.out.println(userAnswer);
                 }
 
-                if(qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && timerStatus.equals("RUNNING")) {
+                //If answer is correct for any type of question
+                if ((qnType.equals("Multiple Choice") && global.getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
+                        (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING"))) {
+
                     timer.cancel();
                     tvTimeLeft.setText("Bomb has been successfully defused");
-                    System.out.println("Bomb " + (i+1) + " has been successfully defused");
-                }
-                else if(!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING")){
-                    timer.cancel();
-                    tvTimeLeft.setText("Bomb has been successfully defused");
-                    System.out.println("Bomb " + (i+1) + " has been successfully defused");
+                    System.out.println("Bomb " + (i + 1) + " has been successfully defused");
+
+                    //If is not last question
+                    if(i<numQuestion-1){
+                        qnLayoutArr[i].setVisibility(View.GONE);
+                        qnLayoutArr[i+1].setVisibility(View.VISIBLE);
+                    }
+
                 }
 
                 global.setAnswerIsCorrect(false);    //To reset after each question
@@ -177,12 +179,8 @@ public class PlayerView extends AppCompatActivity{
     }
 
 
-
-
-
-
     class Background extends AsyncTask<String, Void, Void> {
-        TextView uiUpdate = (TextView)findViewById(R.id.textViewPlayerMessage);
+        TextView uiUpdate = (TextView) findViewById(R.id.textViewPlayerMessage);
         final Global global = Global.getInstance();
 
         protected void onPreExecute(Void pre) {

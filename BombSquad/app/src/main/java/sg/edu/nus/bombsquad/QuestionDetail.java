@@ -1,6 +1,7 @@
 package sg.edu.nus.bombsquad;
 
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +46,7 @@ public class QuestionDetail {
     String points_deducted;
     String num_pass;
     boolean answerIsCorrect;
+    CountDownTimer timer;
 
     /*---------- Constructor ----------*/
     public QuestionDetail(Context context, int i, String question_id, String bomb_name, String question_type, String question,
@@ -68,6 +70,7 @@ public class QuestionDetail {
 
         answerIsCorrect = false;
         setLayout(i);
+        setTimer();
     }
 
 
@@ -101,6 +104,7 @@ public class QuestionDetail {
         tvQuestionHeading.setTextSize(20);
         tvQuestionHeading.setTextColor(Color.WHITE);
         tvQuestionHeading.setPadding(15, 5, 2, 2);
+        this.tvQuestionHeading = tvQuestionHeading;
 
         //Question & Answer_Option - LinearLayout
         LinearLayout questionLL = new LinearLayout(context);
@@ -114,6 +118,7 @@ public class QuestionDetail {
         tvQuestion.setText(question);
         tvQuestion.setTextSize(20);
         questionLL.addView(tvQuestion);
+        this.tvQuestion = tvQuestion;
 
         //Answer Option - TextView
         if(question_type.equals("Multiple Choice")){
@@ -150,6 +155,7 @@ public class QuestionDetail {
         bOptionA.setTextSize(20);
         bOptionA.setTextColor(Color.WHITE);
         bOptionA.setLayoutParams(mcqOlp);
+        this.bOptionA = bOptionA;
 
         //Option B - Button
         final Button bOptionB = new Button(context);
@@ -159,6 +165,8 @@ public class QuestionDetail {
         bOptionB.setTextSize(20);
         bOptionB.setTextColor(Color.WHITE);
         bOptionB.setLayoutParams(mcqOlp);
+        this.bOptionB = bOptionB;
+
 
         //Option C - Button
         final Button bOptionC = new Button(context);
@@ -168,6 +176,8 @@ public class QuestionDetail {
         bOptionC.setTextSize(20);
         bOptionC.setTextColor(Color.WHITE);
         bOptionC.setLayoutParams(mcqOlp);
+        this.bOptionC = bOptionC;
+
 
         //Option D - Button
         final Button bOptionD = new Button(context);
@@ -177,6 +187,8 @@ public class QuestionDetail {
         bOptionD.setTextSize(20);
         bOptionD.setTextColor(Color.WHITE);
         bOptionD.setLayoutParams(mcqOlp);
+        this.bOptionD = bOptionD;
+
 
         //Button A onClickListener
         bOptionA.setOnClickListener(new View.OnClickListener() {
@@ -262,6 +274,7 @@ public class QuestionDetail {
         tvTimeLeftTitle.setTextSize(20);
         tvTimeLeftTitle.setTextColor(Color.WHITE);
         tvTimeLeftTitle.setPadding(15, 5, 2, 2);
+        this.tvTimeLeftTitle = tvTimeLeftTitle;
 
         //Time Left (Display countdown) - TextView
         LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
@@ -272,6 +285,7 @@ public class QuestionDetail {
         tvTimeLeft.setWidth(30);
         tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
         tvTimeLeft.setLayoutParams(tvTimeLeftLL);
+        this.tvTimeLeft = tvTimeLeft;
 
 
         //LinearLayout for defuse and pass
@@ -287,11 +301,13 @@ public class QuestionDetail {
         bDefuse.setBackgroundResource(R.drawable.green_bg_black_border);
         bDefuse.setText("Defuse");
         bDefuse.setLayoutParams(dplp);
+        this.bDefuse = bDefuse;
 
         //Pass - Button
         Button bPass = new Button(context);
         bPass.setBackgroundResource(R.drawable.white_bg_black_border);
         bPass.setText("Pass");
+        this.bPass = bPass;
 
         defusePassLL.addView(bDefuse);
         defusePassLL.addView(bPass);
@@ -310,9 +326,7 @@ public class QuestionDetail {
         layout = innerLL;
     }
 
-    public void setTvQuestionHeading(TextView tvQuestionHeading) {
-        this.tvQuestionHeading = tvQuestionHeading;
-    }
+    public void setTvQuestionHeading(TextView tvQuestionHeading) { this.tvQuestionHeading = tvQuestionHeading; }
 
     public void setTvQuestion(TextView tvQuestion) {
         this.tvQuestion = tvQuestion;
@@ -392,55 +406,55 @@ public class QuestionDetail {
 
     public void setAnswerIsCorrect(boolean answerIsCorrect) { this.answerIsCorrect = answerIsCorrect; }
 
+    public void setTimer() {
+        long timeInitial = Long.valueOf(time_limit)*1000;
+        final CountDownTimer timer = new CountDownTimer(timeInitial, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tvTimeLeft.setText(millisUntilFinished / 1000 + "");
+                tvTimeLeft.setTag("RUNNING");
+                System.out.println("Timer for qn " + (i + 1) + " is " + tvTimeLeft.getTag());
+            }
+
+            @Override
+            public void onFinish() {
+                tvTimeLeft.setText("BOOM");
+                tvTimeLeft.setTag("FINISHED");
+                System.out.println("Timer for qn " + (i + 1) + " has " + tvTimeLeft.getTag() + " counting down");
+            }
+
+        };
+        this.timer = timer;
+    }
+
+
 
 
 
 
     /*---------- Getter ----------*/
     public LinearLayout getLayout() { return layout; }
-
     public TextView getTvQuestionHeading() { return tvQuestionHeading; }
-
     public TextView getTvQuestion() { return tvQuestion; }
-
     public Button getbOptionA() { return bOptionA; }
-
     public Button getbOptionB() { return bOptionB; }
-
     public Button getbOptionC() { return bOptionC; }
-
     public Button getbOptionD() { return bOptionD; }
-
     public TextView getTvTimeLeftTitle() { return tvTimeLeftTitle; }
-
     public TextView getTvTimeLeft() { return tvTimeLeft; }
-
     public Button getbDefuse() { return bDefuse; }
-
     public Button getbPass() { return bPass; }
-
     public int getQuestionNum() { return i; }
-
     public String getQuestion_id() { return question_id; }
-
     public String getBomb_name() { return bomb_name; }
-
     public String getQuestion_type() { return question_type; }
-
     public String getQuestion() { return question; }
-
     public String[] getOption() { return option; }
-
     public String getCorrectAnswer() { return correctAnswer; }
-
     public String getTime_limit() { return time_limit; }
-
     public String getPoints_awarded() { return points_awarded; }
-
     public String getPoints_deducted() { return points_deducted; }
-
     public String getNum_pass() { return num_pass; }
-
     public boolean getAnswerIsCorrect() { return answerIsCorrect; }
-
+    public CountDownTimer getTimer() { return timer; }
 }

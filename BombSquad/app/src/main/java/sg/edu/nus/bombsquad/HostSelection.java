@@ -30,7 +30,6 @@ public class HostSelection extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler1 = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler2 = Executors.newSingleThreadScheduledExecutor();
-    final ScheduledExecutorService scheduler3 = Executors.newSingleThreadScheduledExecutor();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +41,7 @@ public class HostSelection extends AppCompatActivity {
         Intent intent = getIntent();
         String question_id = intent.getStringExtra("question_id");
         String time_limit = intent.getStringExtra("time_limit");
+        System.out.println("time left at start of host selection = " + time_limit);
         String room_code = intent.getStringExtra("room_code");
         new GetPlayerInRoom().execute((room_code+""));
         deployToRandom(room_code, question_id, time_limit);
@@ -230,10 +230,11 @@ public class HostSelection extends AppCompatActivity {
                                     String first_name = result.getString("first_name");
                                     String last_name = result.getString("last_name");
                                     player_list[curr] = first_name+ " " + last_name;
+                                    global.setBooleanAccess(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                global.setBooleanAccess(true);
+
                             }
                         });
                 i++;
@@ -269,7 +270,7 @@ public class HostSelection extends AppCompatActivity {
                                     response.body().close();
                                 }
                             });
-                    if (global.getTimeLeft() == 0) {
+                    if (global.getTimeLeft() <= 0) {
                         scheduler.shutdown();
                     }
                 }

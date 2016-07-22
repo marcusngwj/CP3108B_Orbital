@@ -230,6 +230,7 @@ public class HostSelection extends AppCompatActivity {
                                     String first_name = result.getString("first_name");
                                     String last_name = result.getString("last_name");
                                     player_list[curr] = first_name+ " " + last_name;
+                                    global.pushPlayerInRoom(curr+"", player_list[curr]);
                                     global.setBooleanAccess(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();

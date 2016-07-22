@@ -3,6 +3,9 @@ package sg.edu.nus.bombsquad;
 
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.HashMap;
+
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,6 +49,14 @@ public class Global {
     /*---------- okgttp ----------*/
     private OkHttpClient client = new OkHttpClient();
     private Request.Builder requestBuilder = new Request.Builder();
+
+
+
+    /*-------Qn Deployed ---------*/
+    private HashMap<String, Boolean> deployedQ = new HashMap<>();
+
+    /*------Player in room -------*/
+    private HashMap<String, String> playerInRoom = new HashMap<>();
 
 
 
@@ -108,13 +119,21 @@ public class Global {
 
     public void setRoomBank(RoomBank roomBank) { this.roomBank = roomBank; }
 
+    public void setDeployedQ(String key, Boolean value) {
+        deployedQ.put(key, value);
+    }
 
+    public void undeployQ(String key) {
+        deployedQ.remove(key);
+    }
 
+    public void pushPlayerInRoom(String id, String name) {
+        playerInRoom.put(id, name);
+    }
 
-
-
-
-
+    public void removePlayerInRoom(String id) {
+        playerInRoom.remove(id);
+    }
 
 
 
@@ -181,7 +200,13 @@ public class Global {
 
     public RoomBank getRoomBank() { return roomBank; }
 
+    public Boolean isDeployedQ(String key) {
+        return deployedQ.containsKey(key);
+    }
 
+    public String getPlayerInRoom(String id) {
+        return playerInRoom.get(id);
+    }
 
 
 

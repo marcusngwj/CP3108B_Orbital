@@ -94,7 +94,6 @@ public class PlayerList extends AppCompatActivity {
     }
 
     class UpdateTime extends AsyncTask<String, Void, Void> {
-        final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         final Global global = Global.getInstance();
         protected Void doInBackground(String... times) {
             final String time = times[0];

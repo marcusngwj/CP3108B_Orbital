@@ -27,6 +27,7 @@ public class PreparingPlayerView extends AppCompatActivity {
     final String room_code = global.getRoomCode();
     final int numQuestion = global.getNumQuestion();
     final String[] questionIDArray = global.getQuestion_id();
+    RoomBank roomBank = global.getRoomBank();
 
     ProgressDialog dialog;
 
@@ -37,6 +38,22 @@ public class PreparingPlayerView extends AppCompatActivity {
 
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: PreparingPlayerView");
+        System.out.println("RoomBank.roomname: " + roomBank.getRoom_name());
+        System.out.println("RoomBank.roomcode: " + roomBank.getRoom_code());
+
+        int i=0;
+        while(i<roomBank.getNumQuestion()){
+            System.out.println("--------------------------------------------------");
+            System.out.println("room_id: " + roomBank.getRoomDetailList().get(i).getRoom_id());
+            System.out.println("question_id: " + roomBank.getRoomDetailList().get(i).getQuestion_id());
+            System.out.println("deploy_status: " + roomBank.getRoomDetailList().get(i).getDeploy_status());
+            System.out.println("time_left: " + roomBank.getRoomDetailList().get(i).getTime_left());
+            System.out.println("player_id: " + roomBank.getRoomDetailList().get(i).getPlayer_id());
+            System.out.println("--------------------------------------------------");
+            System.out.println();
+            i++;
+        }
+
 
         Task task = new Task(); //Extends Asynctask
         task.execute();

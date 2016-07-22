@@ -102,6 +102,7 @@ public class PlayerView extends AppCompatActivity {
 
         //Initial qn shown to player
         outerLL.addView(questionBank[0].getLayout(), lp);
+        questionBank[0].getTimer().start();
         withinABox(0);
 
         //Subsequent qn follows
@@ -126,25 +127,6 @@ public class PlayerView extends AppCompatActivity {
     private void withinABox(final int i) {
         //To display timer
         final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
-        long timeInitial = Long.valueOf(questionBank[i].getTime_limit()) * 1000;
-
-        //Params: Total time(Need to retrieve from server, interval +2000 for buffer time for transition
-        final CountDownTimer timer = new CountDownTimer(timeInitial + 2000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                tvTimeLeft.setText(millisUntilFinished / 1000 + "");
-                tvTimeLeft.setTag("RUNNING");
-                System.out.println("Timer for qn " + (i + 1) + " is " + tvTimeLeft.getTag());
-            }
-
-            @Override
-            public void onFinish() {
-                tvTimeLeft.setText("BOOM");
-                tvTimeLeft.setTag("FINISHED");
-                System.out.println("Timer for qn " + (i + 1) + " has " + tvTimeLeft.getTag() + " counting down");
-            }
-
-        }.start();
 
         //Button: Defusing a bomb
         final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
@@ -155,6 +137,7 @@ public class PlayerView extends AppCompatActivity {
                 String correctAnswer = questionBank[i].getCorrectAnswer();
                 String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
+                CountDownTimer timer = questionBank[i].getTimer();
 
                 //Reading string from user
                 EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
@@ -174,6 +157,7 @@ public class PlayerView extends AppCompatActivity {
                     if (i < numQuestion - 1) {
                         questionBank[i].getLayout().setVisibility(View.GONE);
                         questionBank[i+1].getLayout().setVisibility(View.VISIBLE);
+                        questionBank[i+1].getTimer().start();
                     }
                 }
 

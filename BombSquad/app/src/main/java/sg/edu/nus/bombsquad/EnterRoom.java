@@ -55,7 +55,7 @@ public class EnterRoom extends AppCompatActivity {
                                     String room_code = jsonResponse.getString("room_code");
                                     global.setRoomCode(room_code);
 
-                                    RoomBank roomBank = new RoomBank(room_name, room_code);
+                                    final RoomBank roomBank = new RoomBank(room_name, room_code);
                                     global.setRoomBank(roomBank);
 
                                     Response.Listener<String> responseCatcher = new Response.Listener<String>() {
@@ -63,7 +63,7 @@ public class EnterRoom extends AppCompatActivity {
                                         public void onResponse(String response) {
                                             try {
                                                 JSONObject jsonResponse = new JSONObject(response);
-                                                String[] question_id = new String[jsonResponse.length()];
+                                                ArrayList<String> questionIDList = new ArrayList<String>();
 
                                                 RoomBank tempRoomBank = global.getRoomBank();
                                                 ArrayList<RoomDetail> roomDetailList = new ArrayList<RoomDetail>();
@@ -76,13 +76,13 @@ public class EnterRoom extends AppCompatActivity {
                                                         String deploy_status = jsonResponse.getJSONObject(i + "").getString("deploy_status");
                                                         String time_left = jsonResponse.getJSONObject(i + "").getString("time_left");
                                                         String player_id = jsonResponse.getJSONObject(i + "").getString("player_id");
-                                                        question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                                        String question_id = jsonResponse.getJSONObject(i + "").getString("question_id");
                                                         count++;
-                                                        global.setNumber(count);
-                                                        global.setQuestion_id(question_id);
+                                                        questionIDList.add(question_id);
+                                                        roomBank.setQuestionIDList(questionIDList);
 
                                                         tempRoomBank.setNumQuestion(count);
-                                                        roomDetailList.add(new RoomDetail(room_id, question_id[i], deploy_status, time_left, player_id));
+                                                        roomDetailList.add(new RoomDetail(room_id, question_id, deploy_status, time_left, player_id));
 
                                                         tempRoomBank.setRoomDetailList(roomDetailList);
                                                         System.out.println("HERE IS ME: " + tempRoomBank.getRoomDetailList().get(0).getRoom_id());
@@ -97,7 +97,6 @@ public class EnterRoom extends AppCompatActivity {
                                             }
 
                                             Intent playerIntent = new Intent(EnterRoom.this, PreparingPlayerView.class);
-                                            global.setNumQuestion(global.getNumber());
                                             startActivity(playerIntent);
 
 

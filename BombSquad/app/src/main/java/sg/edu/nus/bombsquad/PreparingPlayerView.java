@@ -21,13 +21,15 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class PreparingPlayerView extends AppCompatActivity {
     Global global = Global.getInstance();
-    final String user_id = global.getUserId();
-    final String room_code = global.getRoomCode();
-    final int numQuestion = global.getNumQuestion();
-    final String[] questionIDArray = global.getQuestion_id();
     RoomBank roomBank = global.getRoomBank();
+    final String user_id = global.getUserId();
+    final String room_code = roomBank.getRoomCode();
+    final int numQuestion = roomBank.getNumQuestion();
+    final ArrayList<String> questionIDList = roomBank.getQuestionIDList();
 
     ProgressDialog dialog;
 
@@ -38,21 +40,8 @@ public class PreparingPlayerView extends AppCompatActivity {
 
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: PreparingPlayerView");
-        System.out.println("RoomBank.roomname: " + roomBank.getRoom_name());
-        System.out.println("RoomBank.roomcode: " + roomBank.getRoom_code());
-
-        int i=0;
-        while(i<roomBank.getNumQuestion()){
-            System.out.println("--------------------------------------------------");
-            System.out.println("room_id: " + roomBank.getRoomDetailList().get(i).getRoom_id());
-            System.out.println("question_id: " + roomBank.getRoomDetailList().get(i).getQuestion_id());
-            System.out.println("deploy_status: " + roomBank.getRoomDetailList().get(i).getDeploy_status());
-            System.out.println("time_left: " + roomBank.getRoomDetailList().get(i).getTime_left());
-            System.out.println("player_id: " + roomBank.getRoomDetailList().get(i).getPlayer_id());
-            System.out.println("--------------------------------------------------");
-            System.out.println();
-            i++;
-        }
+        System.out.println("RoomBank.roomname: " + roomBank.getRoomName());
+        System.out.println("RoomBank.roomcode: " + roomBank.getRoomCode());
 
 
         Task task = new Task(); //Extends Asynctask
@@ -71,8 +60,10 @@ public class PreparingPlayerView extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.show();
 
-            QuestionDetail[] questionBank = new QuestionDetail[numQuestion];
-            global.setQuestionBank(questionBank);
+            ArrayList<QuestionDetail> questionDetailList = new ArrayList<QuestionDetail>();
+            roomBank.setQuestionDetailList(questionDetailList);
+
+
         }
 
         @Override
@@ -86,14 +77,14 @@ public class PreparingPlayerView extends AppCompatActivity {
 
             int i = 0;
             while (i < numQuestion) {
-                System.out.println("qnID: " + questionIDArray[i]);
+                System.out.println("qnID: " + questionIDList.get(i));
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-                            QuestionDetail[] questionBank = global.getQuestionBank();
+                            ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
 
                             int i = global.getCounter();
                             String question_id = jsonResponse.getJSONObject(0 + "").getString("question_id");
@@ -110,11 +101,11 @@ public class PreparingPlayerView extends AppCompatActivity {
                             String points_deducted = jsonResponse.getJSONObject(0 + "").getString("points_deducted");
                             String num_pass = jsonResponse.getJSONObject(0 + "").getString("num_pass");
 
-                            questionBank[i] = new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
+                            questionDetailList.add(new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
                                     question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,
-                                    points_deducted, num_pass);
+                                    points_deducted, num_pass));
 
-                            global.setQuestionBank(questionBank);
+                            roomBank.setQuestionDetailList(questionDetailList);
 
                             global.setCounter(++i);
 
@@ -129,7 +120,7 @@ public class PreparingPlayerView extends AppCompatActivity {
                         }
                     }
                 };
-                QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionIDArray[i], responseListener);
+                QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionIDList.get(i), responseListener);
                 RequestQueue requestQueue = Volley.newRequestQueue(PreparingPlayerView.this);
                 requestQueue.add(questionAnswerOptionRequest);
 

@@ -41,7 +41,6 @@ public class Global {
     private TextView[] tvTimeLefts;
     private boolean updateHostViewBoolean;
     private boolean runScheduler;
-    private QuestionDetail[] questionBank;
     private RoomBank roomBank;
 
     /*---------- okgttp ----------*/
@@ -106,8 +105,6 @@ public class Global {
     public void setUpdateHostViewBoolean(Boolean bool) { updateHostViewBoolean = bool; }
 
     public void setRunScheduler(Boolean bool) { runScheduler = bool; }
-
-    public void setQuestionBank(QuestionDetail[] questionBank) { this.questionBank = questionBank; }
 
     public void setRoomBank(RoomBank roomBank) { this.roomBank = roomBank; }
 
@@ -177,8 +174,6 @@ public class Global {
     public boolean getUpdateHostViewBoolean() { return updateHostViewBoolean; }
 
     public boolean getRunScheduler() { return runScheduler; }
-
-    public QuestionDetail[] getQuestionBank() { return questionBank; }
 
     public OkHttpClient getClient() { return client; }
 

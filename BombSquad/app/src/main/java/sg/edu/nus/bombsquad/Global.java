@@ -40,7 +40,7 @@ public class Global {
     private int[] timeLefts;
     private TextView[] tvTimeLefts;
     private boolean updateHostViewBoolean;
-    private boolean runScheduler = true;
+    private boolean runScheduler;
     private QuestionDetail[] questionBank;
 
     /*---------- okgttp ----------*/
@@ -104,9 +104,11 @@ public class Global {
 
     public void setUpdateHostViewBoolean(Boolean bool) { updateHostViewBoolean = bool; }
 
-    public void setRunScheduler(Boolean bool) { runScheduler = true; }
+    public void setRunScheduler(Boolean bool) { runScheduler = bool; }
 
     public void setQuestionBank(QuestionDetail[] questionBank) { this.questionBank = questionBank; }
+
+
 
 
 

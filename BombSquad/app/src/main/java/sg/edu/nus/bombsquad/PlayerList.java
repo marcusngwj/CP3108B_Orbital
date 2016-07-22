@@ -46,6 +46,7 @@ public class PlayerList extends AppCompatActivity {
         final String room_code = intent.getStringExtra("room_code");
         final String question_id = intent.getStringExtra("question_id");
         final String time_left = intent.getStringExtra("time_left");
+        System.out.println("time left at start of playerlist = " + time_left);
         final Global global = Global.getInstance();
         final String[] player_id = global.getPlayerId();
         final String[] player_list = global.getPlayerList();
@@ -119,7 +120,7 @@ public class PlayerList extends AppCompatActivity {
                                     response.body().close();
                                 }
                             });
-                    if (global.getTimeLeft() == 0) {
+                    if (global.getTimeLeft() <= 0) {
                         scheduler.shutdown();
                     }
                 }

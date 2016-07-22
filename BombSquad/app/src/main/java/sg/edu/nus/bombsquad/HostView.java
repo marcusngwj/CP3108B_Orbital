@@ -95,11 +95,15 @@ public class HostView extends AppCompatActivity {
 
     //Main purpose: To retrieve question data from database
     public void getQuestionsData(int numQuestion, final String[] questionIDArray, final LinearLayout outerLL, final LinearLayout.LayoutParams lp){
-        global.setCounter(0);
-
+        global.setRunScheduler(false);
+        System.out.println("RUN SCHEDULE = " + global.getRunScheduler());
         int i = 0;
         while (i < numQuestion) {
+            System.out.println("NUM QUESTION IN LOOP: " + numQuestion);
             System.out.println("qnID: " + questionIDArray[i]);
+            System.out.println("iteration: " + i);
+            final int idx = i;
+            final int HARD_LIMIT = numQuestion;
 
 
             Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -108,20 +112,25 @@ public class HostView extends AppCompatActivity {
 
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
-                        String[][] tempArr = global.getString2DArr();
+                        if (jsonResponse.getJSONObject(0 + "").getBoolean("success")) {
+                            String[][] tempArr = global.getString2DArr();
+                            tempArr[idx][0] = jsonResponse.getJSONObject(0 + "").getString("question_type");
+                            tempArr[idx][1] = jsonResponse.getJSONObject(0 + "").getString("question");
+                            tempArr[idx][2] = jsonResponse.getJSONObject(0 + "").getString("option_one");
+                            tempArr[idx][3] = jsonResponse.getJSONObject(0 + "").getString("option_two");
+                            tempArr[idx][4] = jsonResponse.getJSONObject(0 + "").getString("option_three");
+                            tempArr[idx][5] = jsonResponse.getJSONObject(0 + "").getString("option_four");
+                            tempArr[idx][6] = jsonResponse.getJSONObject(0 + "").getString("answer");
+                            tempArr[idx][7] = jsonResponse.getJSONObject(0 + "").getString("time_limit");
+                            System.out.println("IDX = " + idx);
+                            System.out.println("TIME LIMIT = " + tempArr[idx][7]);
 
-                        int i = global.getCounter();
-                        tempArr[i][0] = jsonResponse.getJSONObject(0 + "").getString("question_type");
-                        tempArr[i][1] = jsonResponse.getJSONObject(0 + "").getString("question");
-                        tempArr[i][2] = jsonResponse.getJSONObject(0 + "").getString("option_one");
-                        tempArr[i][3] = jsonResponse.getJSONObject(0 + "").getString("option_two");
-                        tempArr[i][4] = jsonResponse.getJSONObject(0 + "").getString("option_three");
-                        tempArr[i][5] = jsonResponse.getJSONObject(0 + "").getString("option_four");
-                        tempArr[i][6] = jsonResponse.getJSONObject(0 + "").getString("answer");
-                        tempArr[i][7] = jsonResponse.getJSONObject(0 + "").getString("time_limit");
-
-                        outerLL.addView(createQuestionBox(lp, i, questionIDArray, tempArr));
-                        global.setCounter(++i);
+                            outerLL.addView(createQuestionBox(lp, idx, questionIDArray, tempArr));
+                            if (idx == HARD_LIMIT-1) {
+                                System.out.println("HARD LIMIT = " + HARD_LIMIT);
+                                global.setRunScheduler(true);
+                            }
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -276,15 +285,14 @@ public class HostView extends AppCompatActivity {
         innerLL.addView(tvTimeLefts[i]);
         innerLL.addView(defuseDetonateLL);
 
-        if (i == global.getNumQuestion()-1) {
-            scheduler.scheduleAtFixedRate(new Runnable() {
-                public void run() {
-                    if (global.getRunScheduler()) { //check if there was a response previously so that it will not run until there's a response
-                        new UpdateHostView().execute();
-                    }
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                if (global.getRunScheduler()) { //check if there was a response previously so that it will not run until there's a response
+                    new UpdateHostView().execute();
                 }
-            }, 0, 600, TimeUnit.MILLISECONDS);
-        }
+            }
+        }, 0, 600, TimeUnit.MILLISECONDS);
+
         return innerLL;
     }
 
@@ -338,6 +346,7 @@ public class HostView extends AppCompatActivity {
             int i = 0;
             if (global.getUpdateHostViewBoolean()) {
                 while (i < global.getNumQuestion()) {
+                    System.out.println("IN UPDATEHOST POST EXECUTE = " + i);
                     possession[i].setText(Integer.toString(playerPossessBomb[i]));
                     tvTimeLefts[i].setText(Integer.toString(timeLefts[i]));
                     i++;

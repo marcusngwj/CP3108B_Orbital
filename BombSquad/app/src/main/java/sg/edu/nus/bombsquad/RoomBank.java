@@ -10,6 +10,7 @@ public class RoomBank {
     int numQuestion;
     ArrayList<RoomDetail> roomDetailList;
     ArrayList<QuestionDetail> questionDetailList;
+    ArrayList<String> questionIDList;
 
     /*---------- Constructor ----------*/
     public RoomBank(String room_name, String room_code) {
@@ -21,11 +22,13 @@ public class RoomBank {
     public void setNumQuestion(int numQn) { this.numQuestion = numQn; }
     public void setRoomDetailList(ArrayList<RoomDetail> rmDetailList) { this.roomDetailList = rmDetailList; }
     public void setQuestionDetailList(ArrayList<QuestionDetail> qnDetailList) { this.questionDetailList = qnDetailList; }
+    public void setQuestionIDList(ArrayList<String> questionIDList) { this.questionIDList = questionIDList; }
 
     /*---------- Getter ----------*/
-    public String getRoom_name() { return room_name; }
-    public String getRoom_code() { return room_code; }
+    public String getRoomName() { return room_name; }
+    public String getRoomCode() { return room_code; }
     public int getNumQuestion() { return numQuestion; }
     public ArrayList<RoomDetail> getRoomDetailList() { return roomDetailList; }
     public ArrayList<QuestionDetail> getQuestionDetailList() { return questionDetailList; }
+    public ArrayList<String> getQuestionIDList() { return questionIDList; }
 }

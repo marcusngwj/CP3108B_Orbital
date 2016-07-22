@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -41,10 +42,11 @@ import okhttp3.RequestBody;
 public class PlayerView extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     Global global = Global.getInstance();
+    RoomBank roomBank = global.getRoomBank();
     final String user_id = global.getUserId();
-    final String room_code = global.getRoomCode();
-    final int numQuestion = global.getNumQuestion();
-    final QuestionDetail[] questionBank = global.getQuestionBank();
+    final String room_code = roomBank.getRoomCode();
+    final int numQuestion = roomBank.getNumQuestion();
+    final ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +58,20 @@ public class PlayerView extends AppCompatActivity {
 
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: PlayerView");
-        System.out.println("Room Name: " + global.getRoomName());
-        System.out.println("Room Code: " + global.getRoomCode());
+        System.out.println("Room Name: " + roomBank.getRoomName());
+        System.out.println("Room Code: " + roomBank.getRoomCode());
 
         for (int i = 0; i < numQuestion; i++) {
-            System.out.println("qnID: " + questionBank[i].getQuestion_id());
-            System.out.println("qn: " + questionBank[i].getQuestion());
-            System.out.println("bomb name: " + questionBank[i].getBomb_name());
-            System.out.println("Initial time: " + questionBank[i].getTime_limit());
-            System.out.println("Points awarded: " + questionBank[i].getPoints_awarded());
-            System.out.println("Points deducted: " + questionBank[i].getPoints_deducted());
-            System.out.println("Num Pass: " + questionBank[i].getNum_pass());
+            System.out.println("--------------------------------------------------");
+            System.out.println("qnID: " + questionDetailList.get(i).getQuestion_id());
+            System.out.println("qn: " + questionDetailList.get(i).getQuestion());
+            System.out.println("bomb name: " + questionDetailList.get(i).getBomb_name());
+            System.out.println("Initial time: " + questionDetailList.get(i).getTime_limit());
+            System.out.println("Points awarded: " + questionDetailList.get(i).getPoints_awarded());
+            System.out.println("Points deducted: " + questionDetailList.get(i).getPoints_deducted());
+            System.out.println("Num Pass: " + questionDetailList.get(i).getNum_pass());
+            System.out.println("--------------------------------------------------");
+            System.out.println();
         }
 
         display();
@@ -101,14 +106,14 @@ public class PlayerView extends AppCompatActivity {
         lp.setMargins(0, 0, 0, 50);
 
         //Initial qn shown to player
-        outerLL.addView(questionBank[0].getLayout(), lp);
-        questionBank[0].getTimer().start();
+        outerLL.addView(questionDetailList.get(0).getLayout(), lp);
+        questionDetailList.get(0).getTimer().start();
         withinABox(0);
 
         //Subsequent qn follows
         for (int i = 1; i < numQuestion; i++) {
-            outerLL.addView(questionBank[i].getLayout(), lp);
-            questionBank[i].getLayout().setVisibility(View.GONE);
+            outerLL.addView(questionDetailList.get(i).getLayout(), lp);
+            questionDetailList.get(i).getLayout().setVisibility(View.GONE);
 
             withinABox(i);
         }
@@ -133,11 +138,11 @@ public class PlayerView extends AppCompatActivity {
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String qnType = questionBank[i].getQuestion_type();
-                String correctAnswer = questionBank[i].getCorrectAnswer();
+                String qnType = questionDetailList.get(i).getQuestion_type();
+                String correctAnswer = questionDetailList.get(i).getCorrectAnswer();
                 String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
-                CountDownTimer timer = questionBank[i].getTimer();
+                CountDownTimer timer = questionDetailList.get(i).getTimer();
 
                 //Reading string from user
                 EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
@@ -147,7 +152,7 @@ public class PlayerView extends AppCompatActivity {
                 }
 
                 //If answer is correct for any type of question
-                if ((qnType.equals("Multiple Choice") && questionBank[i].getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
+                if ((qnType.equals("Multiple Choice") && questionDetailList.get(i).getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
                         (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING"))) {
                     timer.cancel();
                     tvTimeLeft.setText("Bomb has been successfully defused");
@@ -155,9 +160,9 @@ public class PlayerView extends AppCompatActivity {
 
                     //If is not last question
                     if (i < numQuestion - 1) {
-                        questionBank[i].getLayout().setVisibility(View.GONE);
-                        questionBank[i+1].getLayout().setVisibility(View.VISIBLE);
-                        questionBank[i+1].getTimer().start();
+                        questionDetailList.get(i).getLayout().setVisibility(View.GONE);
+                        questionDetailList.get(i+1).getLayout().setVisibility(View.VISIBLE);
+                        questionDetailList.get(i+1).getTimer().start();
                     }
                 }
 

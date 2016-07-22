@@ -108,7 +108,7 @@ public class PreparingPlayerView extends AppCompatActivity {
                             }
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            /*e.printStackTrace();*/
                         }
                     }
                 };

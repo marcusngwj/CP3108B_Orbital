@@ -42,6 +42,7 @@ public class Global {
     private boolean updateHostViewBoolean;
     private boolean runScheduler = true;
     private QuestionDetail[] questionBank;
+    private RoomBank roomBank;
 
     /*---------- okgttp ----------*/
     private OkHttpClient client = new OkHttpClient();
@@ -107,6 +108,11 @@ public class Global {
     public void setRunScheduler(Boolean bool) { runScheduler = true; }
 
     public void setQuestionBank(QuestionDetail[] questionBank) { this.questionBank = questionBank; }
+
+    public void setRoomBank(RoomBank roomBank) { this.roomBank = roomBank; }
+
+
+
 
 
 
@@ -175,6 +181,8 @@ public class Global {
     public OkHttpClient getClient() { return client; }
 
     public Request.Builder getRBuilder() { return requestBuilder; }
+
+    public RoomBank getRoomBank() { return roomBank; }
 
 
 

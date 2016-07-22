@@ -15,6 +15,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class EnterRoom extends AppCompatActivity {
     Global global = Global.getInstance();
 
@@ -48,27 +50,47 @@ public class EnterRoom extends AppCompatActivity {
                                 System.out.println(success);
 
                                 if (success) {
-                                    global.setRoomName(jsonResponse.getString("room_name"));
-                                    global.setRoomCode(jsonResponse.getString("room_code"));
+                                    String room_name = jsonResponse.getString("room_name");
+                                    global.setRoomName(room_name);
+                                    String room_code = jsonResponse.getString("room_code");
+                                    global.setRoomCode(room_code);
+
+                                    RoomBank roomBank = new RoomBank(room_name, room_code);
+                                    global.setRoomBank(roomBank);
+
                                     Response.Listener<String> responseCatcher = new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
                                             try {
                                                 JSONObject jsonResponse = new JSONObject(response);
                                                 String[] question_id = new String[jsonResponse.length()];
+
+                                                RoomBank tempRoomBank = global.getRoomBank();
+                                                ArrayList<RoomDetail> roomDetailList = new ArrayList<RoomDetail>();
                                                 int count = 0;  //Count total number of questions in a room
 
                                                 int i = 0;
                                                 while (i < jsonResponse.length()) {
                                                     if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
+                                                        String room_id = jsonResponse.getJSONObject(i + "").getString("room_id");
+                                                        String deploy_status = jsonResponse.getJSONObject(i + "").getString("deploy_status");
+                                                        String time_left = jsonResponse.getJSONObject(i + "").getString("time_left");
+                                                        String player_id = jsonResponse.getJSONObject(i + "").getString("player_id");
                                                         question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
                                                         count++;
                                                         global.setNumber(count);
                                                         global.setQuestion_id(question_id);
 
+                                                        tempRoomBank.setNumQuestion(count);
+                                                        roomDetailList.add(new RoomDetail(room_id, question_id[i], deploy_status, time_left, player_id));
+
+                                                        tempRoomBank.setRoomDetailList(roomDetailList);
+                                                        System.out.println("HERE IS ME: " + tempRoomBank.getRoomDetailList().get(0).getRoom_id());
+                                                        global.setRoomBank(tempRoomBank);
                                                     }
                                                     i++;
                                                 }
+
 
                                             } catch (JSONException e) {
                                                 /*e.printStackTrace();*/
@@ -81,9 +103,9 @@ public class EnterRoom extends AppCompatActivity {
 
                                         }
                                     };
-                                    GetQuestionIDRequest getQuestionIDRequest = new GetQuestionIDRequest(roomCode + "", responseCatcher);
+                                    GetRoomDetailRequest getRoomDetailRequest = new GetRoomDetailRequest(roomCode + "", responseCatcher);
                                     RequestQueue requestQueue = Volley.newRequestQueue(EnterRoom.this);
-                                    requestQueue.add(getQuestionIDRequest);
+                                    requestQueue.add(getRoomDetailRequest);
 
                                 } else {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(EnterRoom.this);

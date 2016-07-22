@@ -71,7 +71,7 @@ public class EnterRoom extends AppCompatActivity {
                                                 }
 
                                             } catch (JSONException e) {
-                                                e.printStackTrace();
+                                                /*e.printStackTrace();*/
                                             }
 
                                             Intent playerIntent = new Intent(EnterRoom.this, PreparingPlayerView.class);
@@ -93,7 +93,7 @@ public class EnterRoom extends AppCompatActivity {
                                             .show();
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                /*e.printStackTrace();*/
                             }
                         }
                     };

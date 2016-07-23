@@ -79,7 +79,32 @@ public class HostView extends AppCompatActivity {
     private void display(String room_code, String room_name, int numQuestion, String[] questionIDArray) {
         //Display room id
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
-        tvHostViewBattlefieldRoomName.setText(room_name + "");
+        assert tvHostViewBattlefieldRoomName != null;
+        tvHostViewBattlefieldRoomName.setText(room_name);
+
+        Button exit = (Button)findViewById(R.id.buttonEndBattle);
+        assert exit != null;
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", global.getRoomCode())
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/closeRoom.php").post(postData).build();
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                response.body().close();
+                            }
+                        });
+            }
+        });
 
         //Outer Container
         LinearLayout outerLL = (LinearLayout) findViewById(R.id.linearLayoutHostView);

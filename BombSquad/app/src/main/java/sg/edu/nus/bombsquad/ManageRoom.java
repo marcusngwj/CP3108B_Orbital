@@ -191,27 +191,56 @@ public class ManageRoom extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
 
-                                    Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                                    global.setRoomCode(codeOfRoomChosen+"");
-                                    global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
-                                    global.setNumQuestion(global.getNumber());
-                                    startActivity(hostIntent);
+                                    final int numQuestion = global.getNumber();
+                                    final String[][] tempArr = new String[numQuestion][8];
+                                    int i = 0;
+                                    while (i < numQuestion) {
+                                        final int idx = i;
+
+                                        Response.Listener<String> responseGrab = new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try {
+                                                    JSONObject jsonResponse = new JSONObject(response);
+                                                    if (jsonResponse.getBoolean("success")) {
+                                                        tempArr[idx][0] = jsonResponse.getString("question_type");
+                                                        tempArr[idx][1] = jsonResponse.getString("question");
+                                                        tempArr[idx][2] = jsonResponse.getString("option_one");
+                                                        tempArr[idx][3] = jsonResponse.getString("option_two");
+                                                        tempArr[idx][4] = jsonResponse.getString("option_three");
+                                                        tempArr[idx][5] = jsonResponse.getString("option_four");
+                                                        tempArr[idx][6] = jsonResponse.getString("answer");
+                                                        global.putTimeLimit(jsonResponse.getString("question_id"), jsonResponse.getString("time_limit"));
+                                                        if (idx == numQuestion - 1) {
+                                                            global.setData(tempArr);
+                                                            Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                                                            global.setRoomCode(codeOfRoomChosen+"");
+                                                            global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
+                                                            global.setNumQuestion(global.getNumber());
+                                                            startActivity(hostIntent);
+                                                        }
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        };
+                                        QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(global.getQuestion_id()[idx], responseGrab);
+                                        RequestQueue queue1 = Volley.newRequestQueue(ManageRoom.this);
+                                        queue1.add(questionAnswerOptionRequest);
+                                        i++;
+                                    }
                                 }
                             };
                             GetQuestionIDRequest getQuestionIDRequest = new GetQuestionIDRequest(codeOfRoomChosen+"", responseCatcher);
                             RequestQueue requestQueue = Volley.newRequestQueue(ManageRoom.this);
                             requestQueue.add(getQuestionIDRequest);
-
-
-                            /*Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                            hostIntent.putExtra("room_code", codeOfRoomChosen+"");
-                            hostIntent.putExtra("room_name", selectedRoomName.get(codeOfRoomChosen+""));
-                            startActivity(hostIntent);*/
                         }
                     };
                     GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", chosenK+"", responseListener);
                     RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
                     queue.add(game);
+
                 }
             }
         });

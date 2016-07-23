@@ -70,7 +70,7 @@ public class QuestionDetail {
 
         answerIsCorrect = false;
         setLayout(i);
-        setTimer();
+//        setTimer();
     }
 
 

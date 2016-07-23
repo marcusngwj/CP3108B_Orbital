@@ -56,7 +56,7 @@ public class RoomDetail {
 
     public String getQuestionID() { return question_id; }
 
-    public String getDeployStatus(int i) {
+    public String getDeployStatus(final int i) {
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
         Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
@@ -72,7 +72,7 @@ public class RoomDetail {
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            deploy_status = result.getJSONObject(0 + "").getString("deploy_status");
+                            deploy_status = result.getJSONObject(i + "").getString("deploy_status");
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
                         }
@@ -83,7 +83,32 @@ public class RoomDetail {
         return deploy_status;
     }
 
-    public String getTimeLeft() { return time_left; }
+    public String getTimeLeft(final int i) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+                            time_left = result.getJSONObject(i + "").getString("time_left");
+                        } catch (JSONException e) {
+                            /*e.printStackTrace();*/
+                        }
+
+                    }
+                });
+
+        return time_left;
+    }
 
     public String getPlayerID() { return player_id; }
 }

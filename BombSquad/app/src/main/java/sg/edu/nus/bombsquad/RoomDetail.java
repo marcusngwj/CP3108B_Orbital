@@ -83,6 +83,7 @@ public class RoomDetail {
         return deploy_status;
     }
 
+    //Get the timer from server
     public String getTimeLeft(final int i) {
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
@@ -110,5 +111,30 @@ public class RoomDetail {
         return time_left;
     }
 
-    public String getPlayerID() { return player_id; }
+    //Get the id of the player who possesses the bomb
+    public String getPlayerID(final int i) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+                            player_id = result.getJSONObject(i + "").getString("player_id");
+                        } catch (JSONException e) {
+                            /*e.printStackTrace();*/
+                        }
+
+                    }
+                });
+        return player_id;
+    }
 }

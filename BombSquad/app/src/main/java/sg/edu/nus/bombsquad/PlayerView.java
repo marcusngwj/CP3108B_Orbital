@@ -108,28 +108,19 @@ public class PlayerView extends AppCompatActivity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
 
-        //Initial qn shown to player
-        /*outerLL.addView(questionDetailList.get(0).getLayout(), lp);
-        questionDetailList.get(0).getTimer().start();
-        withinABox(0);
-        System.out.println("SUP SUP: " + roomBank.getRoomDetailList().get(0).getDeployStatus(0));*/
-
-        //Subsequent qn follows
+        //Individual questions
         for (int i = 0; i < numQuestion; i++) {
             outerLL.addView(questionDetailList.get(i).getLayout(), lp);
             questionDetailList.get(i).getLayout().setVisibility(View.GONE);
 
             withinABox(i);
-//            System.out.println("NA NA: " + roomBank.getRoomDetailList().get(i).getDeployStatus(i));
         }
-
-
 
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 new Background().execute();
             }
-        }, 0, 500, TimeUnit.MILLISECONDS);
+        }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }
 
@@ -140,14 +131,13 @@ public class PlayerView extends AppCompatActivity {
 
         //Button: Defusing a bomb
         final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
+        bDefuse.setVisibility(View.GONE);
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String qnType = questionDetailList.get(i).getQuestion_type();
                 String correctAnswer = questionDetailList.get(i).getCorrectAnswer();
-                String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
-//                CountDownTimer timer = questionDetailList.get(i).getTimer();
 
                 //Reading string from user
                 EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
@@ -156,10 +146,11 @@ public class PlayerView extends AppCompatActivity {
                     System.out.println(userAnswer);
                 }
 
+                int timeLeft = Integer.valueOf(roomBank.getRoomDetailList().get(i).getTimeLeft(i));
+
                 //If answer is correct for any type of question
-                if ((qnType.equals("Multiple Choice") && questionDetailList.get(i).getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
-                        (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING"))) {
-//                    timer.cancel();
+                if ((qnType.equals("Multiple Choice") && questionDetailList.get(i).getAnswerIsCorrect() && timeLeft>0) ||
+                        (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timeLeft>0)) {
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     System.out.println("Bomb " + (i + 1) + " has been successfully defused");
 
@@ -183,6 +174,7 @@ public class PlayerView extends AppCompatActivity {
     class Background extends AsyncTask<Void, Void, Void> {
         String[] deployStatusArray= new String[numQuestion];
         String[] timeLeftArray = new String[numQuestion];
+        String[] playerIDArray = new String[numQuestion];
 
         protected void onPreExecute(Void pre) {
         }
@@ -192,10 +184,12 @@ public class PlayerView extends AppCompatActivity {
             for(int i=0; i<numQuestion; i++){
                 deployStatusArray[i] = roomDetailList.get(i).getDeployStatus(i);
                 timeLeftArray[i] = roomDetailList.get(i).getTimeLeft(i);
+                playerIDArray[i] = roomDetailList.get(i).getPlayerID(i);
 
                 System.out.println(i + ":");
                 System.out.println("Deploy_status: " + deployStatusArray[i]);
                 System.out.println("Time_left: " + timeLeftArray[i]);
+                System.out.println("Player who got the bomb: " + playerIDArray[i]);
                 System.out.println("....................");
             }
             System.out.println("**************************************");
@@ -206,20 +200,42 @@ public class PlayerView extends AppCompatActivity {
         protected void onPostExecute(Void update) {
             for(int i=0; i<numQuestion; i++){
                 final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
+                final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
+                final Button bPass = (Button) findViewById(i + QuestionDetail.ID_BPASS_CONSTANT);
+
                 int deployStatusIntegerValue = Integer.valueOf(deployStatusArray[i]);
                 int timeLeftIntegerValue = Integer.valueOf(timeLeftArray[i]);
 
                 //If a question is being deployed
                 if(deployStatusIntegerValue>0){
                     questionDetailList.get(i).getLayout().setVisibility(View.VISIBLE);
-                    tvTimeLeft.setText(timeLeftIntegerValue+"");
 
-                    if(timeLeftIntegerValue<0){
+                    //If time's up and qn is not answered correctly
+                    if(timeLeftIntegerValue<=0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")){
                         tvTimeLeft.setText("YOU FAILED THIS QUESTION");
                     }
+
+                    //If timer has not finished counting
+                    else if(!tvTimeLeft.getText().equals("Bomb has been successfully defused")){
+                        tvTimeLeft.setText(timeLeftIntegerValue+"");    //Display timer; grabbed from server; live
+                    }
+
+                    //If qn is answered correctly
+                    //tvTimeLeft will display "Bomb has been successfully defused"
                 }
                 else {
                     questionDetailList.get(i).getLayout().setVisibility(View.GONE);
+                }
+
+                //If user possesses the bomb, show button for defuse and pass
+                //else hide both buttons
+                if(user_id.equals(playerIDArray[i])){
+                    bDefuse.setVisibility(View.VISIBLE);
+                    bPass.setVisibility(View.VISIBLE);
+                }
+                else{
+                    bDefuse.setVisibility(View.GONE);
+                    bPass.setVisibility(View.GONE);
                 }
             }
 

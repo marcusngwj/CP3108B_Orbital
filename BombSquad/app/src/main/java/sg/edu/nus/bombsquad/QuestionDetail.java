@@ -70,7 +70,6 @@ public class QuestionDetail {
 
         answerIsCorrect = false;
         setLayout(i);
-//        setTimer();
     }
 
 
@@ -305,6 +304,7 @@ public class QuestionDetail {
 
         //Pass - Button
         Button bPass = new Button(context);
+        bPass.setId(idBPass);
         bPass.setBackgroundResource(R.drawable.white_bg_black_border);
         bPass.setText("Pass");
         this.bPass = bPass;
@@ -406,28 +406,6 @@ public class QuestionDetail {
 
     public void setAnswerIsCorrect(boolean answerIsCorrect) { this.answerIsCorrect = answerIsCorrect; }
 
-    public void setTimer() {
-        long timeInitial = Long.valueOf(time_limit)*1000;
-        final CountDownTimer timer = new CountDownTimer(timeInitial, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                tvTimeLeft.setText(millisUntilFinished / 1000 + "");
-                tvTimeLeft.setTag("RUNNING");
-                System.out.println("Timer for qn " + (i + 1) + " is " + tvTimeLeft.getTag());
-            }
-
-            @Override
-            public void onFinish() {
-                tvTimeLeft.setText("BOOM");
-                tvTimeLeft.setTag("FINISHED");
-                System.out.println("Timer for qn " + (i + 1) + " has " + tvTimeLeft.getTag() + " counting down");
-            }
-
-        };
-        this.timer = timer;
-    }
-
-
 
 
 
@@ -456,5 +434,4 @@ public class QuestionDetail {
     public String getPoints_deducted() { return points_deducted; }
     public String getNum_pass() { return num_pass; }
     public boolean getAnswerIsCorrect() { return answerIsCorrect; }
-    public CountDownTimer getTimer() { return timer; }
 }

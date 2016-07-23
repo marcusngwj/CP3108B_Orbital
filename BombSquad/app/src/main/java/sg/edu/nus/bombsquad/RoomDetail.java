@@ -1,7 +1,20 @@
 package sg.edu.nus.bombsquad;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class RoomDetail {
     /*---------- Variables ----------*/
+    String room_code;
     String room_id;
     String question_id;
     String deploy_status;
@@ -9,7 +22,8 @@ public class RoomDetail {
     String player_id;   //Player holding onto the bomb
 
     /*---------- Constructor ----------*/
-    public RoomDetail(String room_id, String question_id, String deploy_status, String time_left, String player_id) {
+    public RoomDetail(String room_code, String room_id, String question_id, String deploy_status, String time_left, String player_id) {
+        this.room_code = room_code;
         this.room_id = room_id;
         this.question_id = question_id;
         this.deploy_status = deploy_status;
@@ -20,15 +34,15 @@ public class RoomDetail {
 
 
     /*---------- Setter ----------*/
-    public void setRoom_id(String room_id) { this.room_id = room_id; }
+    public void setRoomID(String room_id) { this.room_id = room_id; }
 
-    public void setQuestion_id(String question_id) { this.question_id = question_id; }
+    public void setQuestionID(String question_id) { this.question_id = question_id; }
 
-    public void setDeploy_status(String deploy_status) { this.deploy_status = deploy_status; }
+    public void setDeployStatus(String deploy_status) { this.deploy_status = deploy_status; }
 
-    public void setTime_left(String time_left) { this.time_left = time_left; }
+    public void setTimeLeft(String time_left) { this.time_left = time_left; }
 
-    public void setPlayer_id(String player_id) { this.player_id = player_id; }
+    public void setPlayerID(String player_id) { this.player_id = player_id; }
 
 
 
@@ -36,14 +50,40 @@ public class RoomDetail {
 
 
     /*---------- Getter ----------*/
+    public String getRoomCode() { return room_code; }
 
-    public String getRoom_id() { return room_id; }
+    public String getRoomID() { return room_id; }
 
-    public String getQuestion_id() { return question_id; }
+    public String getQuestionID() { return question_id; }
 
-    public String getDeploy_status() { return deploy_status; }
+    public String getDeployStatus(int i) {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
 
-    public String getTime_left() { return time_left; }
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
 
-    public String getPlayer_id() { return player_id; }
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+                            deploy_status = result.getJSONObject(0 + "").getString("deploy_status");
+                        } catch (JSONException e) {
+                            /*e.printStackTrace();*/
+                        }
+
+                    }
+                });
+
+        return deploy_status;
+    }
+
+    public String getTimeLeft() { return time_left; }
+
+    public String getPlayerID() { return player_id; }
 }

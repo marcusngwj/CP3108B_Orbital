@@ -75,8 +75,7 @@ public class PreparingPlayerView extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             global.setCounter(0);
 
-            int i = 0;
-            while (i < numQuestion) {
+            for(int i=0; i<numQuestion; i++){
                 System.out.println("qnID: " + questionIDList.get(i));
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -116,7 +115,7 @@ public class PreparingPlayerView extends AppCompatActivity {
                             System.out.println("i: " + i);
                             System.out.println("numQn: " + numQuestion);
 
-                            if(i==numQuestion){
+                            if (i == numQuestion) {
                                 dialog.dismiss();
                                 Intent intent = new Intent(PreparingPlayerView.this, PlayerView.class);
                                 startActivity(intent);
@@ -130,8 +129,6 @@ public class PreparingPlayerView extends AppCompatActivity {
                 QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionIDList.get(i), responseListener);
                 RequestQueue requestQueue = Volley.newRequestQueue(PreparingPlayerView.this);
                 requestQueue.add(questionAnswerOptionRequest);
-
-                i++;
             }
         }
 

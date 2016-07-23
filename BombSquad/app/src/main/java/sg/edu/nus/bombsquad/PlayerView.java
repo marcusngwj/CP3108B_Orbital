@@ -97,6 +97,28 @@ public class PlayerView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onStop();
+
+                //Remove user from "GAME" table in the database
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", room_code)
+                        .add("player", global.getUserId())
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/removePlayerFromGame.php").post(postData).build();
+
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                response.body().close();
+                            }
+                        });
+//                onStop();
                 Intent intentLeave = new Intent(PlayerView.this, RoomType.class);
                 intentLeave.putExtra("user_id", global.getUserId());
                 startActivity(intentLeave);

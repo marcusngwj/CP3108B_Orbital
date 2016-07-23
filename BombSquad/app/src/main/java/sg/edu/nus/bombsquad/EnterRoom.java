@@ -82,10 +82,9 @@ public class EnterRoom extends AppCompatActivity {
                                                         roomBank.setQuestionIDList(questionIDList);
 
                                                         tempRoomBank.setNumQuestion(count);
-                                                        roomDetailList.add(new RoomDetail(room_id, question_id, deploy_status, time_left, player_id));
+                                                        roomDetailList.add(new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
 
                                                         tempRoomBank.setRoomDetailList(roomDetailList);
-                                                        System.out.println("HERE IS ME: " + tempRoomBank.getRoomDetailList().get(0).getRoom_id());
                                                         global.setRoomBank(tempRoomBank);
                                                     }
                                                     i++;

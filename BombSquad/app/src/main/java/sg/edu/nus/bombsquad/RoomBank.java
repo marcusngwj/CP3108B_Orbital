@@ -2,7 +2,7 @@ package sg.edu.nus.bombsquad;
 
 import java.util.ArrayList;
 
-//This class serves as a container to contain informtation from a same room_code
+//This class serves as a container to contain information from a same room_code
 //  and the questions tied to that room_code
 public class RoomBank {
     String room_name;

@@ -43,9 +43,12 @@ public class PlayerView extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     Global global = Global.getInstance();
     RoomBank roomBank = global.getRoomBank();
+
     final String user_id = global.getUserId();
     final String room_code = roomBank.getRoomCode();
     final int numQuestion = roomBank.getNumQuestion();
+
+    ArrayList<RoomDetail> roomDetailList = roomBank.getRoomDetailList();
     final ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
 
     @Override
@@ -106,25 +109,27 @@ public class PlayerView extends AppCompatActivity {
         lp.setMargins(0, 0, 0, 50);
 
         //Initial qn shown to player
-        outerLL.addView(questionDetailList.get(0).getLayout(), lp);
+        /*outerLL.addView(questionDetailList.get(0).getLayout(), lp);
         questionDetailList.get(0).getTimer().start();
         withinABox(0);
+        System.out.println("SUP SUP: " + roomBank.getRoomDetailList().get(0).getDeployStatus(0));*/
 
         //Subsequent qn follows
-        for (int i = 1; i < numQuestion; i++) {
+        for (int i = 0; i < numQuestion; i++) {
             outerLL.addView(questionDetailList.get(i).getLayout(), lp);
             questionDetailList.get(i).getLayout().setVisibility(View.GONE);
 
             withinABox(i);
+//            System.out.println("NA NA: " + roomBank.getRoomDetailList().get(i).getDeployStatus(i));
         }
 
 
 
-        /*scheduler.scheduleAtFixedRate(new Runnable() {
+        scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                new Background().execute((room_code+""));
+                new Background().execute();
             }
-        }, 0, 500, TimeUnit.MILLISECONDS);*/
+        }, 0, 2000, TimeUnit.MILLISECONDS);
 
     }
 
@@ -158,12 +163,12 @@ public class PlayerView extends AppCompatActivity {
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     System.out.println("Bomb " + (i + 1) + " has been successfully defused");
 
-                    //If is not last question
+                    /*//If is not last question
                     if (i < numQuestion - 1) {
                         questionDetailList.get(i).getLayout().setVisibility(View.GONE);
                         questionDetailList.get(i+1).getLayout().setVisibility(View.VISIBLE);
                         questionDetailList.get(i+1).getTimer().start();
-                    }
+                    }*/
                 }
 
 //                global.setAnswerIsCorrect(false);    //To reset user's MCQ choice after each question
@@ -174,7 +179,60 @@ public class PlayerView extends AppCompatActivity {
     }
 
 
-    class Background extends AsyncTask<String, Void, Void> {
+
+
+    class Background extends AsyncTask<Void, Void, Void> {
+        String[] deployStatusArray= new String[numQuestion];
+
+        protected void onPreExecute(Void pre) {
+        }
+
+        protected Void doInBackground(Void... param) {
+            System.out.println("**************************************");
+            for(int i=0; i<numQuestion; i++){
+                deployStatusArray[i] = roomDetailList.get(i).getDeployStatus(i);
+                System.out.println(i + ": " + deployStatusArray[i]);
+            }
+            System.out.println("**************************************");
+            System.out.println();
+            return null;
+        }
+
+        protected void onPostExecute(Void update) {
+            for(int i=0; i<numQuestion; i++){
+                int deployStatusIntegerValue = Integer.valueOf(deployStatusArray[i]);
+                if(deployStatusIntegerValue>0){
+                    questionDetailList.get(i).getLayout().setVisibility(View.VISIBLE);
+                }
+                else {
+                    questionDetailList.get(i).getLayout().setVisibility(View.GONE);
+                }
+            }
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*class Background extends AsyncTask<String, Void, Void> {
         TextView uiUpdate = (TextView) findViewById(R.id.textViewPlayerMessage);
         final Global global = Global.getInstance();
 
@@ -217,7 +275,7 @@ public class PlayerView extends AppCompatActivity {
                 uiUpdate.setText("Room closed");
             }
         }
-    }
+    }*/
 }
 
 

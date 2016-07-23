@@ -30,6 +30,7 @@ public class HostSelection extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler1 = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler2 = Executors.newSingleThreadScheduledExecutor();
+    final ScheduledExecutorService scheduler3 = Executors.newSingleThreadScheduledExecutor();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +97,10 @@ public class HostSelection extends AppCompatActivity {
                                         @Override
                                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                             Intent intent = new Intent(HostSelection.this, HostView.class);
+                                            global.setDeployedQ(question_id, true);
                                             new UpdateTime().execute(time_left);
+                                            global.setBooleanAccess(false);
+                                            scheduler2.shutdown();
                                             startActivity(intent);
                                         }
                                     });
@@ -230,7 +234,7 @@ public class HostSelection extends AppCompatActivity {
                                     String first_name = result.getString("first_name");
                                     String last_name = result.getString("last_name");
                                     player_list[curr] = first_name+ " " + last_name;
-                                    global.pushPlayerInRoom(curr+"", player_list[curr]);
+                                    global.pushPlayerInRoom(currPlayer+"", player_list[curr]);
                                     global.setBooleanAccess(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -245,12 +249,12 @@ public class HostSelection extends AppCompatActivity {
     }
 
     class UpdateTime extends AsyncTask<String, Void, Void> {
-        final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
         final Global global = Global.getInstance();
         protected Void doInBackground(String... times) {
             final String time = times[0];
             global.setTimeLeft(Integer.parseInt(time) + 1);
-            scheduler.scheduleAtFixedRate(new Runnable() {
+            scheduler3.scheduleAtFixedRate(new Runnable() {
                 public void run() {
                     global.setTimeLeft(global.getTimeLeft()-1);
                     OkHttpClient client = new OkHttpClient();
@@ -272,7 +276,8 @@ public class HostSelection extends AppCompatActivity {
                                 }
                             });
                     if (global.getTimeLeft() <= 0) {
-                        scheduler.shutdown();
+                        global.undeployQ(global.getCurrQuestionId());
+                        scheduler3.shutdown();
                     }
                 }
             }, 0, 1, TimeUnit.SECONDS);

@@ -81,6 +81,7 @@ public class PlayerList extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                     new UpdateTime().execute(time_left);
+                                    global.setDeployedQ(question_id, true);
                                     Intent intent = new Intent(PlayerList.this, HostView.class);
                                     startActivity(intent);
                                 }
@@ -120,6 +121,7 @@ public class PlayerList extends AppCompatActivity {
                                 }
                             });
                     if (global.getTimeLeft() <= 0) {
+                        global.undeployQ(global.getCurrQuestionId());
                         scheduler.shutdown();
                     }
                 }

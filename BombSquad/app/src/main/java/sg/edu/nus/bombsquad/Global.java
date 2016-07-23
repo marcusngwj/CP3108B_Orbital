@@ -45,6 +45,7 @@ public class Global {
     private boolean updateHostViewBoolean;
     private boolean runScheduler;
     private RoomBank roomBank;
+    private boolean create;
 
     /*---------- okgttp ----------*/
     private OkHttpClient client = new OkHttpClient();
@@ -57,6 +58,9 @@ public class Global {
 
     /*------Player in room -------*/
     private HashMap<String, String> playerInRoom = new HashMap<>();
+
+    /*------Player in room -------*/
+    private HashMap<String, String> timeLimit = new HashMap<>();
 
 
 
@@ -135,6 +139,13 @@ public class Global {
         playerInRoom.remove(id);
     }
 
+    public void putTimeLimit(String key, String value) {
+        timeLimit.put(key, value);
+    }
+
+    public void setCreate(boolean bool) {
+        create = bool;
+    }
 
 
     /*---------- Retrieve ----------*/
@@ -208,6 +219,17 @@ public class Global {
         return playerInRoom.get(id);
     }
 
+    public Boolean existDeployedQ() {
+        return !deployedQ.isEmpty();
+    }
+
+    public String getTimeLimit(String id) {
+        return timeLimit.get(id);
+    }
+
+    public boolean getCreate() {
+        return create;
+    }
 
 
 

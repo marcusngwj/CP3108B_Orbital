@@ -49,15 +49,13 @@ public class HostView extends AppCompatActivity {
         final String room_code = global.getRoomCode();
         final String room_name = global.getRoomName();
         final int numQuestion = global.getNumQuestion();
+        final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
         global.setRoomCode(room_code);
         global.setHostViewPossession(new TextView[numQuestion]);
         global.setTvTimeLefts(new TextView[numQuestion]);
         global.setPlayerPossessBomb(new int[numQuestion]);
         global.setTimeLefts(new int[numQuestion]);
-        final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
 
-        String[][] stringArr = new String[numQuestion][8];  //Initialising String2DArray in global
-        global.setData(stringArr);  //Initialising String2DArray in global
 
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: HostView");
@@ -74,7 +72,6 @@ public class HostView extends AppCompatActivity {
         super.onStop();
         global.setUpdateHostViewBoolean(false);
         scheduler.shutdown();
-
     }
 
 
@@ -93,56 +90,23 @@ public class HostView extends AppCompatActivity {
 
     }
 
-
     //Main purpose: To retrieve question data from database
-    public void getQuestionsData(int numQuestion, final String[] questionIDArray, final LinearLayout outerLL, final LinearLayout.LayoutParams lp){
-        global.setRunScheduler(false);
-        global.setCounter(0);
+    public void getQuestionsData(int numQuestion, final String[] questionIDArray, final LinearLayout outerLL, final LinearLayout.LayoutParams lp) {
         int i = 0;
         while (i < numQuestion) {
-            System.out.println("NUM QUESTION IN LOOP: " + numQuestion);
-            System.out.println("qnID: " + questionIDArray[i]);
-            final int HARD_LIMIT = numQuestion;
-
-
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        int idx = global.getCounter();
-                        JSONObject jsonResponse = new JSONObject(response);
-                        if (jsonResponse.getJSONObject(0 + "").getBoolean("success")) {
-                            String[][] tempArr = global.getString2DArr();
-                            tempArr[idx][0] = jsonResponse.getJSONObject(0 + "").getString("question_type");
-                            tempArr[idx][1] = jsonResponse.getJSONObject(0 + "").getString("question");
-                            tempArr[idx][2] = jsonResponse.getJSONObject(0 + "").getString("option_one");
-                            tempArr[idx][3] = jsonResponse.getJSONObject(0 + "").getString("option_two");
-                            tempArr[idx][4] = jsonResponse.getJSONObject(0 + "").getString("option_three");
-                            tempArr[idx][5] = jsonResponse.getJSONObject(0 + "").getString("option_four");
-                            tempArr[idx][6] = jsonResponse.getJSONObject(0 + "").getString("answer");
-                            tempArr[idx][7] = jsonResponse.getJSONObject(0 + "").getString("time_limit");
-                            outerLL.addView(createQuestionBox(lp, idx, questionIDArray, tempArr));
-                            if (idx == HARD_LIMIT-1) {
-                                global.setRunScheduler(true);
-                            }
-                            global.setCounter(++idx);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(questionIDArray[i], responseListener);
-            RequestQueue requestQueue = Volley.newRequestQueue(HostView.this);
-            requestQueue.add(questionAnswerOptionRequest);
-
+            System.out.println("i = " + i);
+            System.out.println("TEST: " + global.getString2DArr()[i][0]);
+            outerLL.addView(createQuestionBox(lp, i, questionIDArray, global.getString2DArr()));
+            if (i == numQuestion-1) {
+                global.setRunScheduler(true);
+            }
             i++;
         }
     }
 
 
     //To create an individual box that contain details of a particular question
-    private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, final String[] questionIDArray, final String[][] createQnBoxArr){
+    private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, final String[] questionIDArray, final String[][] createQnBoxArr) {
         final int idx = i;
         TextView[] possession = global.getHostViewPossession();
         TextView[] tvTimeLefts = global.getTvTimeLefts();
@@ -181,12 +145,11 @@ public class HostView extends AppCompatActivity {
         TextView tvAnswerOption = new TextView(this);
         String result = "";
         String qnType = createQnBoxArr[i][0];
-        if(qnType.equals("Multiple Choice")){
-            for(int j=2; j<6; j++){
+        if (qnType.equals("Multiple Choice")) {
+            for (int j = 2; j < 6; j++) {
                 result += createQnBoxArr[i][j] + "\n";
             }
-        }
-        else{
+        } else {
             result = createQnBoxArr[i][6];
         }
         tvAnswerOption.setText(result);
@@ -244,21 +207,26 @@ public class HostView extends AppCompatActivity {
         bDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HostView.this, HostSelection.class);
                 String question_id = (String) bDeploy.getTag();
-                if (!global.isDeployedQ(question_id)) {
-                    intent.putExtra("question_id", question_id);
-                    global.setCurrQuestionId(question_id);
-                    global.setDeployedQ(question_id, true);
-                    intent.putExtra("time_limit", createQnBoxArr[idx][7]);
-                    intent.putExtra("room_code", global.getRoomCode());
-                    HostView.this.startActivity(intent);
-                }
-                else {
+                if (global.isDeployedQ(question_id)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(HostView.this);
                     builder.setMessage("Bomb already deployed!")
+                            .setNegativeButton("Ok", null)
                             .create()
                             .show();
+                } else if (global.existDeployedQ()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HostView.this);
+                    builder.setMessage("There is already a deployed bomb!")
+                            .setNegativeButton("Ok", null)
+                            .create()
+                            .show();
+                } else {
+                    Intent intent = new Intent(HostView.this, HostSelection.class);
+                    intent.putExtra("question_id", question_id);
+                    global.setCurrQuestionId(question_id);
+                    intent.putExtra("time_limit", global.getTimeLimit(question_id));
+                    intent.putExtra("room_code", global.getRoomCode());
+                    HostView.this.startActivity(intent);
                 }
             }
         });
@@ -281,6 +249,13 @@ public class HostView extends AppCompatActivity {
         Button bDetonate = new Button(this);
         bDetonate.setBackgroundResource(R.drawable.red_bg_black_border);
         bDetonate.setText("Detonate");
+        bDetonate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                global.undeployQ(questionIDArray[idx]);
+                global.setTimeLeft(1);
+            }
+        });
 
         defuseDetonateLL.addView(bDeploy);
         defuseDetonateLL.addView(bDefuse);
@@ -333,12 +308,17 @@ public class HostView extends AppCompatActivity {
                             public void onFailure(Call call, IOException e) {
                                 System.out.println("FAIL");
                             }
+
                             @Override
                             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                 try {
                                     JSONObject result = new JSONObject(response.body().string());
                                     playerPossessBomb[count] = Integer.parseInt(result.getString("player_id"));
                                     timeLefts[count] = Integer.parseInt(result.getString("time_left"));
+                                    //System.out.println("Question id = " + global.getQuestion_id()[count]);
+                                    //System.out.println("player id = " + playerPossessBomb[count]);
+                                    //System.out.println("time_left = " + timeLefts[count]);
+                                    //System.out.println("-----------");
                                     global.setRunScheduler(true); //to indicate in scheduler that a response was received
                                     global.setUpdateHostViewBoolean(true);
                                 } catch (JSONException e) {
@@ -348,19 +328,20 @@ public class HostView extends AppCompatActivity {
                                 }
                             }
                         });
-                global.setCounter1(global.getCounter1()+1);
+                global.setCounter1(global.getCounter1() + 1);
             }
             global.setCounter1(0);
             return null;
         }
+
         public void onPostExecute(Void unused) {
             int i = 0;
             if (global.getUpdateHostViewBoolean()) {
                 while (i < global.getNumQuestion()) {
-                    System.out.println("I = " + i);
-                    System.out.println(Integer.toString(playerPossessBomb[i]));
+                    //System.out.println("I = " + i);
+                    //System.out.println(Integer.toString(playerPossessBomb[i]));
                     possession[i].setText(global.getPlayerInRoom(Integer.toString(playerPossessBomb[i])));
-                    System.out.println(global.getPlayerInRoom(Integer.toString(playerPossessBomb[i])));
+                    //System.out.println(global.getPlayerInRoom(Integer.toString(playerPossessBomb[i])));
                     tvTimeLefts[i].setText(Integer.toString(timeLefts[i]));
                     i++;
                 }
@@ -368,114 +349,4 @@ public class HostView extends AppCompatActivity {
             }
         }
     }
-
 }
-
-
-//Old AsyncTask code
-    /*class Background extends AsyncTask<Void, Void, Void> {
-        final Global global = Global.getInstance();
-//        final String[] question_id = global.getQuestion_id();
-        protected Void doInBackground(Void... unused) {
-            OkHttpClient client = new OkHttpClient();
-            RequestBody postData = new FormBody.Builder().add("room_code", global.getRoom_code()).build();
-            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionID.php").post(postData).build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            System.out.println("FAIL");
-                        }
-
-                        @Override
-                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response.body().string());
-//                                System.out.println("jsonResponseLength: " + jsonResponse.length());
-//                                System.out.println("jsonResponse: " + jsonResponse);
-                                String[] question_id = new String[jsonResponse.length()];
-                                int count = 0;  //Count total number of questions in a room
-
-                                int i = 0;
-                                //This while loop creates a lot of android run time warning(?).... will look into how to improve later...
-                                while (i < jsonResponse.length()) {
-                                    if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
-                                        question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
-
-                                        count++;
-                                    }
-                                    i++;
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-            return null;
-        }
-
-        protected void onPostExecute(Void update) {
-            Global global = Global.getInstance();
-//            if (question_id != null) {
-//                global.setQuestion_id(global.getQuestion_id());
-//
-//
-//                for(int i=0; i<question_id.length; i++){
-//                    System.out.println("qn id is: " + question_id[i]);
-//                }*//*
-//            }
-        }
-    }*/
-
-
-//Old AsyncTask Code using volley...
-/*
-    //Testing using okHTTP instead of volley...
-    class Background extends AsyncTask<Void, Void, Void>{
-        protected Void doInBackground(Void... unused) {
-            final Global global = Global.getInstance();
-            final String[] question_id = global.getQuestion_id();
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        boolean success = jsonResponse.getJSONObject(0 + "").getBoolean("success");
-                        System.out.println("SUCCESS");
-                        System.out.println(jsonResponse);
-
-                        //Currently can only access 1 qn per room
-                        if (success) {
-                            int i = 0;
-                            while (i < jsonResponse.length()) {
-                                if (jsonResponse.getJSONObject(i+"").getBoolean("success")) {
-                                    question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
-                                }
-                            }
-//                            System.out.println("hello baby " + global.getQuestion_id());
-                        } else {
-                            System.out.println("Error");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            };
-            String room_code = global.getRoom_code();
-            GetQuestionIDRequest getQnID = new GetQuestionIDRequest(room_code, responseListener);
-            RequestQueue queue = Volley.newRequestQueue(HostView.this);
-            queue.add(getQnID);
-            return null;
-        }
-
-        protected void onPostExecute(Void update) {
-            Global global = Global.getInstance();
-            if(global.getQuestion_id()!=null){
-                global.setQuestion_id(global.getQuestion_id());
-            }
-        }
-    }
-} */

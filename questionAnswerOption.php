@@ -12,26 +12,25 @@
 	$option_one, $option_two, $option_three, $option_four, $answer, $time_limit, $points_awarded,
 	$points_deducted, $num_pass, $user_id);
     
-    $response = array(array(), array());
+    $response = array();
     $response["success"] = false;
-    $i = 0;
+
     while(mysqli_stmt_fetch($statement)){
-        $response[$i]["success"] = true;
-		$response[$i]["question_id"] = $question_id;
-		$response[$i]["bomb_name"] = $bomb_name;
-		$response[$i]["question_type"] = $question_type;
-		$response[$i]["question"] = $question;
-		$response[$i]["option_one"] = $option_one;
-		$response[$i]["option_two"] = $option_two;
-		$response[$i]["option_three"] = $option_three;
-		$response[$i]["option_four"] = $option_four;
-		$response[$i]["answer"] = $answer;
-		$response[$i]["time_limit"] = $time_limit;
-		$response[$i]["points_awarded"] = $points_awarded;
-		$response[$i]["points_deducted"] = $points_deducted;
-		$response[$i]["num_pass"] = $num_pass;
-		$response[$i]["user_id"] = $user_id;
-		$i++;
+        $response["success"] = true;
+		$response["question_id"] = $question_id;
+		$response["bomb_name"] = $bomb_name;
+		$response["question_type"] = $question_type;
+		$response["question"] = $question;
+		$response["option_one"] = $option_one;
+		$response["option_two"] = $option_two;
+		$response["option_three"] = $option_three;
+		$response["option_four"] = $option_four;
+		$response["answer"] = $answer;
+		$response["time_limit"] = $time_limit;
+		$response["points_awarded"] = $points_awarded;
+		$response["points_deducted"] = $points_deducted;
+		$response["num_pass"] = $num_pass;
+		$response["user_id"] = $user_id;
     }
 	mysqli_close($con);
     echo json_encode($response);

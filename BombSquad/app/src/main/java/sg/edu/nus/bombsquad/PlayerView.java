@@ -129,7 +129,7 @@ public class PlayerView extends AppCompatActivity {
             public void run() {
                 new Background().execute();
             }
-        }, 0, 2000, TimeUnit.MILLISECONDS);
+        }, 0, 500, TimeUnit.MILLISECONDS);
 
     }
 
@@ -147,7 +147,7 @@ public class PlayerView extends AppCompatActivity {
                 String correctAnswer = questionDetailList.get(i).getCorrectAnswer();
                 String timerStatus = tvTimeLeft.getTag() + "";
                 String userAnswer = "";
-                CountDownTimer timer = questionDetailList.get(i).getTimer();
+//                CountDownTimer timer = questionDetailList.get(i).getTimer();
 
                 //Reading string from user
                 EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
@@ -159,7 +159,7 @@ public class PlayerView extends AppCompatActivity {
                 //If answer is correct for any type of question
                 if ((qnType.equals("Multiple Choice") && questionDetailList.get(i).getAnswerIsCorrect() && timerStatus.equals("RUNNING")) ||
                         (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timerStatus.equals("RUNNING"))) {
-                    timer.cancel();
+//                    timer.cancel();
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     System.out.println("Bomb " + (i + 1) + " has been successfully defused");
 
@@ -171,7 +171,6 @@ public class PlayerView extends AppCompatActivity {
                     }*/
                 }
 
-//                global.setAnswerIsCorrect(false);    //To reset user's MCQ choice after each question
             }
         });
 
@@ -183,6 +182,7 @@ public class PlayerView extends AppCompatActivity {
 
     class Background extends AsyncTask<Void, Void, Void> {
         String[] deployStatusArray= new String[numQuestion];
+        String[] timeLeftArray = new String[numQuestion];
 
         protected void onPreExecute(Void pre) {
         }
@@ -191,7 +191,12 @@ public class PlayerView extends AppCompatActivity {
             System.out.println("**************************************");
             for(int i=0; i<numQuestion; i++){
                 deployStatusArray[i] = roomDetailList.get(i).getDeployStatus(i);
-                System.out.println(i + ": " + deployStatusArray[i]);
+                timeLeftArray[i] = roomDetailList.get(i).getTimeLeft(i);
+
+                System.out.println(i + ":");
+                System.out.println("Deploy_status: " + deployStatusArray[i]);
+                System.out.println("Time_left: " + timeLeftArray[i]);
+                System.out.println("....................");
             }
             System.out.println("**************************************");
             System.out.println();
@@ -200,9 +205,18 @@ public class PlayerView extends AppCompatActivity {
 
         protected void onPostExecute(Void update) {
             for(int i=0; i<numQuestion; i++){
+                final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
                 int deployStatusIntegerValue = Integer.valueOf(deployStatusArray[i]);
+                int timeLeftIntegerValue = Integer.valueOf(timeLeftArray[i]);
+
+                //If a question is being deployed
                 if(deployStatusIntegerValue>0){
                     questionDetailList.get(i).getLayout().setVisibility(View.VISIBLE);
+                    tvTimeLeft.setText(timeLeftIntegerValue+"");
+
+                    if(timeLeftIntegerValue<0){
+                        tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                    }
                 }
                 else {
                     questionDetailList.get(i).getLayout().setVisibility(View.GONE);

@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class BombPassPlayerSelection extends AppCompatActivity {
+    Global global = Global.getInstance();
+    RoomBank roomBank = global.getRoomBank();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,6 +15,10 @@ public class BombPassPlayerSelection extends AppCompatActivity {
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: BombPassPlayerSelection");
 
+        display();
+    }
+
+    public void display(){
 
     }
 }

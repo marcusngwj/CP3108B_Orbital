@@ -118,7 +118,7 @@ public class PlayerView extends AppCompatActivity {
                                 response.body().close();
                             }
                         });
-//                onStop();
+
                 Intent intentLeave = new Intent(PlayerView.this, RoomType.class);
                 intentLeave.putExtra("user_id", global.getUserId());
                 startActivity(intentLeave);

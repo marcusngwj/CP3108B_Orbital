@@ -13,13 +13,16 @@ import android.content.Context;
 public class QuestionDetail {
     //Constants
     public static final int ID_ETANSWEROPTION_CONSTANT = 1000000;
+    public static final int ID_MCQOPTIONSLL_CONSTANT = 2000000;
     public static final int ID_BOPTIONA_CONSTANT = 65000000;
     public static final int ID_BOPTIONB_CONSTANT = 66000000;
     public static final int ID_BOPTIONC_CONSTANT = 67000000;
     public static final int ID_BOPTIOND_CONSTANT = 68000000;
-    public static final int ID_TVTIMELEFT_CONSTANT = 2000000;
-    public static final int ID_BDEFUSE_CONSTANT = 3000000;
-    public static final int ID_BPASS_CONSTANT = 4000000;
+    public static final int ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT = 3000000;
+    public static final int ID_TVINPOSSESSIONOFBOMB_CONSTANT = 4000000;
+    public static final int ID_TVTIMELEFT_CONSTANT = 5000000;
+    public static final int ID_BDEFUSE_CONSTANT = 6000000;
+    public static final int ID_BPASS_CONSTANT = 7000000;
 
     //Variables
     Context context;
@@ -80,10 +83,13 @@ public class QuestionDetail {
 
         //Creating Id
         final int idETAnswerOption = i + ID_ETANSWEROPTION_CONSTANT;   //id for etAnswerOption
+        final int idmcqOptionsLL = i + ID_MCQOPTIONSLL_CONSTANT;    //id for mcqOptionsLL
         final int idBOptionA = i + ID_BOPTIONA_CONSTANT;    //id for bOptionA
         final int idBOptionB = i + ID_BOPTIONB_CONSTANT;    //id for bOptionB
         final int idBOptionC = i + ID_BOPTIONC_CONSTANT;    //id for bOptionC
         final int idBOptionD = i + ID_BOPTIOND_CONSTANT;    //id for bOptionD
+        final int idTVInPossessionOfBombTitle = i + ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT;
+        final int idTVInPossessionOfBomb = i + ID_TVINPOSSESSIONOFBOMB_CONSTANT;    //id for tvInPossessionOfBomb
         final int idTVTimeLeft = i + ID_TVTIMELEFT_CONSTANT;   //id for tvTimeLeft
         final int idBDefuse = i + ID_BDEFUSE_CONSTANT;  //id for bDefuse
         final int idBPass = i + ID_BPASS_CONSTANT;    //id for bPass
@@ -140,6 +146,7 @@ public class QuestionDetail {
 
         //LinearLayout for MCQoptions
         LinearLayout mcqOptionsLL = new LinearLayout(context);
+        mcqOptionsLL.setId(idmcqOptionsLL);
         mcqOptionsLL.setOrientation(LinearLayout.HORIZONTAL);
         mcqOptionsLL.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams mcqOlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -166,7 +173,6 @@ public class QuestionDetail {
         bOptionB.setLayoutParams(mcqOlp);
         this.bOptionB = bOptionB;
 
-
         //Option C - Button
         final Button bOptionC = new Button(context);
         bOptionC.setBackgroundResource(R.drawable.white_border);
@@ -176,7 +182,6 @@ public class QuestionDetail {
         bOptionC.setTextColor(Color.WHITE);
         bOptionC.setLayoutParams(mcqOlp);
         this.bOptionC = bOptionC;
-
 
         //Option D - Button
         final Button bOptionD = new Button(context);
@@ -267,6 +272,25 @@ public class QuestionDetail {
         mcqOptionsLL.addView(bOptionD);
 
 
+        //In possession of bomb (Title) - TextView
+        TextView tvInPossessionOfBombTitle = new TextView(context);
+        tvInPossessionOfBombTitle.setId(idTVInPossessionOfBombTitle);
+        tvInPossessionOfBombTitle.setText("In possession of bomb");
+        tvInPossessionOfBombTitle.setTextSize(20);
+        tvInPossessionOfBombTitle.setTextColor(Color.WHITE);
+        tvInPossessionOfBombTitle.setPadding(15, 5, 2, 2);
+
+        //In possession of bomb (Display) - TextView
+        LinearLayout.LayoutParams tvIPOBLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        tvIPOBLL.setMargins(30, 0, 30, 20);
+        TextView tvInPossessionOfBomb = new TextView(context);
+        tvInPossessionOfBomb.setId(idTVInPossessionOfBomb);
+        tvInPossessionOfBomb.setPadding(15, 15, 12, 12);
+        tvInPossessionOfBomb.setWidth(30);
+        tvInPossessionOfBomb.setBackgroundResource(R.drawable.white_bg_black_border);
+        tvInPossessionOfBomb.setLayoutParams(tvIPOBLL);
+
+
         //Time Left (Title) - TextView
         TextView tvTimeLeftTitle = new TextView(context);
         tvTimeLeftTitle.setText("Time Left");
@@ -279,7 +303,7 @@ public class QuestionDetail {
         LinearLayout.LayoutParams tvTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
         tvTimeLeftLL.setMargins(30,0,30,35);
         final TextView tvTimeLeft = new TextView(context);
-        tvTimeLeft.setId(i + ID_TVTIMELEFT_CONSTANT);
+        tvTimeLeft.setId(idTVTimeLeft);
         tvTimeLeft.setPadding(15, 15, 12, 12);
         tvTimeLeft.setWidth(30);
         tvTimeLeft.setBackgroundResource(R.drawable.white_bg_black_border);
@@ -319,6 +343,8 @@ public class QuestionDetail {
         if(question_type.equals("Multiple Choice")){
             innerLL.addView(mcqOptionsLL);
         }
+        innerLL.addView(tvInPossessionOfBombTitle);
+        innerLL.addView(tvInPossessionOfBomb);
         innerLL.addView(tvTimeLeftTitle);
         innerLL.addView(tvTimeLeft);
         innerLL.addView(defusePassLL);

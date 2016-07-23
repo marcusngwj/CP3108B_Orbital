@@ -86,20 +86,24 @@ public class PreparingPlayerView extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
 
+                            System.out.println(jsonResponse);
+
                             int i = global.getCounter();
-                            String question_id = jsonResponse.getJSONObject(0 + "").getString("question_id");
-                            String bomb_name = jsonResponse.getJSONObject(0 + "").getString("bomb_name");
-                            String question_type = jsonResponse.getJSONObject(0 + "").getString("question_type");
-                            String question = jsonResponse.getJSONObject(0 + "").getString("question");
-                            String option_one = jsonResponse.getJSONObject(0 + "").getString("option_one");
-                            String option_two = jsonResponse.getJSONObject(0 + "").getString("option_two");
-                            String option_three = jsonResponse.getJSONObject(0 + "").getString("option_three");
-                            String option_four = jsonResponse.getJSONObject(0 + "").getString("option_four");
-                            String correctAnswer = jsonResponse.getJSONObject(0 + "").getString("answer");
-                            String time_limit = jsonResponse.getJSONObject(0 + "").getString("time_limit");
-                            String points_awarded = jsonResponse.getJSONObject(0 + "").getString("points_awarded");
-                            String points_deducted = jsonResponse.getJSONObject(0 + "").getString("points_deducted");
-                            String num_pass = jsonResponse.getJSONObject(0 + "").getString("num_pass");
+
+//                            String question_id = jsonResponse.getJSONObject(0+"").getString("question_id");   //Used to be this, but suddenly this way cannot work
+                            String question_id = jsonResponse.getString("question_id");
+                            String bomb_name = jsonResponse.getString("bomb_name");
+                            String question_type = jsonResponse.getString("question_type");
+                            String question = jsonResponse.getString("question");
+                            String option_one = jsonResponse.getString("option_one");
+                            String option_two = jsonResponse.getString("option_two");
+                            String option_three = jsonResponse.getString("option_three");
+                            String option_four = jsonResponse.getString("option_four");
+                            String correctAnswer = jsonResponse.getString("answer");
+                            String time_limit = jsonResponse.getString("time_limit");
+                            String points_awarded = jsonResponse.getString("points_awarded");
+                            String points_deducted = jsonResponse.getString("points_deducted");
+                            String num_pass = jsonResponse.getString("num_pass");
 
                             questionDetailList.add(new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
                                     question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,
@@ -108,6 +112,9 @@ public class PreparingPlayerView extends AppCompatActivity {
                             roomBank.setQuestionDetailList(questionDetailList);
 
                             global.setCounter(++i);
+
+                            System.out.println("i: " + i);
+                            System.out.println("numQn: " + numQuestion);
 
                             if(i==numQuestion){
                                 dialog.dismiss();

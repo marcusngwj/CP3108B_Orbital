@@ -41,7 +41,9 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".NewBomb" />
-        <activity android:name=".PreparingPlayerView"></activity>
+        <activity android:name=".PreparingPlayerView" />
+        <activity android:name=".BombPassSelectionType" />
+        <activity android:name=".BombPassPlayerSelection"></activity>
     </application>
 
 </manifest>

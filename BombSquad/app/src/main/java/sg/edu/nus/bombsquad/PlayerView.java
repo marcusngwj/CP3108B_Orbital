@@ -153,17 +153,20 @@ public class PlayerView extends AppCompatActivity {
                         (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timeLeft>0)) {
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     System.out.println("Bomb " + (i + 1) + " has been successfully defused");
-
-                    /*//If is not last question
-                    if (i < numQuestion - 1) {
-                        questionDetailList.get(i).getLayout().setVisibility(View.GONE);
-                        questionDetailList.get(i+1).getLayout().setVisibility(View.VISIBLE);
-                        questionDetailList.get(i+1).getTimer().start();
-                    }*/
                 }
-
             }
         });
+
+        //Button: Passing a bomb
+        final Button bPass = (Button) findViewById(i + QuestionDetail.ID_BPASS_CONSTANT);
+        bPass.setVisibility(View.GONE);
+        bPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("HELLO");
+            }
+        });
+
 
 
     }
@@ -199,6 +202,10 @@ public class PlayerView extends AppCompatActivity {
 
         protected void onPostExecute(Void update) {
             for(int i=0; i<numQuestion; i++){
+                final EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
+                final LinearLayout mcqOptionsLL = (LinearLayout) findViewById(i + QuestionDetail.ID_MCQOPTIONSLL_CONSTANT);
+                final TextView tvInPossessionOfBombTitle = (TextView) findViewById(i + QuestionDetail.ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT);
+                final TextView tvInPossessionOfBomb = (TextView) findViewById(i + QuestionDetail.ID_TVINPOSSESSIONOFBOMB_CONSTANT);
                 final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
                 final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
                 final Button bPass = (Button) findViewById(i + QuestionDetail.ID_BPASS_CONSTANT);
@@ -227,15 +234,37 @@ public class PlayerView extends AppCompatActivity {
                     questionDetailList.get(i).getLayout().setVisibility(View.GONE);
                 }
 
-                //If user possesses the bomb, show button for defuse and pass
-                //else hide both buttons
+                //If user possesses the bomb, show button for defuse and pass, hide bomb possession display
                 if(user_id.equals(playerIDArray[i])){
+                    tvInPossessionOfBombTitle.setVisibility(View.GONE);
+                    tvInPossessionOfBomb.setVisibility(View.GONE);
                     bDefuse.setVisibility(View.VISIBLE);
                     bPass.setVisibility(View.VISIBLE);
+
+                    //Question type verification
+                    if(questionDetailList.get(i).getQuestion_type().equals("Multiple Choice")){
+                        mcqOptionsLL.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        etAnswerOption.setVisibility(View.VISIBLE);
+                    }
                 }
+                //else hide both buttons, show bomb possession display
                 else{
+                    tvInPossessionOfBombTitle.setVisibility(View.VISIBLE);
+                    tvInPossessionOfBomb.setVisibility(View.VISIBLE);
+                    tvInPossessionOfBomb.setText(playerIDArray[i]);
+
                     bDefuse.setVisibility(View.GONE);
                     bPass.setVisibility(View.GONE);
+
+                    //Question type verification
+                    if(questionDetailList.get(i).getQuestion_type().equals("Multiple Choice")){
+                        mcqOptionsLL.setVisibility(View.GONE);
+                    }
+                    else{
+                        etAnswerOption.setVisibility(View.GONE);
+                    }
                 }
             }
 

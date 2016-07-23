@@ -164,6 +164,8 @@ public class PlayerView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("HELLO");
+                Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
+                startActivity(intentBPST);
             }
         });
 

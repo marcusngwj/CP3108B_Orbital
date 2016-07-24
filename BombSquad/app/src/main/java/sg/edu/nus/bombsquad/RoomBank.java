@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -21,8 +22,10 @@ public class RoomBank {
     String room_code;
     int numQuestion;
     ArrayList<RoomDetail> roomDetailList;
-    ArrayList<QuestionDetail> questionDetailList;
+//    ArrayList<QuestionDetail> questionDetailList;
     ArrayList<String> questionIDList;
+    HashMap<String, QuestionDetail> questionHashMap;
+    HashMap<String, RoomDetail> roomDetailHashMap;
     String currentQuestion;
 
     /*---------- Constructor ----------*/
@@ -34,8 +37,10 @@ public class RoomBank {
     /*---------- Setter ----------*/
     public void setNumQuestion(int numQn) { this.numQuestion = numQn; }
     public void setRoomDetailList(ArrayList<RoomDetail> rmDetailList) { this.roomDetailList = rmDetailList; }
-    public void setQuestionDetailList(ArrayList<QuestionDetail> qnDetailList) { this.questionDetailList = qnDetailList; }
+//    public void setQuestionDetailList(ArrayList<QuestionDetail> qnDetailList) { this.questionDetailList = qnDetailList; }
     public void setQuestionIDList(ArrayList<String> questionIDList) { this.questionIDList = questionIDList; }
+    public void setQuestionHashMap(HashMap<String, QuestionDetail> map) { this.questionHashMap = map; }
+    public void setRoomDetailHashMap(HashMap<String, RoomDetail> map) { this.roomDetailHashMap = map; }
     public void setCurrentQuestion(String question_id) { this.currentQuestion = question_id; }
 
     /*---------- Getter ----------*/
@@ -43,8 +48,10 @@ public class RoomBank {
     public String getRoomCode() { return room_code; }
     public int getNumQuestion() { return numQuestion; }
     public ArrayList<RoomDetail> getRoomDetailList() { return roomDetailList; }
-    public ArrayList<QuestionDetail> getQuestionDetailList() { return questionDetailList; }
+//    public ArrayList<QuestionDetail> getQuestionDetailList() { return questionDetailList; }
     public ArrayList<String> getQuestionIDList() { return questionIDList; }
+    public HashMap<String, QuestionDetail> getQuestionHashMap() { return questionHashMap; }
+    public HashMap<String, RoomDetail> getRoomDetailHashMap() { return roomDetailHashMap; }
     public String getCurrentQuestion() { return currentQuestion; }
 
 }

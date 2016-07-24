@@ -256,7 +256,7 @@ public class ManageRoom extends AppCompatActivity {
                             requestQueue.add(getQuestionIDRequest);
                         }
                     };
-                    GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", chosenK+"", responseListener);
+                    GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", chosenK+"", intent.getStringExtra("user_id"), responseListener);
                     RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
                     queue.add(game);
 

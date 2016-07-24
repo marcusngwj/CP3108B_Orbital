@@ -71,6 +71,13 @@ public class HostView extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+        Intent intent = getIntent();
+        Intent back = new Intent(HostView.this, ManageRoom.class);
+        back.putExtra("room", intent.getStringExtra("room"));
+        back.putExtra("user_id", intent.getStringExtra("user_id"));
+        System.out.println("pressed back at HostView");
+        System.out.println(intent.getStringExtra("room"));
+        startActivity(back);
     }
 
     protected void onStop() {
@@ -251,12 +258,14 @@ public class HostView extends AppCompatActivity {
                             .create()
                             .show();
                 } else {
-                    Intent intent = new Intent(HostView.this, HostSelection.class);
-                    intent.putExtra("question_id", question_id);
+                    Intent intent = getIntent();
+                    Intent intentDeploy = new Intent(HostView.this, HostSelection.class);
+                    intentDeploy.putExtra("question_id", question_id);
                     global.setCurrQuestionId(question_id);
-                    intent.putExtra("time_limit", global.getTimeLimit(question_id));
-                    intent.putExtra("room_code", global.getRoomCode());
-                    HostView.this.startActivity(intent);
+                    intentDeploy.putExtra("time_limit", global.getTimeLimit(question_id));
+                    intentDeploy.putExtra("room_code", global.getRoomCode());
+                    intentDeploy.putExtra("room", intent.getStringExtra("room"));
+                    HostView.this.startActivity(intentDeploy);
                 }
             }
         });

@@ -56,10 +56,10 @@ public class RoomDetail {
 
     public String getQuestionID() { return question_id; }
 
-    public String getDeployStatus(final int i) {
+    public String getDeployStatus() {
         OkHttpClient client = new OkHttpClient();
-        RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
-        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
+        RequestBody postData = new FormBody.Builder().add("room_code", room_code).add("question_id", question_id).build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/roomQuestionDetail.php").post(postData).build();
 
         client.newCall(request)
                 .enqueue(new Callback() {
@@ -72,7 +72,7 @@ public class RoomDetail {
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            deploy_status = result.getJSONObject(i + "").getString("deploy_status");
+                            deploy_status = result.getString("deploy_status");
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
                         }
@@ -84,10 +84,10 @@ public class RoomDetail {
     }
 
     //Get the timer from server
-    public String getTimeLeft(final int i) {
+    public String getTimeLeft() {
         OkHttpClient client = new OkHttpClient();
-        RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
-        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
+        RequestBody postData = new FormBody.Builder().add("room_code", room_code).add("question_id", question_id).build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/roomQuestionDetail.php").post(postData).build();
 
         client.newCall(request)
                 .enqueue(new Callback() {
@@ -100,7 +100,7 @@ public class RoomDetail {
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            time_left = result.getJSONObject(i + "").getString("time_left");
+                            time_left = result.getString("time_left");
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
                         }
@@ -112,10 +112,10 @@ public class RoomDetail {
     }
 
     //Get the id of the player who possesses the bomb
-    public String getPlayerID(final int i) {
+    public String getPlayerID() {
         OkHttpClient client = new OkHttpClient();
-        RequestBody postData = new FormBody.Builder().add("room_code", room_code).build();
-        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
+        RequestBody postData = new FormBody.Builder().add("room_code", room_code).add("question_id", question_id).build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/roomQuestionDetail.php").post(postData).build();
 
         client.newCall(request)
                 .enqueue(new Callback() {
@@ -128,7 +128,7 @@ public class RoomDetail {
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            player_id = result.getJSONObject(i + "").getString("player_id");
+                            player_id = result.getString("player_id");
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
                         }

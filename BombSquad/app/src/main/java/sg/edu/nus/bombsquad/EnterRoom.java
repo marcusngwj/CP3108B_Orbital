@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -73,8 +74,11 @@ public class EnterRoom extends AppCompatActivity {
                                                 JSONObject jsonResponse = new JSONObject(response);
                                                 ArrayList<String> questionIDList = new ArrayList<String>();
 
+                                                System.out.println(jsonResponse);
+
                                                 RoomBank tempRoomBank = global.getRoomBank();
-                                                ArrayList<RoomDetail> roomDetailList = new ArrayList<RoomDetail>();
+//                                                ArrayList<RoomDetail> roomDetailList = new ArrayList<RoomDetail>();
+                                                HashMap<String, RoomDetail> roomDetailHashMap = new HashMap<String, RoomDetail>();
                                                 int count = 0;  //Count total number of questions in a room
 
                                                 int i = 0;
@@ -90,9 +94,11 @@ public class EnterRoom extends AppCompatActivity {
                                                         roomBank.setQuestionIDList(questionIDList);
 
                                                         tempRoomBank.setNumQuestion(count);
-                                                        roomDetailList.add(new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
+//                                                        roomDetailList.add(new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
 
-                                                        tempRoomBank.setRoomDetailList(roomDetailList);
+                                                        roomDetailHashMap.put(question_id, new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
+
+                                                        tempRoomBank.setRoomDetailHashMap(roomDetailHashMap);
                                                         global.setRoomBank(tempRoomBank);
                                                     }
                                                     i++;

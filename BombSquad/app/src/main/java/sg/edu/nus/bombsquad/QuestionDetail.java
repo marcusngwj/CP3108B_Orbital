@@ -12,17 +12,18 @@ import android.content.Context;
 
 public class QuestionDetail {
     //Constants
-    public static final int ID_ETANSWEROPTION_CONSTANT = 1000000;
-    public static final int ID_MCQOPTIONSLL_CONSTANT = 2000000;
+    public static final int ID_INNERLL_CONSTANT = 1000000;
+    public static final int ID_ETANSWEROPTION_CONSTANT = 2000000;
+    public static final int ID_MCQOPTIONSLL_CONSTANT = 3000000;
     public static final int ID_BOPTIONA_CONSTANT = 65000000;
     public static final int ID_BOPTIONB_CONSTANT = 66000000;
     public static final int ID_BOPTIONC_CONSTANT = 67000000;
     public static final int ID_BOPTIOND_CONSTANT = 68000000;
-    public static final int ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT = 3000000;
-    public static final int ID_TVINPOSSESSIONOFBOMB_CONSTANT = 4000000;
-    public static final int ID_TVTIMELEFT_CONSTANT = 5000000;
-    public static final int ID_BDEFUSE_CONSTANT = 6000000;
-    public static final int ID_BPASS_CONSTANT = 7000000;
+    public static final int ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT = 4000000;
+    public static final int ID_TVINPOSSESSIONOFBOMB_CONSTANT = 5000000;
+    public static final int ID_TVTIMELEFT_CONSTANT = 6000000;
+    public static final int ID_BDEFUSE_CONSTANT = 7000000;
+    public static final int ID_BPASS_CONSTANT = 8000000;
 
     //Variables
     Context context;
@@ -37,7 +38,7 @@ public class QuestionDetail {
     TextView tvTimeLeft;
     Button bDefuse;
     Button bPass;
-    int i;  //Question number
+    int i;  //Question number - 1
     String question_id;
     String bomb_name;
     String question_type;
@@ -72,34 +73,37 @@ public class QuestionDetail {
         this.num_pass = num_pass;
 
         answerIsCorrect = false;
-        setLayout(i);
+        setLayout();
     }
 
 
     /*---------- Setter ----------*/
-    public void setLayout(int i) {
+    public void setLayout() {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
 
+        int qnID = Integer.valueOf(question_id);
+
         //Creating Id
-        final int idETAnswerOption = i + ID_ETANSWEROPTION_CONSTANT;   //id for etAnswerOption
-        final int idmcqOptionsLL = i + ID_MCQOPTIONSLL_CONSTANT;    //id for mcqOptionsLL
-        final int idBOptionA = i + ID_BOPTIONA_CONSTANT;    //id for bOptionA
-        final int idBOptionB = i + ID_BOPTIONB_CONSTANT;    //id for bOptionB
-        final int idBOptionC = i + ID_BOPTIONC_CONSTANT;    //id for bOptionC
-        final int idBOptionD = i + ID_BOPTIOND_CONSTANT;    //id for bOptionD
-        final int idTVInPossessionOfBombTitle = i + ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT;
-        final int idTVInPossessionOfBomb = i + ID_TVINPOSSESSIONOFBOMB_CONSTANT;    //id for tvInPossessionOfBomb
-        final int idTVTimeLeft = i + ID_TVTIMELEFT_CONSTANT;   //id for tvTimeLeft
-        final int idBDefuse = i + ID_BDEFUSE_CONSTANT;  //id for bDefuse
-        final int idBPass = i + ID_BPASS_CONSTANT;    //id for bPass
+        final int idInnerLL = qnID + ID_INNERLL_CONSTANT;   //id for innerLL
+        final int idETAnswerOption = qnID + ID_ETANSWEROPTION_CONSTANT;   //id for etAnswerOption
+        final int idmcqOptionsLL = qnID + ID_MCQOPTIONSLL_CONSTANT;    //id for mcqOptionsLL
+        final int idBOptionA = qnID + ID_BOPTIONA_CONSTANT;    //id for bOptionA
+        final int idBOptionB = qnID + ID_BOPTIONB_CONSTANT;    //id for bOptionB
+        final int idBOptionC = qnID + ID_BOPTIONC_CONSTANT;    //id for bOptionC
+        final int idBOptionD = qnID + ID_BOPTIOND_CONSTANT;    //id for bOptionD
+        final int idTVInPossessionOfBombTitle = qnID + ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT;
+        final int idTVInPossessionOfBomb = qnID + ID_TVINPOSSESSIONOFBOMB_CONSTANT;    //id for tvInPossessionOfBomb
+        final int idTVTimeLeft = qnID + ID_TVTIMELEFT_CONSTANT;   //id for tvTimeLeft
+        final int idBDefuse = qnID + ID_BDEFUSE_CONSTANT;  //id for bDefuse
+        final int idBPass = qnID + ID_BPASS_CONSTANT;    //id for bPass
 
         //Container
         LinearLayout innerLL = new LinearLayout(context);
         innerLL.setOrientation(LinearLayout.VERTICAL);
         innerLL.setBackgroundResource(R.drawable.white_border_transparent_background);
         innerLL.setPadding(15, 15, 15, 50);
-        innerLL.setId(i);
+        innerLL.setId(idInnerLL);
         innerLL.setLayoutParams(lp);
 
 

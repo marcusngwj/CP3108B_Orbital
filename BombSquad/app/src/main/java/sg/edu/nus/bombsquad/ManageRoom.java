@@ -2,6 +2,7 @@ package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,11 @@ public class ManageRoom extends AppCompatActivity {
         display();
         deleteRoom();
         startRoom();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); so that user cannot press the back button on android! YAY!
     }
 
     private void display() {
@@ -123,6 +129,10 @@ public class ManageRoom extends AppCompatActivity {
         greenTick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ManageRoom.this);
+                builder.setMessage("Please wait while we load the room :)")
+                        .create()
+                        .show();
                 int k = 0;
                 int numTrues = 0;
                 int chosenK=-1;
@@ -211,14 +221,16 @@ public class ManageRoom extends AppCompatActivity {
                                                         tempArr[idx][5] = jsonResponse.getString("option_four");
                                                         tempArr[idx][6] = jsonResponse.getString("answer");
                                                         global.putTimeLimit(jsonResponse.getString("question_id"), jsonResponse.getString("time_limit"));
-                                                        if (idx == numQuestion - 1) {
+                                                        if (global.getCounter() == numQuestion - 1) {
                                                             global.setData(tempArr);
+                                                            System.out.println(global.getString2DArr()[idx][0]);
                                                             Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
                                                             global.setRoomCode(codeOfRoomChosen+"");
                                                             global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
                                                             global.setNumQuestion(global.getNumber());
                                                             startActivity(hostIntent);
                                                         }
+                                                        global.setCounter(global.getCounter()+1);
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();

@@ -1,6 +1,7 @@
 package sg.edu.nus.bombsquad;
 
 
+import android.support.v7.app.AlertDialog;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -61,6 +62,9 @@ public class Global {
 
     /*------Player in room -------*/
     private HashMap<String, String> timeLimit = new HashMap<>();
+
+    /*------ While loading -------*/
+    private AlertDialog.Builder builder;
 
 
 
@@ -147,6 +151,11 @@ public class Global {
         create = bool;
     }
 
+    public void setAlert(AlertDialog.Builder build) {
+        builder = build;
+    }
+
+
 
     /*---------- Retrieve ----------*/
     public String[] getStringArray() { return stringArr; }
@@ -229,6 +238,10 @@ public class Global {
 
     public boolean getCreate() {
         return create;
+    }
+
+    public AlertDialog.Builder getAlert() {
+        return builder;
     }
 
 

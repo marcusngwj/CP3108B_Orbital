@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Queue;
+import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +39,6 @@ public class HostSelection extends AppCompatActivity {
 
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: HostSelection");
-
         Intent intent = getIntent();
         String question_id = intent.getStringExtra("question_id");
         String time_limit = intent.getStringExtra("time_limit");
@@ -49,6 +49,10 @@ public class HostSelection extends AppCompatActivity {
         deployToSelected(room_code, question_id, time_limit);
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+    }
 
     private void deployToRandom(String roomCode, String questionId, String timeLeft) {
 
@@ -58,6 +62,7 @@ public class HostSelection extends AppCompatActivity {
         final String time_left = timeLeft;
         Button bRandomPlayer = (Button)findViewById(R.id.buttonRandomPlayer);
         assert bRandomPlayer != null;
+        global.setCounter(0);
         bRandomPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +106,10 @@ public class HostSelection extends AppCompatActivity {
                                             new UpdateTime().execute(time_left);
                                             global.setBooleanAccess(false);
                                             scheduler2.shutdown();
-                                            startActivity(intent);
+                                            global.setCounter(global.getCounter()+1);
+                                            if (global.getCounter() == 1) {
+                                                startActivity(intent);
+                                            }
                                         }
                                     });
                             scheduler2.shutdown();
@@ -132,9 +140,9 @@ public class HostSelection extends AppCompatActivity {
                 }
                 scheduler1.scheduleAtFixedRate(new Runnable() {
                     public void run() {
-                        if (!global.playerExist()) {
+                        /*if (!global.playerExist()) {
                             scheduler1.shutdown();
-                        }
+                        }*/
                         if (global.getBooleanAccess() && global.playerExist()) {
                             Intent intent = new Intent(HostSelection.this, PlayerList.class);
                             intent.putExtra("room_code", room_code);
@@ -171,13 +179,14 @@ public class HostSelection extends AppCompatActivity {
                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
                             try {
                                 JSONObject result = new JSONObject(response.body().string());
-                                int i = 1;
-
-                                global.setPlayerId(new String[result.length()-2]);
-                                global.setPlayerList(new String[result.length()-2]);
+                                System.out.println("result: " + result);
+                                int i = 0;
+                                global.setPlayerId(new String[result.length()-1]);
+                                global.setPlayerList(new String[result.length()-1]);
                                 String[] player_id = global.getPlayerId();
                                 while (i < result.length()-1) {
-                                    player_id[i-1] = result.getJSONObject(i+"").getString("player");
+                                    player_id[i] = result.getJSONObject(i+"").getString("player");
+                                    System.out.println("player_id = " + player_id[i]);
                                     i++;
                                 }
                             } catch (JSONException e) {
@@ -234,6 +243,7 @@ public class HostSelection extends AppCompatActivity {
                                     String first_name = result.getString("first_name");
                                     String last_name = result.getString("last_name");
                                     player_list[curr] = first_name+ " " + last_name;
+                                    System.out.println("player = " + player_list[curr]);
                                     global.pushPlayerInRoom(currPlayer+"", player_list[curr]);
                                     global.setBooleanAccess(true);
                                 } catch (JSONException e) {

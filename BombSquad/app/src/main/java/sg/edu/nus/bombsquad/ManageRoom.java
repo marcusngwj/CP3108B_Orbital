@@ -19,8 +19,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class ManageRoom extends AppCompatActivity {
     boolean[] selected = new boolean[100000];
@@ -45,6 +53,10 @@ public class ManageRoom extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+        Intent intent = getIntent();
+        Intent back = new Intent(ManageRoom.this, RoomType.class);
+        back.putExtra("user_id", intent.getStringExtra("user_id"));
+        startActivity(back);
     }
 
     private void display() {
@@ -71,10 +83,7 @@ public class ManageRoom extends AppCompatActivity {
                         else {
                             selected[v.getId()] = true;
                             String name = (String) checkbox.getText();
-                            System.out.println(name);
                         }
-                        System.out.println("selected ID: " + v.getId());
-                        System.out.println("status: " + selected[v.getId()]);
                     }
                 });
                 assert ll != null;
@@ -83,7 +92,7 @@ public class ManageRoom extends AppCompatActivity {
             }
         }
         catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
     }
@@ -99,8 +108,6 @@ public class ManageRoom extends AppCompatActivity {
                 int j = 0;
                 while (j < 100000) {
                     if (selected[j]) {
-                        System.out.println("user_id = " + intent.getStringExtra("user_id"));
-                        System.out.println("room_code = " + j);
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -173,93 +180,112 @@ public class ManageRoom extends AppCompatActivity {
                 }
 
                 else if(numTrues == 1){
-                    System.out.println("Test");
                     //Nested Response to make sure counting is done before new intent
-                    Response.Listener<String> responseListener = new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            System.out.println("Test1");
-                            Response.Listener<String> responseCatcher = new Response.Listener<String>() {
+                    final OkHttpClient client = new OkHttpClient();
+                    RequestBody postData = new FormBody.Builder()
+                            .add("user_id", intent.getStringExtra("user_id"))
+                            .add("room_status", "1")
+                            .add("room_code", chosenK+"")
+                            .add("player", intent.getStringExtra("user_id"))
+                            .build();
+                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/gameRequest.php").post(postData).build();
+
+                    client.newCall(request)
+                            .enqueue(new Callback() {
                                 @Override
-                                public void onResponse(String response) {
-                                    try {
-                                        System.out.println("Test2");
-                                        JSONObject jsonResponse = new JSONObject(response);
-                                        String[] question_id = new String[jsonResponse.length()];
-                                        int count = 0;  //Count total number of questions in a room
-
-                                        int i = 0;
-                                        while (i < jsonResponse.length()) {
-                                            if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
-                                                question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
-                                                count++;
-                                                global.setNumber(count);
-                                                global.setQuestion_id(question_id);
-
-                                            }
-                                            i++;
-                                        }
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    final int numQuestion = global.getNumber();
-                                    final String[][] tempArr = new String[numQuestion][8];
-                                    int i = 0;
-                                    while (i < numQuestion) {
-                                        final int idx = i;
-
-                                        Response.Listener<String> responseGrab = new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                try {
-                                                    JSONObject jsonResponse = new JSONObject(response);
-                                                    if (jsonResponse.getBoolean("success")) {
-                                                        tempArr[idx][0] = jsonResponse.getString("question_type");
-                                                        tempArr[idx][1] = jsonResponse.getString("question");
-                                                        tempArr[idx][2] = jsonResponse.getString("option_one");
-                                                        tempArr[idx][3] = jsonResponse.getString("option_two");
-                                                        tempArr[idx][4] = jsonResponse.getString("option_three");
-                                                        tempArr[idx][5] = jsonResponse.getString("option_four");
-                                                        tempArr[idx][6] = jsonResponse.getString("answer");
-                                                        global.putTimeLimit(jsonResponse.getString("question_id"), jsonResponse.getString("time_limit"));
-                                                        if (global.getCounter() == numQuestion - 1) {
-                                                            global.setData(tempArr);
-                                                            System.out.println(global.getString2DArr()[idx][0]);
-                                                            Intent intent = getIntent();
-                                                            Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                                                            hostIntent.putExtra("room", intent.getStringExtra("room"));
-                                                            hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                                            global.setRoomCode(codeOfRoomChosen+"");
-                                                            global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
-                                                            global.setNumQuestion(global.getNumber());
-                                                            global.setCounter(0);
-                                                            startActivity(hostIntent);
-                                                        }
-                                                        global.setCounter(global.getCounter()+1);
-                                                    }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        };
-                                        QuestionAnswerOptionRequest questionAnswerOptionRequest = new QuestionAnswerOptionRequest(global.getQuestion_id()[idx], responseGrab);
-                                        RequestQueue queue1 = Volley.newRequestQueue(ManageRoom.this);
-                                        queue1.add(questionAnswerOptionRequest);
-                                        i++;
-                                    }
+                                public void onFailure(Call call, IOException e) {
+                                    System.out.println("FAIL");
                                 }
-                            };
-                            GetQuestionIDRequest getQuestionIDRequest = new GetQuestionIDRequest(codeOfRoomChosen+"", responseCatcher);
-                            RequestQueue requestQueue = Volley.newRequestQueue(ManageRoom.this);
-                            requestQueue.add(getQuestionIDRequest);
-                        }
-                    };
-                    GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", chosenK+"", intent.getStringExtra("user_id"), responseListener);
-                    RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
-                    queue.add(game);
+                                @Override
+                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                    RequestBody postData = new FormBody.Builder()
+                                            .add("room_code", codeOfRoomChosen+"")
+                                            .build();
+                                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionID.php").post(postData).build();
+                                    client.newCall(request)
+                                            .enqueue(new Callback() {
+                                                @Override
+                                                public void onFailure(Call call, IOException e) {
+                                                    System.out.println("FAIL");
+                                                }
+                                                @Override
+                                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                    try {
+                                                        JSONObject jsonResponse = new JSONObject(response.body().string());
+                                                        String[] question_id = new String[jsonResponse.length()];
+                                                        int count = 0;  //Count total number of questions in a room
 
+                                                        int i = 0;
+                                                        while (i < jsonResponse.length()) {
+                                                            if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
+                                                                question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                                                count++;
+                                                                global.setNumber(count);
+                                                                global.setQuestion_id(question_id);
+
+                                                            }
+                                                            i++;
+                                                        }
+
+                                                    } catch (JSONException e) {
+                                                        //e.printStackTrace();
+                                                    }
+
+                                                    final int numQuestion = global.getNumber();
+                                                    final String[][] tempArr = new String[numQuestion][8];
+                                                    int i = 0;
+                                                    global.setCounter(0);
+                                                    while (i < numQuestion) {
+                                                        final int idx = i;
+
+                                                        RequestBody postData = new FormBody.Builder()
+                                                                .add("question_id", global.getQuestion_id()[idx])
+                                                                .build();
+                                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/questionAnswerOption.php").post(postData).build();
+                                                        client.newCall(request)
+                                                                .enqueue(new Callback() {
+                                                                    @Override
+                                                                    public void onFailure(Call call, IOException e) {
+                                                                        System.out.println("FAIL");
+                                                                    }
+                                                                    @Override
+                                                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                                        try {
+                                                                            JSONObject jsonResponse = new JSONObject(response.body().string());
+                                                                            if (jsonResponse.getBoolean("success")) {
+                                                                                tempArr[idx][0] = jsonResponse.getString("question_type");
+                                                                                tempArr[idx][1] = jsonResponse.getString("question");
+                                                                                tempArr[idx][2] = jsonResponse.getString("option_one");
+                                                                                tempArr[idx][3] = jsonResponse.getString("option_two");
+                                                                                tempArr[idx][4] = jsonResponse.getString("option_three");
+                                                                                tempArr[idx][5] = jsonResponse.getString("option_four");
+                                                                                tempArr[idx][6] = jsonResponse.getString("answer");
+                                                                                global.putTimeLimit(jsonResponse.getString("question_id"), jsonResponse.getString("time_limit"));
+                                                                                if (global.getCounter() == numQuestion - 1) {
+                                                                                    global.setData(tempArr);
+                                                                                    Intent intent = getIntent();
+                                                                                    Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                                                                                    hostIntent.putExtra("room", intent.getStringExtra("room"));
+                                                                                    hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                                                    global.setRoomCode(codeOfRoomChosen+"");
+                                                                                    global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
+                                                                                    global.setNumQuestion(global.getNumber());
+                                                                                    global.setCounter(0);
+                                                                                    startActivity(hostIntent);
+                                                                                }
+                                                                                global.setCounter(global.getCounter()+1);
+                                                                            }
+                                                                        } catch (JSONException e) {
+                                                                           // e.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                });
+                                                        i++;
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
                 }
             }
         });

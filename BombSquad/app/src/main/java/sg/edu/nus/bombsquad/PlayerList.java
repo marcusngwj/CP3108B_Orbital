@@ -46,13 +46,11 @@ public class PlayerList extends AppCompatActivity {
         //super.onBackPressed(); so that user cannot press the back button on android! YAY!
         Intent intent = getIntent();
         Intent back = new Intent(PlayerList.this, HostSelection.class);
-        System.out.println("Room Code Intent: " + intent.getStringExtra("room_code"));
-        System.out.println("Question ID Intent: " + intent.getStringExtra("question_id"));
-        System.out.println("Time Limit Intent: " + intent.getStringExtra("time_left"));
-
         back.putExtra("room_code", intent.getStringExtra("room_code"));
         back.putExtra("question_id", intent.getStringExtra("question_id"));
         back.putExtra("time_limit", intent.getStringExtra("time_left"));
+        back.putExtra("user_id", intent.getStringExtra("user_id"));
+        back.putExtra("room", intent.getStringExtra("room"));
         startActivity(back);
     }
 
@@ -61,7 +59,6 @@ public class PlayerList extends AppCompatActivity {
         final String room_code = intent.getStringExtra("room_code");
         final String question_id = intent.getStringExtra("question_id");
         final String time_left = intent.getStringExtra("time_left");
-        System.out.println("time left at start of playerlist = " + time_left);
         final Global global = Global.getInstance();
         final String[] player_id = global.getPlayerId();
         final String[] player_list = global.getPlayerList();
@@ -76,9 +73,6 @@ public class PlayerList extends AppCompatActivity {
             player.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println(room_code);
-                    System.out.println(question_id);
-                    System.out.println(currPlayer);
                     OkHttpClient client = new OkHttpClient();
                     RequestBody postData = new FormBody.Builder()
                             .add("room_code", room_code)

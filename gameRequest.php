@@ -4,9 +4,10 @@
     $host = $_POST["user_id"];
 	$room_status = $_POST["room_status"];
 	$room_code = $_POST["room_code"];
+	$player = $_POST["player"];
     
 	$result = mysqli_query($con,"INSERT INTO Game (host, room_status, room_code, player) 
-      VALUES ('$host', '$room_status', '$room_code', 0)");
+      VALUES ('$host', '$room_status', '$room_code', '$player')");
 		  
 	if($result == true){
 		echo '{"query_result":"SUCCESS"}';

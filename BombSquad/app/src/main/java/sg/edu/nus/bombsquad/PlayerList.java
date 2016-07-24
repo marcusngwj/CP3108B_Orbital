@@ -44,6 +44,16 @@ public class PlayerList extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+        Intent intent = getIntent();
+        Intent back = new Intent(PlayerList.this, HostSelection.class);
+        System.out.println("Room Code Intent: " + intent.getStringExtra("room_code"));
+        System.out.println("Question ID Intent: " + intent.getStringExtra("question_id"));
+        System.out.println("Time Limit Intent: " + intent.getStringExtra("time_left"));
+
+        back.putExtra("room_code", intent.getStringExtra("room_code"));
+        back.putExtra("question_id", intent.getStringExtra("question_id"));
+        back.putExtra("time_limit", intent.getStringExtra("time_left"));
+        startActivity(back);
     }
 
     private void display() {

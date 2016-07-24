@@ -123,7 +123,7 @@ public class ManageRoom extends AppCompatActivity {
     //Green-Tick Button
     private void startRoom() {
         final Intent intent = getIntent();
-        final String user_id = intent.getStringExtra("user_id");
+        //final String user_id = intent.getStringExtra("user_id");
         ImageButton greenTick = (ImageButton)findViewById(R.id.RMgreenTick);
         assert greenTick != null;
         greenTick.setOnClickListener(new View.OnClickListener() {
@@ -173,14 +173,17 @@ public class ManageRoom extends AppCompatActivity {
                 }
 
                 else if(numTrues == 1){
+                    System.out.println("Test");
                     //Nested Response to make sure counting is done before new intent
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            System.out.println("Test1");
                             Response.Listener<String> responseCatcher = new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
                                     try {
+                                        System.out.println("Test2");
                                         JSONObject jsonResponse = new JSONObject(response);
                                         String[] question_id = new String[jsonResponse.length()];
                                         int count = 0;  //Count total number of questions in a room
@@ -224,10 +227,14 @@ public class ManageRoom extends AppCompatActivity {
                                                         if (global.getCounter() == numQuestion - 1) {
                                                             global.setData(tempArr);
                                                             System.out.println(global.getString2DArr()[idx][0]);
+                                                            Intent intent = getIntent();
                                                             Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                                                            hostIntent.putExtra("room", intent.getStringExtra("room"));
+                                                            hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
                                                             global.setRoomCode(codeOfRoomChosen+"");
                                                             global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
                                                             global.setNumQuestion(global.getNumber());
+                                                            global.setCounter(0);
                                                             startActivity(hostIntent);
                                                         }
                                                         global.setCounter(global.getCounter()+1);

@@ -36,14 +36,15 @@ public class HostSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_selection);
-
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: HostSelection");
         Intent intent = getIntent();
+        Global global = Global.getInstance();
         String question_id = intent.getStringExtra("question_id");
         String time_limit = intent.getStringExtra("time_limit");
         System.out.println("time left at start of host selection = " + time_limit);
         String room_code = intent.getStringExtra("room_code");
+        global.setBooleanAccess(false);
         new GetPlayerInRoom().execute((room_code+""));
         deployToRandom(room_code, question_id, time_limit);
         deployToSelected(room_code, question_id, time_limit);
@@ -52,6 +53,12 @@ public class HostSelection extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+        Intent intent = getIntent();
+        Intent back = new Intent(HostSelection.this, HostView.class);
+        back.putExtra("room", intent.getStringExtra("room"));
+        System.out.println("Press back at HostSelection");
+        System.out.println(intent.getStringExtra("room"));
+        startActivity(back);
     }
 
     private void deployToRandom(String roomCode, String questionId, String timeLeft) {
@@ -101,19 +108,20 @@ public class HostSelection extends AppCompatActivity {
                                         }
                                         @Override
                                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                            Intent intent = new Intent(HostSelection.this, HostView.class);
+                                            Intent intent = getIntent();
+                                            Intent hostIntent = new Intent(HostSelection.this, HostView.class);
                                             global.setDeployedQ(question_id, true);
                                             new UpdateTime().execute(time_left);
                                             global.setBooleanAccess(false);
                                             scheduler2.shutdown();
                                             global.setCounter(global.getCounter()+1);
                                             if (global.getCounter() == 1) {
-                                                startActivity(intent);
+                                                System.out.println("TEST");
+                                                hostIntent.putExtra("room", intent.getStringExtra("room"));
+                                                startActivity(hostIntent);
                                             }
                                         }
                                     });
-                            scheduler2.shutdown();
-                            startActivity(intent);
                         }
                     }
                 }, 0, 500, TimeUnit.MILLISECONDS);

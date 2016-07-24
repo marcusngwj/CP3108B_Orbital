@@ -49,9 +49,6 @@ public class PlayerView extends AppCompatActivity {
     final String room_code = roomBank.getRoomCode();
     final int numQuestion = roomBank.getNumQuestion();
 
-//    ArrayList<RoomDetail> roomDetailList = roomBank.getRoomDetailList();
-//    final ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
-
     final ArrayList<String> questionIDList = roomBank.getQuestionIDList();
     final HashMap<String, QuestionDetail> questionHashMap = roomBank.getQuestionHashMap();
     final HashMap<String, RoomDetail> roomDetailHashMap = roomBank.getRoomDetailHashMap();
@@ -127,21 +124,6 @@ public class PlayerView extends AppCompatActivity {
         outerLL = (LinearLayout) findViewById(R.id.playerViewLinearLayout);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 50);
-
-        /*System.out.println();
-
-        for(int i=21; i<24; i++){
-            RoomDetail roomDetail = roomDetailHashMap.get(i+"");
-            System.out.println("ROOM CODE: " + roomDetail.getRoomCode());
-            System.out.println("ROOM ID: " + roomDetail.getRoomID());
-            System.out.println("QN ID: " + roomDetail.getQuestionID());
-            System.out.println("DEPLOY STATUS: " + roomDetail.getDeployStatus());
-            System.out.println("TIME LEFT: " + roomDetail.getTimeLeft());
-            System.out.println("PLAYER ID: " + roomDetail.getPlayerID());
-        }*/
-
-        /*outerLL.addView(questionHashMap.get(22+"").getLayout());
-        withinABox(22+"");*/
 
 
         scheduler.scheduleAtFixedRate(new Runnable() {
@@ -284,11 +266,7 @@ public class PlayerView extends AppCompatActivity {
             }
         });
 
-
-
-        //If qn is answered correctly
-        //tvTimeLeft will display "Bomb has been successfully defused"
-
+        //If qn is answered correctly tvTimeLeft will display "Bomb has been successfully defused"
 
         //If user possesses the bomb, show button for defuse and pass, hide bomb possession display
         if (user_id.equals(player_id)) {

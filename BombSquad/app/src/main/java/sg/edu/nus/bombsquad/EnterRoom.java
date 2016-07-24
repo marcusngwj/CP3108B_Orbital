@@ -77,7 +77,6 @@ public class EnterRoom extends AppCompatActivity {
                                                 System.out.println(jsonResponse);
 
                                                 RoomBank tempRoomBank = global.getRoomBank();
-//                                                ArrayList<RoomDetail> roomDetailList = new ArrayList<RoomDetail>();
                                                 HashMap<String, RoomDetail> roomDetailHashMap = new HashMap<String, RoomDetail>();
                                                 int count = 0;  //Count total number of questions in a room
 
@@ -94,7 +93,6 @@ public class EnterRoom extends AppCompatActivity {
                                                         roomBank.setQuestionIDList(questionIDList);
 
                                                         tempRoomBank.setNumQuestion(count);
-//                                                        roomDetailList.add(new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
 
                                                         roomDetailHashMap.put(question_id, new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
 

@@ -61,8 +61,6 @@ public class PreparingPlayerView extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.show();
 
-            /*ArrayList<QuestionDetail> questionDetailList = new ArrayList<QuestionDetail>();
-            roomBank.setQuestionDetailList(questionDetailList);*/
             HashMap<String, QuestionDetail> questionHashMap = new HashMap<String, QuestionDetail>();
             roomBank.setQuestionHashMap(questionHashMap);
 
@@ -84,7 +82,6 @@ public class PreparingPlayerView extends AppCompatActivity {
 
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-//                            ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
                             HashMap<String, QuestionDetail> questionHashMap = roomBank.getQuestionHashMap();
 
                             System.out.println(jsonResponse);
@@ -107,15 +104,10 @@ public class PreparingPlayerView extends AppCompatActivity {
                             String points_deducted = jsonResponse.getString("points_deducted");
                             String num_pass = jsonResponse.getString("num_pass");
 
-                            /*questionDetailList.add(new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
-                                    question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,
-                                    points_deducted, num_pass));*/
-
                             questionHashMap.put(question_id, new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
                                     question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,
                                     points_deducted, num_pass));
 
-//                            roomBank.setQuestionDetailList(questionDetailList);
                             roomBank.setQuestionHashMap(questionHashMap);
 
                             global.setCounter(++i);

@@ -23,7 +23,6 @@ public class RoomBank {
     ArrayList<RoomDetail> roomDetailList;
     ArrayList<QuestionDetail> questionDetailList;
     ArrayList<String> questionIDList;
-    ArrayList<String> playersInGameList;
 
     /*---------- Constructor ----------*/
     public RoomBank(String room_name, String room_code) {
@@ -45,42 +44,4 @@ public class RoomBank {
     public ArrayList<QuestionDetail> getQuestionDetailList() { return questionDetailList; }
     public ArrayList<String> getQuestionIDList() { return questionIDList; }
 
-    public ArrayList<String> getPlayersInGameList() {
-        playersInGameList = new ArrayList<String>();
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody postData = new FormBody.Builder()
-                .add("room_code", room_code)
-                .build();
-        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/playersInGame.php").post(postData).build();
-
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        System.out.println("FAIL");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                        try {
-                            JSONObject result = new JSONObject(response.body().string());
-
-                            int numPlayers = Integer.valueOf(result.getJSONObject(0+"").getString("numRow"));
-                            System.out.println("numPlayers: " + numPlayers);
-
-                            for(int i=0; i<numPlayers; i++){
-                                String player_id = result.getJSONObject(i+"").getString("player");
-                                System.out.println("player_id: " + player_id);
-                                playersInGameList.add(player_id);
-                            }
-                        } catch (JSONException e) {
-                            /*e.printStackTrace();*/
-                        }
-
-                    }
-                });
-
-        return playersInGameList;
-    }
 }

@@ -1,6 +1,7 @@
 package sg.edu.nus.bombsquad;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -59,21 +60,28 @@ public class HostView extends AppCompatActivity {
         System.out.println("ROOM NAME: " + room_name);
         System.out.println("NUM QUESTION: " + numQuestion);
 
-
         display(room_code, room_name, numQuestion, questionIDArray);
 
     }
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed(); so that user cannot press the back button on android! YAY!
-        Intent intent = getIntent();
-        Intent back = new Intent(HostView.this, ManageRoom.class);
-        back.putExtra("room", intent.getStringExtra("room"));
-        back.putExtra("user_id", intent.getStringExtra("user_id"));
-        System.out.println("pressed back at HostView");
-        System.out.println(intent.getStringExtra("room"));
-        startActivity(back);
+        AlertDialog.Builder builder = new AlertDialog.Builder(HostView.this);
+        builder.setMessage("Pressing back closes the room. All players will be kicked out of the room.")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Need to add the delete room code here~
+                        Intent intent = getIntent();
+                        Intent back = new Intent(HostView.this, ManageRoom.class);
+                        back.putExtra("room", intent.getStringExtra("room"));
+                        back.putExtra("user_id", intent.getStringExtra("user_id"));
+                        startActivity(back);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     protected void onStop() {
@@ -127,8 +135,6 @@ public class HostView extends AppCompatActivity {
     public void getQuestionsData(int numQuestion, final String[] questionIDArray, final LinearLayout outerLL, final LinearLayout.LayoutParams lp) {
         int i = 0;
         while (i < numQuestion) {
-            System.out.println("i = " + i);
-            System.out.println("TEST: " + global.getString2DArr()[i][0]);
             outerLL.addView(createQuestionBox(lp, i, questionIDArray, global.getString2DArr()));
             if (i == numQuestion-1) {
                 global.setRunScheduler(true);
@@ -261,6 +267,7 @@ public class HostView extends AppCompatActivity {
                     intentDeploy.putExtra("time_limit", global.getTimeLimit(question_id));
                     intentDeploy.putExtra("room_code", global.getRoomCode());
                     intentDeploy.putExtra("room", intent.getStringExtra("room"));
+                    intentDeploy.putExtra("user_id", intent.getStringExtra("user_id"));
                     HostView.this.startActivity(intentDeploy);
                 }
             }
@@ -350,10 +357,6 @@ public class HostView extends AppCompatActivity {
                                     JSONObject result = new JSONObject(response.body().string());
                                     playerPossessBomb[count] = Integer.parseInt(result.getString("player_id"));
                                     timeLefts[count] = Integer.parseInt(result.getString("time_left"));
-                                    //System.out.println("Question id = " + global.getQuestion_id()[count]);
-                                    //System.out.println("player id = " + playerPossessBomb[count]);
-                                    //System.out.println("time_left = " + timeLefts[count]);
-                                    //System.out.println("-----------");
                                     global.setRunScheduler(true); //to indicate in scheduler that a response was received
                                     global.setUpdateHostViewBoolean(true);
                                 } catch (JSONException e) {
@@ -373,10 +376,7 @@ public class HostView extends AppCompatActivity {
             int i = 0;
             if (global.getUpdateHostViewBoolean()) {
                 while (i < global.getNumQuestion()) {
-                    //System.out.println("I = " + i);
-                    //System.out.println(Integer.toString(playerPossessBomb[i]));
                     possession[i].setText(global.getPlayerInRoom(Integer.toString(playerPossessBomb[i])));
-                    //System.out.println(global.getPlayerInRoom(Integer.toString(playerPossessBomb[i])));
                     tvTimeLefts[i].setText(Integer.toString(timeLefts[i]));
                     i++;
                 }

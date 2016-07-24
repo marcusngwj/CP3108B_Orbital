@@ -42,7 +42,6 @@ public class HostSelection extends AppCompatActivity {
         Global global = Global.getInstance();
         String question_id = intent.getStringExtra("question_id");
         String time_limit = intent.getStringExtra("time_limit");
-        System.out.println("time left at start of host selection = " + time_limit);
         String room_code = intent.getStringExtra("room_code");
         global.setBooleanAccess(false);
         new GetPlayerInRoom().execute((room_code+""));
@@ -56,8 +55,7 @@ public class HostSelection extends AppCompatActivity {
         Intent intent = getIntent();
         Intent back = new Intent(HostSelection.this, HostView.class);
         back.putExtra("room", intent.getStringExtra("room"));
-        System.out.println("Press back at HostSelection");
-        System.out.println(intent.getStringExtra("room"));
+        back.putExtra("user_id", intent.getStringExtra("user_id"));
         startActivity(back);
     }
 
@@ -78,7 +76,6 @@ public class HostSelection extends AppCompatActivity {
                     builder.setMessage("There are no players in the room")
                             .create()
                             .show();
-                    System.out.println("I AM HEREEEEE");
                     global.setBooleanAccess(false);
                 }
                 scheduler2.scheduleAtFixedRate(new Runnable() {
@@ -90,7 +87,6 @@ public class HostSelection extends AppCompatActivity {
                             final String[] player_id = global.getPlayerId();
                             int random = (int) Math.floor(Math.random() * (player_id.length));
                             String randomPlayer = player_id[random];
-                            Intent intent = new Intent(HostSelection.this, HostView.class);
                             global.setBooleanAccess(false);
                             OkHttpClient client = new OkHttpClient();
                             RequestBody postData = new FormBody.Builder()
@@ -116,8 +112,8 @@ public class HostSelection extends AppCompatActivity {
                                             scheduler2.shutdown();
                                             global.setCounter(global.getCounter()+1);
                                             if (global.getCounter() == 1) {
-                                                System.out.println("TEST");
                                                 hostIntent.putExtra("room", intent.getStringExtra("room"));
+                                                hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
                                                 startActivity(hostIntent);
                                             }
                                         }
@@ -152,13 +148,16 @@ public class HostSelection extends AppCompatActivity {
                             scheduler1.shutdown();
                         }*/
                         if (global.getBooleanAccess() && global.playerExist()) {
-                            Intent intent = new Intent(HostSelection.this, PlayerList.class);
-                            intent.putExtra("room_code", room_code);
-                            intent.putExtra("question_id", question_id);
-                            intent.putExtra("time_left", time_left);
+                            Intent intent = getIntent();
+                            Intent intent1 = new Intent(HostSelection.this, PlayerList.class);
+                            intent1.putExtra("room_code", room_code);
+                            intent1.putExtra("question_id", question_id);
+                            intent1.putExtra("time_left", time_left);
+                            intent1.putExtra("room", intent.getStringExtra("room"));
+                            intent1.putExtra("user_id", intent.getStringExtra("user_id"));
                             global.setBooleanAccess(false);
                             scheduler1.shutdown();
-                            startActivity(intent);
+                            startActivity(intent1);
 
                         }
                     }
@@ -187,18 +186,16 @@ public class HostSelection extends AppCompatActivity {
                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
                             try {
                                 JSONObject result = new JSONObject(response.body().string());
-                                System.out.println("result: " + result);
                                 int i = 0;
                                 global.setPlayerId(new String[result.length()-1]);
                                 global.setPlayerList(new String[result.length()-1]);
                                 String[] player_id = global.getPlayerId();
                                 while (i < result.length()-1) {
                                     player_id[i] = result.getJSONObject(i+"").getString("player");
-                                    System.out.println("player_id = " + player_id[i]);
                                     i++;
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                             //   e.printStackTrace();
                             }
                             global.setBooleanVar(true);
                         }
@@ -251,11 +248,10 @@ public class HostSelection extends AppCompatActivity {
                                     String first_name = result.getString("first_name");
                                     String last_name = result.getString("last_name");
                                     player_list[curr] = first_name+ " " + last_name;
-                                    System.out.println("player = " + player_list[curr]);
                                     global.pushPlayerInRoom(currPlayer+"", player_list[curr]);
                                     global.setBooleanAccess(true);
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                   // e.printStackTrace();
                                 }
 
                             }

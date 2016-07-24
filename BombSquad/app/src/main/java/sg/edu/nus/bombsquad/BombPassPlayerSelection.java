@@ -120,7 +120,10 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                                         }
                                                     });
 
-                                            onBackPressed();
+//                                            onBackPressed();
+                                            onStop();
+                                            Intent intent = new Intent(BombPassPlayerSelection.this, PlayerView.class);
+                                            startActivity(intent);
                                         }
                                     });
 

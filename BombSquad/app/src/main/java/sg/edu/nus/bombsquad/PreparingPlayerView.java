@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PreparingPlayerView extends AppCompatActivity {
     Global global = Global.getInstance();
@@ -60,9 +61,10 @@ public class PreparingPlayerView extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.show();
 
-            ArrayList<QuestionDetail> questionDetailList = new ArrayList<QuestionDetail>();
-            roomBank.setQuestionDetailList(questionDetailList);
-
+            /*ArrayList<QuestionDetail> questionDetailList = new ArrayList<QuestionDetail>();
+            roomBank.setQuestionDetailList(questionDetailList);*/
+            HashMap<String, QuestionDetail> questionHashMap = new HashMap<String, QuestionDetail>();
+            roomBank.setQuestionHashMap(questionHashMap);
 
         }
 
@@ -74,7 +76,6 @@ public class PreparingPlayerView extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             global.setCounter(0);
-
             for(int i=0; i<numQuestion; i++){
                 System.out.println("qnID: " + questionIDList.get(i));
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -83,7 +84,8 @@ public class PreparingPlayerView extends AppCompatActivity {
 
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-                            ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
+//                            ArrayList<QuestionDetail> questionDetailList = roomBank.getQuestionDetailList();
+                            HashMap<String, QuestionDetail> questionHashMap = roomBank.getQuestionHashMap();
 
                             System.out.println(jsonResponse);
 
@@ -91,6 +93,7 @@ public class PreparingPlayerView extends AppCompatActivity {
 
 //                            String question_id = jsonResponse.getJSONObject(0+"").getString("question_id");   //Used to be this, but suddenly this way cannot work
                             String question_id = jsonResponse.getString("question_id");
+                            System.out.println("HELLLO ANB: " + question_id);
                             String bomb_name = jsonResponse.getString("bomb_name");
                             String question_type = jsonResponse.getString("question_type");
                             String question = jsonResponse.getString("question");
@@ -104,11 +107,16 @@ public class PreparingPlayerView extends AppCompatActivity {
                             String points_deducted = jsonResponse.getString("points_deducted");
                             String num_pass = jsonResponse.getString("num_pass");
 
-                            questionDetailList.add(new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
+                            /*questionDetailList.add(new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
+                                    question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,
+                                    points_deducted, num_pass));*/
+
+                            questionHashMap.put(question_id, new QuestionDetail(PreparingPlayerView.this, i, question_id, bomb_name, question_type,
                                     question, option_one, option_two, option_three, option_four, correctAnswer, time_limit, points_awarded,
                                     points_deducted, num_pass));
 
-                            roomBank.setQuestionDetailList(questionDetailList);
+//                            roomBank.setQuestionDetailList(questionDetailList);
+                            roomBank.setQuestionHashMap(questionHashMap);
 
                             global.setCounter(++i);
 

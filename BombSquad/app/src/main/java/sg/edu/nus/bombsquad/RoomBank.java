@@ -23,6 +23,7 @@ public class RoomBank {
     ArrayList<RoomDetail> roomDetailList;
     ArrayList<QuestionDetail> questionDetailList;
     ArrayList<String> questionIDList;
+    String currentQuestion;
 
     /*---------- Constructor ----------*/
     public RoomBank(String room_name, String room_code) {
@@ -35,6 +36,7 @@ public class RoomBank {
     public void setRoomDetailList(ArrayList<RoomDetail> rmDetailList) { this.roomDetailList = rmDetailList; }
     public void setQuestionDetailList(ArrayList<QuestionDetail> qnDetailList) { this.questionDetailList = qnDetailList; }
     public void setQuestionIDList(ArrayList<String> questionIDList) { this.questionIDList = questionIDList; }
+    public void setCurrentQuestion(String question_id) { this.currentQuestion = question_id; }
 
     /*---------- Getter ----------*/
     public String getRoomName() { return room_name; }
@@ -43,5 +45,6 @@ public class RoomBank {
     public ArrayList<RoomDetail> getRoomDetailList() { return roomDetailList; }
     public ArrayList<QuestionDetail> getQuestionDetailList() { return questionDetailList; }
     public ArrayList<String> getQuestionIDList() { return questionIDList; }
+    public String getCurrentQuestion() { return currentQuestion; }
 
 }

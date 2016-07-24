@@ -80,10 +80,15 @@ public class PlayerView extends AppCompatActivity {
         display();
     }
 
-    @Override
+    /*@Override
     protected void onStop() {
         super.onStop();
         scheduler.shutdown();
+    }*/
+
+    @Override
+    public void onBackPressed(){
+        //super.onBackPressed();    //user cannot press the back button on android
     }
 
     private void display() {
@@ -96,7 +101,7 @@ public class PlayerView extends AppCompatActivity {
         bExitPlayerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onStop();
+                scheduler.shutdown();
 
                 //Remove user from "GAME" table in the database
                 OkHttpClient client = new OkHttpClient();

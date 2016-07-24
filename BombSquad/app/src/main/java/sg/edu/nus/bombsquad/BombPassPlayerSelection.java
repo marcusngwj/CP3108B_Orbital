@@ -41,7 +41,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: BombPassPlayerSelection");
 
-        bombPassPlayerSelectionLL = (LinearLayout)findViewById(R.id.LinearLayoutBombPassPlayerSelection);
+        bombPassPlayerSelectionLL = (LinearLayout) findViewById(R.id.LinearLayoutBombPassPlayerSelection);
 
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -51,7 +51,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
 
     }
 
-    private void display(){
+    private void display() {
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()
                 .add("room_code", roomBank.getRoomCode())
@@ -75,30 +75,52 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                             JSONObject result = new JSONObject(response.body().string());
                             System.out.println(result);
 
-                            int numPlayers = Integer.valueOf(result.getJSONObject(0+"").getString("numRow"));
+                            int numPlayers = Integer.valueOf(result.getJSONObject(0 + "").getString("numRow"));
 
-                            for(int i=0; i<numPlayers; i++){
-                                String player_id = result.getJSONObject(i+"").getString("player");
+                            for (int i = 0; i < numPlayers; i++) {
+                                String player_id = result.getJSONObject(i + "").getString("player");
                                 playersInGameList.add(player_id);
 
                                 //Usually is the person who created the room, hence, all host should be same
                                 //If host == -1 (default value in database), it means user is a player
-                                String host = result.getJSONObject(i+"").getString("host");
+                                String host = result.getJSONObject(i + "").getString("host");
                                 System.out.println("host: " + host);
 
                                 //If user is not the person who currently got the bomb
                                 // and he is not the host
                                 // add to the list of players who can receive the bomb
-                                if(!player_id.equals(global.getUserId()) && !player_id.equals(host)) {
-                                    Button bPlayer = new Button(BombPassPlayerSelection.this);
-                                    bPlayer.setText(player_id);
+                                if (!player_id.equals(global.getUserId()) && !player_id.equals(host)) {
+                                    final Button bPlayer = new Button(BombPassPlayerSelection.this);
+                                    bPlayer.setTag(player_id);
+                                    bPlayer.setText(player_id); //Will be change to display name of player instead
 
                                     bPlayer.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            OkHttpClient client = new OkHttpClient();
+                                            RequestBody postData = new FormBody.Builder()
+                                                    .add("room_code", roomBank.getRoomCode())
+                                                    .add("question_id", roomBank.getCurrentQuestion())
+                                                    .add("player_id", bPlayer.getTag()+"")
+                                                    .build();
+                                            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateBombPossession.php").post(postData).build();
+
+                                            client.newCall(request)
+                                                    .enqueue(new Callback() {
+                                                        boolean responded;
+
+                                                        @Override
+                                                        public void onFailure(Call call, IOException e) {
+                                                            System.out.println("FAIL");
+                                                        }
+
+                                                        @Override
+                                                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                            response.body().close();
+                                                        }
+                                                    });
+
                                             onBackPressed();
-                                            /*Intent intent = new Intent(BombPassPlayerSelection.this, PlayerView.class);
-                                            startActivity(intent);*/
                                         }
                                     });
 
@@ -109,13 +131,13 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
                         }
-                        if(responded){
+                        if (responded) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     LinearLayout tempLL = new LinearLayout(BombPassPlayerSelection.this);
                                     tempLL.setOrientation(LinearLayout.VERTICAL);
-                                    for(Button bTemp : playersWhoCanReceiveBombButtonList){
+                                    for (Button bTemp : playersWhoCanReceiveBombButtonList) {
                                         tempLL.addView(bTemp);
                                     }
                                     bombPassPlayerSelectionLL.removeAllViews();
@@ -135,7 +157,6 @@ public class BombPassPlayerSelection extends AppCompatActivity {
         super.onStop();
         scheduler.shutdown();
     }
-
 
 
 }

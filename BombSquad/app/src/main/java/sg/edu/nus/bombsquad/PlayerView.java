@@ -190,8 +190,8 @@ public class PlayerView extends AppCompatActivity {
         bPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("HELLO");
                 Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
+                roomBank.setCurrentQuestion(questionDetailList.get(i).getQuestion_id());
                 startActivity(intentBPST);
             }
         });

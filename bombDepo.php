@@ -1,7 +1,7 @@
 <?php
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
-	$user_id = $_POST["user_id"];
+	$user_id = mysqli_real_escape_string($con, $_POST["user_id"]);
 
     $statement = mysqli_prepare($con, "SELECT * FROM Bomb_Depository WHERE user_id = ?");
     mysqli_stmt_bind_param($statement, "s", $user_id);

@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -134,11 +135,11 @@ public class PlayerView extends AppCompatActivity {
 
     }
 
-    /*@Override
+    @Override
     protected void onStop() {
         super.onStop();
         scheduler.shutdown();
-    }*/
+    }
 
     @Override
     public void onBackPressed() {
@@ -165,6 +166,7 @@ public class PlayerView extends AppCompatActivity {
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         final ArrayList<LinearLayout> deployedQuestionList = new ArrayList<LinearLayout>();
                         final ArrayList<String> playerWithBombList = new ArrayList<String>();
+
                         try {
                             JSONObject result = new JSONObject(response.body().string());
                             System.out.println(result);
@@ -260,6 +262,7 @@ public class PlayerView extends AppCompatActivity {
         bPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onStop();
                 Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
                 roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
                 startActivity(intentBPST);

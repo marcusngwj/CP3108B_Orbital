@@ -40,29 +40,74 @@ public class BombPassPlayerSelection extends AppCompatActivity {
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: BombPassPlayerSelection");
 
-//        display();
-
         bombPassPlayerSelectionLL = (LinearLayout)findViewById(R.id.LinearLayoutBombPassPlayerSelection);
 
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                new Background().execute();
+                display();
             }
         }, 0, 2500, TimeUnit.MILLISECONDS);
 
     }
 
-//    private void display(){
+    private void display(){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_code", roomBank.getRoomCode())
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/playersInGame.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    boolean responded;
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        ArrayList<String> playersInGameList = new ArrayList<String>();
+                        final ArrayList<Button> buttonList = new ArrayList<Button>();
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+
+                            int numPlayers = Integer.valueOf(result.getJSONObject(0+"").getString("numRow"));
+
+                            for(int i=0; i<numPlayers; i++){
+                                String player_id = result.getJSONObject(i+"").getString("player");
+                                playersInGameList.add(player_id);
+
+                                Button bPlayer = new Button(BombPassPlayerSelection.this);
+                                bPlayer.setText(player_id);
+                                buttonList.add(bPlayer);
+                            }
+
+                            responded = true;
+                        } catch (JSONException e) {
+                            /*e.printStackTrace();*/
+                        }
+                        if(responded){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LinearLayout tempLL = new LinearLayout(BombPassPlayerSelection.this);
+                                    tempLL.setOrientation(LinearLayout.VERTICAL);
+                                    for(Button bTemp : buttonList){
+                                        tempLL.addView(bTemp);
+                                    }
+                                    bombPassPlayerSelectionLL.removeAllViews();
+                                    bombPassPlayerSelectionLL.addView(tempLL);
+                                }
+                            });
 
 
+                        }
 
-        /*scheduler.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-
-            }
-        }, 0, 2500, TimeUnit.MILLISECONDS);*/
-
-//    }
+                    }
+                });
+    }
 
     @Override
     protected void onStop() {
@@ -70,37 +115,6 @@ public class BombPassPlayerSelection extends AppCompatActivity {
         scheduler.shutdown();
     }
 
-    class Background extends AsyncTask<Void, Void, Void> {
-        ArrayList<String> playersInGameList;
-
-        protected void onPreExecute(Void pre) {
-        }
-
-        protected Void doInBackground(Void... param) {
-            playersInGameList = roomBank.getPlayersInGameList();
-            return null;
-        }
-
-        protected void onPostExecute(Void update) {
-            if(playersInGameList!=null) {
-                int numPlayers = playersInGameList.size();
-
-                System.out.println("NUMPLAYERS: " + numPlayers);
-
-
-                for (int i = 0; i < numPlayers; i++) {
-                    String player_id = playersInGameList.get(i);
-
-                    Button bPlayer = new Button(BombPassPlayerSelection.this);
-                    bPlayer.setText(player_id);
-
-                    bombPassPlayerSelectionLL.addView(bPlayer);
-                }
-            }
-
-
-        }
-    }
 
 
 }

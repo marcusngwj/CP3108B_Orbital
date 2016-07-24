@@ -21,8 +21,6 @@ public class RoomBank {
     String room_name;
     String room_code;
     int numQuestion;
-    ArrayList<RoomDetail> roomDetailList;
-//    ArrayList<QuestionDetail> questionDetailList;
     ArrayList<String> questionIDList;
     HashMap<String, QuestionDetail> questionHashMap;
     HashMap<String, RoomDetail> roomDetailHashMap;
@@ -36,8 +34,6 @@ public class RoomBank {
 
     /*---------- Setter ----------*/
     public void setNumQuestion(int numQn) { this.numQuestion = numQn; }
-    public void setRoomDetailList(ArrayList<RoomDetail> rmDetailList) { this.roomDetailList = rmDetailList; }
-//    public void setQuestionDetailList(ArrayList<QuestionDetail> qnDetailList) { this.questionDetailList = qnDetailList; }
     public void setQuestionIDList(ArrayList<String> questionIDList) { this.questionIDList = questionIDList; }
     public void setQuestionHashMap(HashMap<String, QuestionDetail> map) { this.questionHashMap = map; }
     public void setRoomDetailHashMap(HashMap<String, RoomDetail> map) { this.roomDetailHashMap = map; }
@@ -47,8 +43,6 @@ public class RoomBank {
     public String getRoomName() { return room_name; }
     public String getRoomCode() { return room_code; }
     public int getNumQuestion() { return numQuestion; }
-    public ArrayList<RoomDetail> getRoomDetailList() { return roomDetailList; }
-//    public ArrayList<QuestionDetail> getQuestionDetailList() { return questionDetailList; }
     public ArrayList<String> getQuestionIDList() { return questionIDList; }
     public HashMap<String, QuestionDetail> getQuestionHashMap() { return questionHashMap; }
     public HashMap<String, RoomDetail> getRoomDetailHashMap() { return roomDetailHashMap; }

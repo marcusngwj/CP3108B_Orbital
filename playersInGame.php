@@ -18,6 +18,10 @@
     $i = 0;
     while(mysqli_stmt_fetch($statement)){
         $response[$i]["success"] = true;
+		$response[$i]["game_id"] = $game_id;
+		$response[$i]["host"] = $host;
+		$response[$i]["room_status"] = $room_status;
+		$response[$i]["room_code"] = $room_code;
 		$response[$i]["player"] = $player;
 		$response[$i]["numRow"] = $num_rows;
 		$i++;

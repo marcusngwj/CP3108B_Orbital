@@ -158,7 +158,6 @@ public class HostSelection extends AppCompatActivity {
                             global.setBooleanAccess(false);
                             scheduler1.shutdown();
                             startActivity(intent1);
-
                         }
                     }
                 }, 0, 500, TimeUnit.MILLISECONDS);
@@ -230,7 +229,6 @@ public class HostSelection extends AppCompatActivity {
                     global.setPlayerExist(false);
                     return null;
                 }
-                global.setPlayerExist(true);
                 final int curr = i;
                 OkHttpClient client = new OkHttpClient();
                 RequestBody postData = new FormBody.Builder().add("player_id", currPlayer).build();
@@ -250,6 +248,7 @@ public class HostSelection extends AppCompatActivity {
                                     player_list[curr] = first_name+ " " + last_name;
                                     global.pushPlayerInRoom(currPlayer+"", player_list[curr]);
                                     global.setBooleanAccess(true);
+                                    global.setPlayerExist(true);
                                 } catch (JSONException e) {
                                    // e.printStackTrace();
                                 }
@@ -270,25 +269,28 @@ public class HostSelection extends AppCompatActivity {
             global.setTimeLeft(Integer.parseInt(time) + 1);
             scheduler3.scheduleAtFixedRate(new Runnable() {
                 public void run() {
-                    global.setTimeLeft(global.getTimeLeft()-1);
-                    OkHttpClient client = new OkHttpClient();
-                    RequestBody postData = new FormBody.Builder()
-                            .add("room_code", global.getRoomCode())
-                            .add("question_id", global.getCurrQuestionId())
-                            .add("time_left", Integer.toString(global.getTimeLeft()))
-                            .build();
-                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateTimeLeft.php").post(postData).build();
-                    client.newCall(request)
-                            .enqueue(new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-                                    System.out.println("FAIL");
-                                }
-                                @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                    response.body().close();
-                                }
-                            });
+                    if (global.getTimeLeft() > 0) {
+                        global.setTimeLeft(global.getTimeLeft() - 1);
+                        OkHttpClient client = new OkHttpClient();
+                        RequestBody postData = new FormBody.Builder()
+                                .add("room_code", global.getRoomCode())
+                                .add("question_id", global.getCurrQuestionId())
+                                .add("time_left", Integer.toString(global.getTimeLeft()))
+                                .build();
+                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateTimeLeft.php").post(postData).build();
+                        client.newCall(request)
+                                .enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        System.out.println("FAIL");
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                        response.body().close();
+                                    }
+                                });
+                    }
                     if (global.getTimeLeft() <= 0) {
                         global.undeployQ(global.getCurrQuestionId());
                         scheduler3.shutdown();

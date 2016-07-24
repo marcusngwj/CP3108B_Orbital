@@ -135,6 +135,10 @@ public class Global {
         deployedQ.remove(key);
     }
 
+    public void clearDeployed() {
+        deployedQ.clear();
+    }
+
     public void pushPlayerInRoom(String id, String name) {
         playerInRoom.put(id, name);
     }
@@ -154,6 +158,7 @@ public class Global {
     public void setAlert(AlertDialog.Builder build) {
         builder = build;
     }
+
 
 
 

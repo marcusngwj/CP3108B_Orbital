@@ -1,5 +1,6 @@
 package sg.edu.nus.bombsquad;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -91,6 +92,16 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                 if(!player_id.equals(global.getUserId()) && !player_id.equals(host)) {
                                     Button bPlayer = new Button(BombPassPlayerSelection.this);
                                     bPlayer.setText(player_id);
+
+                                    bPlayer.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            onBackPressed();
+                                            /*Intent intent = new Intent(BombPassPlayerSelection.this, PlayerView.class);
+                                            startActivity(intent);*/
+                                        }
+                                    });
+
                                     playersWhoCanReceiveBombButtonList.add(bPlayer);
                                 }
                             }

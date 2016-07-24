@@ -69,9 +69,10 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                     @Override
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         ArrayList<String> playersInGameList = new ArrayList<String>();
-                        final ArrayList<Button> buttonList = new ArrayList<Button>();
+                        final ArrayList<Button> playersWhoCanReceiveBombButtonList = new ArrayList<Button>();
                         try {
                             JSONObject result = new JSONObject(response.body().string());
+                            System.out.println(result);
 
                             int numPlayers = Integer.valueOf(result.getJSONObject(0+"").getString("numRow"));
 
@@ -79,11 +80,20 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                 String player_id = result.getJSONObject(i+"").getString("player");
                                 playersInGameList.add(player_id);
 
-                                Button bPlayer = new Button(BombPassPlayerSelection.this);
-                                bPlayer.setText(player_id);
-                                buttonList.add(bPlayer);
-                            }
+                                //Usually is the person who created the room, hence, all host should be same
+                                //If host == -1 (default value in database), it means user is a player
+                                String host = result.getJSONObject(i+"").getString("host");
+                                System.out.println("host: " + host);
 
+                                //If user is not the person who currently got the bomb
+                                // and he is not the host
+                                // add to the list of players who can receive the bomb
+                                if(!player_id.equals(global.getUserId()) && !player_id.equals(host)) {
+                                    Button bPlayer = new Button(BombPassPlayerSelection.this);
+                                    bPlayer.setText(player_id);
+                                    playersWhoCanReceiveBombButtonList.add(bPlayer);
+                                }
+                            }
                             responded = true;
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
@@ -94,7 +104,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                 public void run() {
                                     LinearLayout tempLL = new LinearLayout(BombPassPlayerSelection.this);
                                     tempLL.setOrientation(LinearLayout.VERTICAL);
-                                    for(Button bTemp : buttonList){
+                                    for(Button bTemp : playersWhoCanReceiveBombButtonList){
                                         tempLL.addView(bTemp);
                                     }
                                     bombPassPlayerSelectionLL.removeAllViews();

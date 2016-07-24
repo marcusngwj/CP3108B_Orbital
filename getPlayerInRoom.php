@@ -3,7 +3,7 @@
     
     $room_code = $_POST["room_code"];
     
-    $statement = mysqli_prepare($con, "SELECT * FROM Game WHERE room_code = ?");
+    $statement = mysqli_prepare($con, "SELECT * FROM Game WHERE room_code = ? AND player != 0");
     mysqli_stmt_bind_param($statement, "s", $room_code);
     mysqli_stmt_execute($statement);
     

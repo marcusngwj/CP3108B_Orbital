@@ -41,6 +41,11 @@ public class PlayerList extends AppCompatActivity {
         display();
 
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+    }
+
     private void display() {
         Intent intent = getIntent();
         final String room_code = intent.getStringExtra("room_code");

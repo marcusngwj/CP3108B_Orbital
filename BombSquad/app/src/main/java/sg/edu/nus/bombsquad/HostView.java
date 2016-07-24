@@ -68,6 +68,11 @@ public class HostView extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); so that user cannot press the back button on android! YAY!
+    }
+
     protected void onStop() {
         super.onStop();
         global.setUpdateHostViewBoolean(false);

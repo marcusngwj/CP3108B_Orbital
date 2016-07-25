@@ -101,7 +101,7 @@ public class RoomType extends AppCompatActivity {
                             }
                         }
                         catch (JSONException e) {
-                            e.printStackTrace();
+                            /*e.printStackTrace();*/
                         }
                     }
                 };

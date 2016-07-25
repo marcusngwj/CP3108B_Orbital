@@ -69,7 +69,7 @@ public class BombDepo extends AppCompatActivity {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            /*e.printStackTrace();*/
         }
 
         //GreenTick - Button

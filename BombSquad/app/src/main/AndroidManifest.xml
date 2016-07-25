@@ -43,7 +43,7 @@
         <activity android:name=".NewBomb" />
         <activity android:name=".PreparingPlayerView" />
         <activity android:name=".BombPassSelectionType" />
-        <activity android:name=".BombPassPlayerSelection"></activity>
+        <activity android:name=".BombPassPlayerSelection" />
     </application>
 
 </manifest>

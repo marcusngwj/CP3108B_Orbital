@@ -106,26 +106,7 @@ public class EnterRoom extends AppCompatActivity {
                                             }
 
                                             //Add user into "GAME" table in the database
-                                            OkHttpClient client = new OkHttpClient();
-                                            RequestBody postData = new FormBody.Builder()
-                                                    .add("room_status", "1")
-                                                    .add("room_code", room_code)
-                                                    .add("player", global.getUserId())
-                                                    .build();
-                                            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertUserIntoGame.php").post(postData).build();
-
-                                            client.newCall(request)
-                                                    .enqueue(new Callback() {
-                                                        @Override
-                                                        public void onFailure(Call call, IOException e) {
-                                                            System.out.println("FAIL");
-                                                        }
-
-                                                        @Override
-                                                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                                            response.body().close();
-                                                        }
-                                                    });
+                                            RoomBank.addPlayersIntoGame(room_code, global.getUserId());
 
 
 

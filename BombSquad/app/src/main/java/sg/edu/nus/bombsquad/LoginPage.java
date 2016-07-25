@@ -35,8 +35,8 @@ public class LoginPage extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent intent = new Intent(LoginPage.this, Main.class);
-        startActivity(intent);
+        /*Intent intent = new Intent(LoginPage.this, Main.class);
+        startActivity(intent);*/
     }
 
     public void onLogin(){

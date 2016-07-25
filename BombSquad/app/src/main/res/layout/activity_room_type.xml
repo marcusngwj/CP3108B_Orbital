@@ -19,7 +19,7 @@
         android:paddingRight="20sp"
         android:text="History"
         android:id="@+id/buttonHistory"
-        android:background="#ffffff"
+        android:background="@drawable/normal_button"
         android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/buttonManageRoom" />
 

@@ -106,7 +106,7 @@ public class EnterRoom extends AppCompatActivity {
                                             }
 
                                             //Add user into "GAME" table in the database
-                                            RoomBank.addPlayersIntoGame(room_code, global.getUserId());
+                                            RoomBank.addPlayerIntoGame(room_code, global.getUserId());
 
 
 

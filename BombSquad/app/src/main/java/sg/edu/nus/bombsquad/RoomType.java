@@ -34,6 +34,13 @@ public class RoomType extends AppCompatActivity {
         history();
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(RoomType.this, LoginPage.class);
+        startActivity(intent);
+    }
+
+
+
     //Manage Room Button
     private void manageRoom() {
         bManageRoom = (Button)findViewById(R.id.buttonManageRoom);

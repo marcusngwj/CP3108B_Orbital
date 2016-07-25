@@ -29,4 +29,7 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    public void onBackPressed() {
+    }
+
 }

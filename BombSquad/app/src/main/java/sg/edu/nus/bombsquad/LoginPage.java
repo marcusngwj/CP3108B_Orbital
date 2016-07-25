@@ -34,6 +34,11 @@ public class LoginPage extends AppCompatActivity {
         onRegister();
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(LoginPage.this, Main.class);
+        startActivity(intent);
+    }
+
     public void onLogin(){
         bLogin=(Button)findViewById(R.id.buttonLogin);
         editUser=(EditText)findViewById(R.id.editTextUser);

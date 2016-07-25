@@ -45,6 +45,7 @@ public class ManageRoom extends AppCompatActivity {
         System.out.println("Activity Name: ManageRoom");
 
         global.setData(selected);
+        global.setQuestionName(new String[100000]);
         selectedRoomName = new HashMap<String, String>();
         display();
         deleteRoom();
@@ -148,71 +149,49 @@ public class ManageRoom extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ManageRoom.this);
-                builder.setMessage("Please wait while we load the room :)")
-                        .create()
-                        .show();
-                int k = 0;
-                int numTrues = 0;
-                int chosenK=-1;
-                /*while (k < 100000) {
-                    if (selected[k]) {
-                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                builder.setMessage("Do you wish to start the room or edit the room?")
+                        .setPositiveButton("Start Room", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onResponse(String response) {
-                                Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                                startActivity(hostIntent);
-                            }
-                        };
-                        GameRequest game = new GameRequest(intent.getStringExtra("user_id"), "1", k+"", responseListener);
-                        RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
-                        queue.add(game);
-                    }
-                    k++;
-                }*/
+                            public void onClick(DialogInterface dialog, int which) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ManageRoom.this);
+                                builder.setMessage("Please wait while we load the room :)")
+                                        .create()
+                                        .show();
+                                int k = 0;
+                                int numTrues = 0;
+                                int chosenK=-1;
 
-                //Proceed to next activity iff 1 option is selected
-                while(k < 100000){
-                    if(numTrues>1){
-                        Toast.makeText(getApplicationContext(), "Select only one",Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                    else if(selected[k]){
-                        numTrues++;
-                        chosenK = k;
-                    }
-                    k++;
-                }
-
-
-                final int codeOfRoomChosen = chosenK;
-
-                if(numTrues < 1){
-                    Toast.makeText(getApplicationContext(), "Select a room",Toast.LENGTH_SHORT).show();
-                }
-
-                else if(numTrues == 1){
-                    //Nested Response to make sure counting is done before new intent
-                    final OkHttpClient client = new OkHttpClient();
-                    RequestBody postData = new FormBody.Builder()
-                            .add("user_id", intent.getStringExtra("user_id"))
-                            .add("room_status", "1")
-                            .add("room_code", chosenK+"")
-                            .add("player", intent.getStringExtra("user_id"))
-                            .build();
-                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/gameRequest.php").post(postData).build();
-
-                    client.newCall(request)
-                            .enqueue(new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-                                    System.out.println("FAIL");
+                                //Proceed to next activity iff 1 option is selected
+                                while(k < 100000){
+                                    if(numTrues>1){
+                                        Toast.makeText(getApplicationContext(), "Select only one",Toast.LENGTH_SHORT).show();
+                                        break;
+                                    }
+                                    else if(selected[k]){
+                                        numTrues++;
+                                        chosenK = k;
+                                    }
+                                    k++;
                                 }
-                                @Override
-                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
+
+                                final int codeOfRoomChosen = chosenK;
+
+                                if(numTrues < 1){
+                                    Toast.makeText(getApplicationContext(), "Select a room",Toast.LENGTH_SHORT).show();
+                                }
+
+                                else if(numTrues == 1){
+                                    //Nested Response to make sure counting is done before new intent
+                                    final OkHttpClient client = new OkHttpClient();
                                     RequestBody postData = new FormBody.Builder()
-                                            .add("room_code", codeOfRoomChosen+"")
+                                            .add("user_id", intent.getStringExtra("user_id"))
+                                            .add("room_status", "1")
+                                            .add("room_code", chosenK+"")
+                                            .add("player", intent.getStringExtra("user_id"))
                                             .build();
-                                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionID.php").post(postData).build();
+                                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/gameRequest.php").post(postData).build();
+
                                     client.newCall(request)
                                             .enqueue(new Callback() {
                                                 @Override
@@ -221,83 +200,169 @@ public class ManageRoom extends AppCompatActivity {
                                                 }
                                                 @Override
                                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                                    try {
-                                                        JSONObject jsonResponse = new JSONObject(response.body().string());
-                                                        String[] question_id = new String[jsonResponse.length()];
-                                                        int count = 0;  //Count total number of questions in a room
+                                                    RequestBody postData = new FormBody.Builder()
+                                                            .add("room_code", codeOfRoomChosen+"")
+                                                            .build();
+                                                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionID.php").post(postData).build();
+                                                    client.newCall(request)
+                                                            .enqueue(new Callback() {
+                                                                @Override
+                                                                public void onFailure(Call call, IOException e) {
+                                                                    System.out.println("FAIL");
+                                                                }
+                                                                @Override
+                                                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                                    try {
+                                                                        JSONObject jsonResponse = new JSONObject(response.body().string());
+                                                                        String[] question_id = new String[jsonResponse.length()];
+                                                                        int count = 0;  //Count total number of questions in a room
 
-                                                        int i = 0;
-                                                        while (i < jsonResponse.length()) {
-                                                            if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
-                                                                question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
-                                                                count++;
-                                                                global.setNumber(count);
-                                                                global.setQuestion_id(question_id);
+                                                                        int i = 0;
+                                                                        while (i < jsonResponse.length()) {
+                                                                            if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
+                                                                                question_id[i] = (jsonResponse.getJSONObject(i + "").getString("question_id"));
+                                                                                count++;
+                                                                                global.setNumber(count);
+                                                                                global.setQuestion_id(question_id);
 
-                                                            }
-                                                            i++;
-                                                        }
-
-                                                    } catch (JSONException e) {
-                                                        //e.printStackTrace();
-                                                    }
-
-                                                    final int numQuestion = global.getNumber();
-                                                    final String[][] tempArr = new String[numQuestion][8];
-                                                    int i = 0;
-                                                    global.setCounter(0);
-                                                    while (i < numQuestion) {
-                                                        final int idx = i;
-
-                                                        RequestBody postData = new FormBody.Builder()
-                                                                .add("question_id", global.getQuestion_id()[idx])
-                                                                .build();
-                                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/questionAnswerOption.php").post(postData).build();
-                                                        client.newCall(request)
-                                                                .enqueue(new Callback() {
-                                                                    @Override
-                                                                    public void onFailure(Call call, IOException e) {
-                                                                        System.out.println("FAIL");
-                                                                    }
-                                                                    @Override
-                                                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                                                        try {
-                                                                            JSONObject jsonResponse = new JSONObject(response.body().string());
-                                                                            if (jsonResponse.getBoolean("success")) {
-                                                                                tempArr[idx][0] = jsonResponse.getString("question_type");
-                                                                                tempArr[idx][1] = jsonResponse.getString("question");
-                                                                                tempArr[idx][2] = jsonResponse.getString("option_one");
-                                                                                tempArr[idx][3] = jsonResponse.getString("option_two");
-                                                                                tempArr[idx][4] = jsonResponse.getString("option_three");
-                                                                                tempArr[idx][5] = jsonResponse.getString("option_four");
-                                                                                tempArr[idx][6] = jsonResponse.getString("answer");
-                                                                                global.putTimeLimit(jsonResponse.getString("question_id"), jsonResponse.getString("time_limit"));
-                                                                                if (global.getCounter() == numQuestion - 1) {
-                                                                                    global.setData(tempArr);
-                                                                                    Intent intent = getIntent();
-                                                                                    Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
-                                                                                    hostIntent.putExtra("room", intent.getStringExtra("room"));
-                                                                                    hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                                                                    global.setRoomCode(codeOfRoomChosen+"");
-                                                                                    global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
-                                                                                    global.setNumQuestion(global.getNumber());
-                                                                                    global.setCounter(0);
-                                                                                    startActivity(hostIntent);
-                                                                                }
-                                                                                global.setCounter(global.getCounter()+1);
                                                                             }
-                                                                        } catch (JSONException e) {
-                                                                           // e.printStackTrace();
+                                                                            i++;
                                                                         }
+
+                                                                    } catch (JSONException e) {
+                                                                        //e.printStackTrace();
                                                                     }
-                                                                });
-                                                        i++;
-                                                    }
+
+                                                                    final int numQuestion = global.getNumber();
+                                                                    final String[][] tempArr = new String[numQuestion][8];
+                                                                    int i = 0;
+                                                                    global.setCounter(0);
+                                                                    while (i < numQuestion) {
+                                                                        final int idx = i;
+
+                                                                        RequestBody postData = new FormBody.Builder()
+                                                                                .add("question_id", global.getQuestion_id()[idx])
+                                                                                .build();
+                                                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/questionAnswerOption.php").post(postData).build();
+                                                                        client.newCall(request)
+                                                                                .enqueue(new Callback() {
+                                                                                    @Override
+                                                                                    public void onFailure(Call call, IOException e) {
+                                                                                        System.out.println("FAIL");
+                                                                                    }
+                                                                                    @Override
+                                                                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                                                        try {
+                                                                                            JSONObject jsonResponse = new JSONObject(response.body().string());
+                                                                                            if (jsonResponse.getBoolean("success")) {
+                                                                                                tempArr[idx][0] = jsonResponse.getString("question_type");
+                                                                                                tempArr[idx][1] = jsonResponse.getString("question");
+                                                                                                tempArr[idx][2] = jsonResponse.getString("option_one");
+                                                                                                tempArr[idx][3] = jsonResponse.getString("option_two");
+                                                                                                tempArr[idx][4] = jsonResponse.getString("option_three");
+                                                                                                tempArr[idx][5] = jsonResponse.getString("option_four");
+                                                                                                tempArr[idx][6] = jsonResponse.getString("answer");
+                                                                                                global.putTimeLimit(jsonResponse.getString("question_id"), jsonResponse.getString("time_limit"));
+                                                                                                if (global.getCounter() == numQuestion - 1) {
+                                                                                                    global.setData(tempArr);
+                                                                                                    Intent intent = getIntent();
+                                                                                                    Intent hostIntent = new Intent(ManageRoom.this, HostView.class);
+                                                                                                    hostIntent.putExtra("room", intent.getStringExtra("room"));
+                                                                                                    hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                                                                    global.setRoomCode(codeOfRoomChosen+"");
+                                                                                                    global.setRoomName(selectedRoomName.get(codeOfRoomChosen+""));
+                                                                                                    global.setNumQuestion(global.getNumber());
+                                                                                                    global.setCounter(0);
+                                                                                                    startActivity(hostIntent);
+                                                                                                }
+                                                                                                global.setCounter(global.getCounter()+1);
+                                                                                            }
+                                                                                        } catch (JSONException e) {
+                                                                                            // e.printStackTrace();
+                                                                                        }
+                                                                                    }
+                                                                                });
+                                                                        i++;
+                                                                    }
+                                                                }
+                                                            });
                                                 }
                                             });
                                 }
-                            });
-                }
+                            }
+                        })
+                        .setNeutralButton("Edit Room", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int k = 0;
+                                OkHttpClient client = new OkHttpClient();
+                                while (k < 100000) {
+                                    if (selected[k]) {
+                                        RequestBody postData = new FormBody.Builder()
+                                                .add("room_code", k+"")
+                                                .build();
+                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionInRoom.php").post(postData).build();
+                                        client.newCall(request)
+                                                .enqueue(new Callback() {
+                                                    @Override
+                                                    public void onFailure(Call call, IOException e) {
+                                                        System.out.println("FAIL");
+                                                    }
+
+                                                    @Override
+                                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                        try {
+                                                            JSONObject result = new JSONObject(response.body().string());
+
+                                                            if (result.getBoolean("success")) {
+                                                                OkHttpClient client = new OkHttpClient();
+                                                                int m = 0;
+                                                                while (m < result.length()) {
+                                                                    final int curr = m;
+                                                                    RequestBody postData = new FormBody.Builder()
+                                                                            .add("question_id", result.getJSONObject(m+"").getString("question_id"))
+                                                                            .build();
+                                                                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionName.php").post(postData).build();
+                                                                    client.newCall(request)
+                                                                            .enqueue(new Callback() {
+                                                                                @Override
+                                                                                public void onFailure(Call call, IOException e) {
+                                                                                    System.out.println("FAIL");
+                                                                                }
+                                                                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                                                    try {
+                                                                                        JSONObject result = new JSONObject(response.body().string());
+                                                                                        if (result.getBoolean("success")) {
+                                                                                            global.getQuestionName()[curr] =result.getString("bomb_name");
+                                                                                            Intent intent = getIntent();
+                                                                                            Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
+                                                                                            editRoomIntent.putExtra("room", intent.getStringExtra("room"));
+                                                                                            editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                                                            startActivity(editRoomIntent);
+                                                                                        }
+                                                                                    } catch (JSONException e) {
+                                                                                        //e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                    m++;
+                                                                }
+
+
+                                                            }
+                                                        } catch (JSONException e){
+                                                            //e.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                    k++;
+                                }
+
+                            }
+                        })
+                        .create()
+                        .show();
             }
         });
     }

@@ -47,6 +47,8 @@ public class Global {
     private boolean runScheduler;
     private RoomBank roomBank;
     private boolean create;
+    private String[] questionName;
+
 
     /*---------- okgttp ----------*/
     private OkHttpClient client = new OkHttpClient();
@@ -159,6 +161,10 @@ public class Global {
         builder = build;
     }
 
+    public void setQuestionName(String[] arr) {
+        questionName = arr;
+    }
+
 
 
 
@@ -249,6 +255,9 @@ public class Global {
         return builder;
     }
 
+    public String[] getQuestionName() {
+        return questionName;
+    }
 
 
 

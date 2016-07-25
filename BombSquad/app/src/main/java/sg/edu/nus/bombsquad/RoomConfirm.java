@@ -3,6 +3,7 @@ package sg.edu.nus.bombsquad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -42,8 +43,8 @@ public class RoomConfirm extends AppCompatActivity {
             while (i < 100000) {
                 if (selected[i]) {
                     CheckedTextView ctv = new CheckedTextView(this);
+                    ctv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                     ctv.setText(selected_name[i]);
-                    ctv.setTextSize(20);
                     assert ll != null;
                     ll.addView(ctv, lp);
                     j++;

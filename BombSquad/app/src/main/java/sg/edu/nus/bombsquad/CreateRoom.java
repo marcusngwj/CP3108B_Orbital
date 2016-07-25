@@ -74,10 +74,6 @@ public class CreateRoom extends AppCompatActivity {
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("room_code", roomCodeString);
                     intent.putExtra("room_name", roomName);
-                    System.out.println("CREATE ROOM");
-                    System.out.println(user_id);
-                    System.out.println(roomCodeString);
-                    System.out.println(roomName);
                     startActivity(intent);
                 }
             }

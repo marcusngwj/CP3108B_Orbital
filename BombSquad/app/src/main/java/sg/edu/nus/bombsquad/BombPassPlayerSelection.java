@@ -73,7 +73,6 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                         final ArrayList<Button> playersWhoCanReceiveBombButtonList = new ArrayList<Button>();
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            System.out.println(result);
 
                             int numPlayers = Integer.valueOf(result.getJSONObject(0 + "").getString("numRow"));
 
@@ -84,7 +83,6 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                 //Usually is the person who created the room, hence, all host should be same
                                 //If host == -1 (default value in database), it means user is a player
                                 String host = result.getJSONObject(i + "").getString("host");
-                                System.out.println("host: " + host);
 
                                 //If user is not the person who currently got the bomb
                                 // and he is not the host

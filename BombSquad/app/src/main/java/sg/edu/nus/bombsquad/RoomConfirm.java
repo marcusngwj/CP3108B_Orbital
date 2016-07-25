@@ -69,7 +69,6 @@ public class RoomConfirm extends AppCompatActivity {
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                System.out.println("test");
                             }
                         };
                         CreateRoomRequest createRoomRequest = new CreateRoomRequest(user_id, intent.getStringExtra("room_name"),

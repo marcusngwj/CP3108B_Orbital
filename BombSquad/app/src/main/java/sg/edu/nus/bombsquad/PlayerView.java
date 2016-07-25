@@ -198,7 +198,16 @@ public class PlayerView extends AppCompatActivity {
                                     outerLL.removeAllViews();
                                     int i=0;
                                     for (LinearLayout qnLL : deployedQuestionList) {
+                                        //To remove the error throw on runtime
+                                        if (qnLL != null) {
+                                            ViewGroup parent = (ViewGroup) qnLL.getParent();
+                                            if (parent != null) {
+                                                parent.removeView(qnLL);
+                                            }
+                                        }
+
                                         outerLL.addView(qnLL);
+
                                         String question_id = (qnLL.getId() - QuestionDetail.ID_INNERLL_CONSTANT) + "";
                                         String time_left = qnLL.getTag().toString();
                                         String player_id = playerWithBombList.get(i++);
@@ -245,7 +254,6 @@ public class PlayerView extends AppCompatActivity {
                 }
 
                 int timeLeft = Integer.valueOf(roomDetailHashMap.get(question_id).getTimeLeft());
-//                int timeLeft = Integer.valueOf(roomBank.getRoomDetailList().get(i).getTimeLeft(i));
 
                 //If answer is correct for any type of question
                 if ((qnType.equals("Multiple Choice") && qnDetail.getAnswerIsCorrect() && timeLeft > 0) ||
@@ -262,14 +270,18 @@ public class PlayerView extends AppCompatActivity {
         bPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onStop();
-                Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
-                roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
-                startActivity(intentBPST);
+                //If time is not up and you have not answered correctly, you can pass the bomb,
+                // else otherwise
+                if (timeLeftIntegerValue > 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
+                    onStop();
+                    Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
+                    roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
+                    startActivity(intentBPST);
+                }
+
             }
         });
 
-        //If qn is answered correctly tvTimeLeft will display "Bomb has been successfully defused"
 
         //If user possesses the bomb, show button for defuse and pass, hide bomb possession display
         if (user_id.equals(player_id)) {
@@ -294,6 +306,9 @@ public class PlayerView extends AppCompatActivity {
             else if (!tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
                 tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
             }
+
+            //If qn is answered correctly tvTimeLeft will display "Bomb has been successfully defused"
+
         }
         //else hide both buttons, show bomb possession display
         else {

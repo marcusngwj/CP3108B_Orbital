@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "sg.edu.nus.bombsquad"
-        minSdkVersion 17
-        targetSdkVersion 23
+        minSdkVersion 15
+        targetSdkVersion 18
         versionCode 1
         versionName "1.0"
     }

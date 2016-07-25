@@ -92,8 +92,6 @@ public class RoomType extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
-                            System.out.println(jsonResponse);
-                            //ROOM table cannot be empty in the database
 
                             if (success) {
                                 Intent intentCreate = new Intent(RoomType.this, CreateRoom.class);

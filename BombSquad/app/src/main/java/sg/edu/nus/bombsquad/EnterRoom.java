@@ -55,8 +55,6 @@ public class EnterRoom extends AppCompatActivity {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
                                 boolean success = jsonResponse.getBoolean("success");
-                                System.out.println(jsonResponse);
-                                System.out.println(success);
 
                                 if (success) {
                                     String room_name = jsonResponse.getString("room_name");

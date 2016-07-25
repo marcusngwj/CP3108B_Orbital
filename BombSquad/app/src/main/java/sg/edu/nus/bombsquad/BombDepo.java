@@ -56,7 +56,6 @@ public class BombDepo extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (selected[v.getId()]) {
-                            System.out.println(v.getId());
                             selected[v.getId()] = false;
                         } else {
                             selected[v.getId()] = true;
@@ -86,11 +85,6 @@ public class BombDepo extends AppCompatActivity {
                     intentConfirm.putExtra("user_id", intent.getStringExtra("user_id"));
                     intentConfirm.putExtra("room_name", intent.getStringExtra("room_name"));
                     intentConfirm.putExtra("room_code", intent.getStringExtra("room_code"));
-                    System.out.println("GREEN TICK");
-                    System.out.println(intent.getStringExtra("user_id"));
-                    System.out.println(intent.getStringExtra("room_name"));
-                    System.out.println(intent.getStringExtra("room_code"));
-
                     //To check if anything is selected
                     boolean empty = true;
                     for (String name : selected_name) {
@@ -107,7 +101,7 @@ public class BombDepo extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    System.out.println("JSON ERROR");
+                   // e.printStackTrace();
                 }
             }
         });
@@ -118,7 +112,6 @@ public class BombDepo extends AppCompatActivity {
         redCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Red cross clicked");
                 AlertDialog.Builder builder = new AlertDialog.Builder(BombDepo.this);
                 builder.setMessage("Are you sure you wish to delete this bomb? Deleted bomb cannot be retrieved anymore.")
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -137,8 +130,6 @@ public class BombDepo extends AppCompatActivity {
                                                 //Nothing here to see
                                             }
                                         };
-                                        System.out.println(intent.getStringExtra("user_id"));
-                                        System.out.println("i = " + i);
                                         BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i + "", responseListener);
                                         RequestQueue queue = Volley.newRequestQueue(BombDepo.this);
                                         queue.add(bombDelete);

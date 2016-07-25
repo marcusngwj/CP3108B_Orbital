@@ -29,8 +29,6 @@ public class History extends AppCompatActivity {
             Intent intent = getIntent();
             final String room_name = intent.getStringExtra("room_name");
             JSONObject room = new JSONObject(intent.getStringExtra("room"));
-            System.out.println(room);
-            System.out.println(room.length());
             LinearLayout ll = (LinearLayout) findViewById(R.id.history_layout);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             int i = 0;

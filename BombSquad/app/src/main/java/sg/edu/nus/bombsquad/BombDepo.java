@@ -1,5 +1,6 @@
 package sg.edu.nus.bombsquad;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -117,32 +118,42 @@ public class BombDepo extends AppCompatActivity {
         redCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i = 0;
                 System.out.println("Red cross clicked");
-                while (i < 100000) {
-                    if (selected[i]) {
-                        CheckBox checkbox = (CheckBox) findViewById(i);
-                        LinearLayout ll = (LinearLayout) findViewById(R.id.bombDepoScroll);
-                        assert ll != null;
-                        ll.removeView(checkbox);
-                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(BombDepo.this);
+                builder.setMessage("Are you sure you wish to delete this bomb? Deleted bomb cannot be retrieved anymore.")
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onResponse(String response) {
-                                //Nothing here to see 
-                            }
-                        };
-                        System.out.println(intent.getStringExtra("user_id"));
-                        System.out.println("i = " + i);
-                        BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i + "", responseListener);
-                        RequestQueue queue = Volley.newRequestQueue(BombDepo.this);
-                        queue.add(bombDelete);
+                            public void onClick(DialogInterface dialog, int which) {
+                                int i = 0;
+                                while (i < 100000) {
+                                    if (selected[i]) {
+                                        CheckBox checkbox = (CheckBox) findViewById(i);
+                                        LinearLayout ll = (LinearLayout) findViewById(R.id.bombDepoScroll);
+                                        assert ll != null;
+                                        ll.removeView(checkbox);
+                                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                //Nothing here to see
+                                            }
+                                        };
+                                        System.out.println(intent.getStringExtra("user_id"));
+                                        System.out.println("i = " + i);
+                                        BombDeleteRequest bombDelete = new BombDeleteRequest(intent.getStringExtra("user_id"), i + "", responseListener);
+                                        RequestQueue queue = Volley.newRequestQueue(BombDepo.this);
+                                        queue.add(bombDelete);
 
-                        BombDeleteRequest_Room bombDeleteFromRoom = new BombDeleteRequest_Room(intent.getStringExtra("user_id"), i + "", responseListener);
-                        queue = Volley.newRequestQueue(BombDepo.this);
-                        queue.add(bombDeleteFromRoom);
-                    }
-                    i++;
-                }
+                                        BombDeleteRequest_Room bombDeleteFromRoom = new BombDeleteRequest_Room(intent.getStringExtra("user_id"), i + "", responseListener);
+                                        queue = Volley.newRequestQueue(BombDepo.this);
+                                        queue.add(bombDeleteFromRoom);
+                                    }
+                                    i++;
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create()
+                        .show();
             }
         });
     }

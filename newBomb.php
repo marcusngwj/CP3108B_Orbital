@@ -1,19 +1,19 @@
 <?php
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
-    $bomb_name = $_POST["bomb_name"];
-	$question_type = $_POST["question_type"];
-	$question = $_POST["question"];
-	$option_one = $_POST["option_one"];
-	$option_two = $_POST["option_two"];
-	$option_three = $_POST["option_three"];
-	$option_four = $_POST["option_four"];
-	$answer = $_POST["answer"];
-	$time_limit = $_POST["time_limit"];
-	$points_awarded = $_POST["points_awarded"];
-	$points_deducted = $_POST["points_deducted"];
-	$num_pass = $_POST["num_pass"];
-	$user_id = $_POST["user_id"];
+    $bomb_name = mysqli_real_escape_string($con, $_POST["bomb_name"]);
+	$question_type = mysqli_real_escape_string($con, $_POST["question_type"]);
+	$question = mysqli_real_escape_string($con, $_POST["question"]);
+	$option_one = mysqli_real_escape_string($con, $_POST["option_one"]);
+	$option_two = mysqli_real_escape_string($con, $_POST["option_two"]);
+	$option_three = mysqli_real_escape_string($con, $_POST["option_three"]);
+	$option_four = mysqli_real_escape_string($con, $_POST["option_four"]);
+	$answer = mysqli_real_escape_string($con, $_POST["answer"]);
+	$time_limit = mysqli_real_escape_string($con, $_POST["time_limit"]);
+	$points_awarded = mysqli_real_escape_string($con, $_POST["points_awarded"]);
+	$points_deducted = mysqli_real_escape_string($con, $_POST["points_deducted"]);
+	$num_pass = mysqli_real_escape_string($con, $_POST["num_pass"]);
+	$user_id = mysqli_real_escape_string($con, $_POST["user_id"]);
 	
 	$response = array();
     $response["success"] = false;  

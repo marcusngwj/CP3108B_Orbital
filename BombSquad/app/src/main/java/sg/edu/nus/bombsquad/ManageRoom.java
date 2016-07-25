@@ -1,5 +1,6 @@
 package sg.edu.nus.bombsquad;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -105,24 +106,34 @@ public class ManageRoom extends AppCompatActivity {
         redCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int j = 0;
-                while (j < 100000) {
-                    if (selected[j]) {
-                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ManageRoom.this);
+                builder.setMessage("Are you sure you wish to delete this room? Deleted room cannot be retrieved anymore.")
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onResponse(String response) {
-                                Intent backIntent = new Intent(ManageRoom.this, RoomType.class);
-                                backIntent.putExtra("room", intent.getStringExtra("room"));
-                                backIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                startActivity(backIntent);
+                            public void onClick(DialogInterface dialog, int which) {
+                                int j = 0;
+                                while (j < 100000) {
+                                    if (selected[j]) {
+                                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                Intent backIntent = new Intent(ManageRoom.this, RoomType.class);
+                                                backIntent.putExtra("room", intent.getStringExtra("room"));
+                                                backIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                startActivity(backIntent);
+                                            }
+                                        };
+                                        RoomDeleteRequest roomDelete = new RoomDeleteRequest(intent.getStringExtra("user_id"), j+"", responseListener);
+                                        RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
+                                        queue.add(roomDelete);
+                                    }
+                                    j++;
+                                }
                             }
-                        };
-                        RoomDeleteRequest roomDelete = new RoomDeleteRequest(intent.getStringExtra("user_id"), j+"", responseListener);
-                        RequestQueue queue = Volley.newRequestQueue(ManageRoom.this);
-                        queue.add(roomDelete);
-                    }
-                    j++;
-                }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create()
+                        .show();
             }
         });
     }

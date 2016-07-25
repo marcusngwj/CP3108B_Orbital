@@ -76,6 +76,8 @@ public class HostView extends AppCompatActivity {
                         Intent back = new Intent(HostView.this, ManageRoom.class);
                         back.putExtra("room", intent.getStringExtra("room"));
                         back.putExtra("user_id", intent.getStringExtra("user_id"));
+                        global.clearDeployed();
+                        global.setTimeLeft(0);
                         startActivity(back);
                     }
                 })
@@ -283,7 +285,7 @@ public class HostView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 global.undeployQ(questionIDArray[idx]);
-                global.setTimeLeft(1);
+                global.setTimeLeft(0);
             }
         });
 

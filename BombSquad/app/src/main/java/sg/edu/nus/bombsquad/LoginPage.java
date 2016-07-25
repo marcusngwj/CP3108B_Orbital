@@ -92,7 +92,7 @@ public class LoginPage extends AppCompatActivity {
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginPage.this);
-                                builder.setMessage("Login Failed")
+                                builder.setMessage("Incorrect username or password :(")
                                         .setNegativeButton("Retry", null)
                                         .create()
                                          .show();

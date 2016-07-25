@@ -1,8 +1,8 @@
 <?php
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
-    $room_code = $_POST["room_code"];
-    $question_id = $_POST["question_id"];
+    $room_code = mysqli_real_escape_string($con, $_POST["room_code"]);
+    $question_id = mysqli_real_escape_string($con, $_POST["question_id"]);
     
     $statement = mysqli_prepare($con, "SELECT * FROM Room WHERE room_code = ? AND question_id = ?");
     mysqli_stmt_bind_param($statement, "ss", $room_code, $question_id);

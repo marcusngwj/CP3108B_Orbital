@@ -1,11 +1,9 @@
 <?php
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
-	$room_status = $_POST["room_status"];
-	$room_code = $_POST["room_code"];
-	$player = $_POST["player"];
-	
-	
+	$room_status = mysqli_real_escape_string($con, $_POST["room_status"]);
+	$room_code = mysqli_real_escape_string($con, $_POST["room_code"]);
+	$player = mysqli_real_escape_string($con, $_POST["player"]);
     
 	$result = mysqli_query($con,"INSERT INTO Game (room_status, room_code, player) 
           VALUES ('$room_status', '$room_code', '$player')");

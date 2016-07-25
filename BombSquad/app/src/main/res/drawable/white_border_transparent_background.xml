@@ -4,6 +4,13 @@
 
     <solid android:color="#44546A" />
 
+    <corners
+        android:radius = "5dp"
+        android:topLeftRadius="5dp"
+        android:topRightRadius="5dp"
+        android:bottomLeftRadius="5dp"
+        android:bottomRightRadius="5dp" />
+
     <stroke
         android:width="4sp"
         android:color="#ffffff" />

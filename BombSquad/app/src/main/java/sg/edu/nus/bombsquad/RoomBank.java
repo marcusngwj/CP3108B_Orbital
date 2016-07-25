@@ -48,4 +48,27 @@ public class RoomBank {
     public HashMap<String, RoomDetail> getRoomDetailHashMap() { return roomDetailHashMap; }
     public String getCurrentQuestion() { return currentQuestion; }
 
+    /*---------- Others ----------*/
+    public static void addPlayersIntoGame(String room_code, String user_id){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_status", "1")
+                .add("room_code", room_code)
+                .add("player", user_id)
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertUserIntoGame.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        response.body().close();
+                    }
+                });
+    }
 }

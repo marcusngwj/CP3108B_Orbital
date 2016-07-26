@@ -85,7 +85,7 @@ public class PlayerView extends AppCompatActivity {
 
         TextView room_name = (TextView) findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
-        room_name.setText(global.getRoomName());
+        room_name.setText(roomBank.getRoomName());
 
         //Exit button, link to RoomType
         Button bExitPlayerView = (Button) findViewById(R.id.buttonExitPlayerView);
@@ -113,7 +113,7 @@ public class PlayerView extends AppCompatActivity {
             public void run() {
                 display();
             }
-        }, 0, 2500, TimeUnit.MILLISECONDS);
+        }, 0, 500, TimeUnit.MILLISECONDS);
 
     }
 

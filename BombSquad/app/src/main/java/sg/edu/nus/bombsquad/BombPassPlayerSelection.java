@@ -47,7 +47,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
             public void run() {
                 display();
             }
-        }, 0, 2500, TimeUnit.MILLISECONDS);
+        }, 0, 500, TimeUnit.MILLISECONDS);
 
     }
 
@@ -73,11 +73,14 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                         final ArrayList<Button> playersWhoCanReceiveBombButtonList = new ArrayList<Button>();
                         try {
                             JSONObject result = new JSONObject(response.body().string());
+                            System.out.println(result);
 
                             int numPlayers = Integer.valueOf(result.getJSONObject(0 + "").getString("numRow"));
 
                             for (int i = 0; i < numPlayers; i++) {
                                 String player_id = result.getJSONObject(i + "").getString("player");
+                                String player_firstName = result.getJSONObject(i + "").getString("first_name");
+                                String player_lastName = result.getJSONObject(i + "").getString("last_name");
                                 playersInGameList.add(player_id);
 
                                 //Usually is the person who created the room, hence, all host should be same
@@ -90,7 +93,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                 if (!player_id.equals(global.getUserId()) && !player_id.equals(host)) {
                                     final Button bPlayer = new Button(BombPassPlayerSelection.this);
                                     bPlayer.setTag(player_id);
-                                    bPlayer.setText(player_id); //Will be change to display name of player instead
+                                    bPlayer.setText(player_firstName + " " + player_lastName);
 
                                     bPlayer.setOnClickListener(new View.OnClickListener() {
                                         @Override

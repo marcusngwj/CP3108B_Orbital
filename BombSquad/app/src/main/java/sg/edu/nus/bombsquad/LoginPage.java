@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -21,6 +22,7 @@ public class LoginPage extends AppCompatActivity {
     Global global = Global.getInstance();
     Button bLogin,bRegister;
     EditText editUser,editPass;
+    TextView tvForgetPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class LoginPage extends AppCompatActivity {
 
         onLogin();
         onRegister();
+        onForgetPassword();
     }
 
     public void onBackPressed() {
@@ -44,23 +47,6 @@ public class LoginPage extends AppCompatActivity {
         editUser=(EditText)findViewById(R.id.editTextUser);
         editPass=(EditText)findViewById(R.id.editTextPass);
 
-        /*//Login Button (Dummy Login)
-        bLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Redirecting...",Toast.LENGTH_SHORT).show();
-                if(editUser.getText().toString().equals("admin") && editPass.getText().toString().equals("admin"))  //To check if credential exists
-                {
-                    Intent intent = new Intent(v.getContext(), RoomType.class);
-                    startActivity(intent);
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(), "Wrong Credentials",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
         //Login Request
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,43 +54,51 @@ public class LoginPage extends AppCompatActivity {
                 final String username = editUser.getText().toString();
                 final String password = editPass.getText().toString();
 
-                Response.Listener<String> responseListener = new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response){
+                if(username.isEmpty()){
+                    editUser.setError("Enter username");
+                }
+                else if(password.isEmpty()){
+                    editPass.setError("Enter password");
+                }
+                else {
 
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-                            if(success){
-                                String first_name = jsonResponse.getString("first_name");
-                                String last_name = jsonResponse.getString("last_name");
-                                String user_id = jsonResponse.getString("user_id");
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                boolean success = jsonResponse.getBoolean("success");
 
-                                Intent intent = new Intent(LoginPage.this, RoomType.class);
-                                intent.putExtra("first_name", first_name);
-                                intent.putExtra("last_name", last_name);
-                                intent.putExtra("user_id", user_id);
+                                if (success) {
+                                    String first_name = jsonResponse.getString("first_name");
+                                    String last_name = jsonResponse.getString("last_name");
+                                    String user_id = jsonResponse.getString("user_id");
 
-                                global.setUserId(user_id);
+                                    Intent intent = new Intent(LoginPage.this, RoomType.class);
+                                    intent.putExtra("first_name", first_name);
+                                    intent.putExtra("last_name", last_name);
+                                    intent.putExtra("user_id", user_id);
 
-                                LoginPage.this.startActivity(intent);
+                                    global.setUserId(user_id);
+
+                                    LoginPage.this.startActivity(intent);
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginPage.this);
+                                    builder.setMessage("Incorrect username or password :(")
+                                            .setNegativeButton("Retry", null)
+                                            .create()
+                                            .show();
+                                }
+                            } catch (JSONException e) {
+                            /*e.printStackTrace();*/
                             }
-                            else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginPage.this);
-                                builder.setMessage("Incorrect username or password :(")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                         .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                };
-                LoginRequest loginRequest = new LoginRequest(username, password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(LoginPage.this);
-                queue.add(loginRequest);
+                    };
+                    LoginRequest loginRequest = new LoginRequest(username, password, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(LoginPage.this);
+                    queue.add(loginRequest);
+                }
             }
         });
     }
@@ -117,6 +111,17 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(v.getContext(), RegisterPage.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void onForgetPassword(){
+        tvForgetPassword = (TextView)findViewById(R.id.textViewForgetPassword);
+        tvForgetPassword.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(LoginPage.this, ForgetPassword.class);
                 startActivity(intent);
             }
         });

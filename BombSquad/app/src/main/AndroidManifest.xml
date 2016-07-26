@@ -31,6 +31,7 @@
         <activity android:name=".PlayerView" />
         <activity android:name=".HostSelection" />
         <activity android:name=".PlayerList" />
+        <activity android:name=".EditRoom" />
 
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for

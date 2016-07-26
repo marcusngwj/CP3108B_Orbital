@@ -296,8 +296,10 @@ public class ManageRoom extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 int k = 0;
                                 OkHttpClient client = new OkHttpClient();
+                                System.out.println("EDIT ROOM");
                                 while (k < 100000) {
                                     if (selected[k]) {
+                                        System.out.println("room_code" + k);
                                         RequestBody postData = new FormBody.Builder()
                                                 .add("room_code", k+"")
                                                 .build();
@@ -312,9 +314,12 @@ public class ManageRoom extends AppCompatActivity {
                                                     @Override
                                                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                                         try {
+                                                            System.out.println("GOT THE QUESTION IDS OF QUESTION IN ROOM!");
                                                             JSONObject result = new JSONObject(response.body().string());
+                                                            System.out.println("result: " + result);
 
-                                                            if (result.getBoolean("success")) {
+                                                            if (result.getJSONObject(0+""). getBoolean("success")) {
+                                                                System.out.println("SUCCESS!");
                                                                 OkHttpClient client = new OkHttpClient();
                                                                 int m = 0;
                                                                 while (m < result.length()) {
@@ -331,8 +336,10 @@ public class ManageRoom extends AppCompatActivity {
                                                                                 }
                                                                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                                                                     try {
+                                                                                        System.out.println("GOT THE NAME OF QUESTIONS!");
                                                                                         JSONObject result = new JSONObject(response.body().string());
                                                                                         if (result.getBoolean("success")) {
+                                                                                            System.out.println("SUCCESS!");
                                                                                             global.getQuestionName()[curr] =result.getString("bomb_name");
                                                                                             Intent intent = getIntent();
                                                                                             Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);

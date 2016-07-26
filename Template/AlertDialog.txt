@@ -1,0 +1,18 @@
+AlertDialog.Builder builder = new AlertDialog.Builder(HostView.this);
+        builder.setMessage("Pressing back closes the room. All players will be kicked out of the room.")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Need to add the delete room code here~
+                        Intent intent = getIntent();
+                        Intent back = new Intent(HostView.this, ManageRoom.class);
+                        back.putExtra("room", intent.getStringExtra("room"));
+                        back.putExtra("user_id", intent.getStringExtra("user_id"));
+                        global.clearDeployed();
+                        global.setTimeLeft(0);
+                        startActivity(back);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();

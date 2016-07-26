@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,11 +82,10 @@ public class ForgetPassword extends AppCompatActivity {
                                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                     try {
                                         JSONObject result = new JSONObject(response.body().string());
-                                        System.out.println(result);
 
                                         boolean success = result.getBoolean("success");
                                         response.body().close();
-                                        if(success){
+                                        if (success) {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -102,10 +102,16 @@ public class ForgetPassword extends AppCompatActivity {
                                                             .show();
                                                 }
                                             });
-                                        }
-                                        else{
-                                            System.out.println("FAIL ALR LA");
-
+                                        } else {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getApplicationContext(), "Username does not exist", Toast.LENGTH_SHORT).show();
+                                                    etUsername.setText("");
+                                                    etNewPassword.setText("");
+                                                    etConfirmNewPassword.setText("");
+                                                }
+                                            });
                                         }
                                     } catch (JSONException e) {
                                         /*e.printStackTrace();*/

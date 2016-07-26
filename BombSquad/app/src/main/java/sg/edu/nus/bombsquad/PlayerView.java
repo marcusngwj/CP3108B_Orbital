@@ -61,6 +61,9 @@ public class PlayerView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_view);
 
+        //set up full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         //To avoid automatically appear android keyboard when activity start
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -178,7 +181,7 @@ public class PlayerView extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     outerLL.removeAllViews();
-                                    int i=0;
+                                    int i = 0;
                                     for (LinearLayout qnLL : deployedQuestionList) {
                                         //To remove the error throw on runtime
                                         if (qnLL != null) {

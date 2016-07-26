@@ -78,7 +78,7 @@
         android:textColor="#F64D54"
         android:layout_marginTop="7dp"
         android:layout_below="@id/buttonLogin"
-        android:layout_alignParentRight="true"
+        android:layout_alignEnd="@+id/editTextPass"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
     
     <!--Register-->

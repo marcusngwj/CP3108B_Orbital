@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Bomb Squad</string>
 
+    <string name="forget_password"><u>Forget Password</u></string>
+
     <string-array name="question_type">
         <item>Multiple Choice</item>
         <item>Short Answer</item>

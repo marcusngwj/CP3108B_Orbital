@@ -32,7 +32,7 @@
 		$response[$i]["username"] = $username;
 		$response[$i]["password"] = $password;
 		
-		$response[$i]["numRow"] = $num_rows;
+		$response["numRow"] = $num_rows;
 		
 		$i++;
     }

@@ -75,7 +75,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                             JSONObject result = new JSONObject(response.body().string());
                             System.out.println(result);
 
-                            int numPlayers = Integer.valueOf(result.getJSONObject(0 + "").getString("numRow"));
+                            int numPlayers = Integer.valueOf(result.getString("numRow"));
 
                             for (int i = 0; i < numPlayers; i++) {
                                 String player_id = result.getJSONObject(i + "").getString("player");

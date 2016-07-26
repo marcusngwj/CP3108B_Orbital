@@ -68,6 +68,18 @@
         android:background="@drawable/normal_button"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false" />
+
+    <!--Forget password-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/forget_password"
+        android:id="@+id/textViewForgetPassword"
+        android:textColor="#F64D54"
+        android:layout_marginTop="7dp"
+        android:layout_below="@id/buttonLogin"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
     
     <!--Register-->
     <Button

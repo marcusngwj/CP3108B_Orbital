@@ -86,6 +86,11 @@ public class PlayerView extends AppCompatActivity {
             System.out.println();
         }
 
+        //Display room code
+        TextView tvRoomCode = (TextView)findViewById(R.id.textViewPlayerViewRoomCode);
+        tvRoomCode.setText("Room Code: " + room_code);
+
+        //Display room name
         TextView room_name = (TextView) findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
         assert room_name != null;
         room_name.setText(roomBank.getRoomName());
@@ -183,7 +188,7 @@ public class PlayerView extends AppCompatActivity {
                                     outerLL.removeAllViews();
                                     int i = 0;
                                     for (LinearLayout qnLL : deployedQuestionList) {
-                                        //To remove the error throw on runtime
+                                        //To remove the error thrown on runtime
                                         if (qnLL != null) {
                                             ViewGroup parent = (ViewGroup) qnLL.getParent();
                                             if (parent != null) {

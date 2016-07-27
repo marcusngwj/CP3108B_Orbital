@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -41,6 +42,9 @@ public class HostView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_view);
+
+        //set up full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         final Global global = Global.getInstance();
         final String room_code = global.getRoomCode();
@@ -95,6 +99,10 @@ public class HostView extends AppCompatActivity {
 
     //To display the entire layout of hostview
     private void display(String room_code, String room_name, int numQuestion, String[] questionIDArray) {
+        //Display room code
+        TextView tvRoomCode = (TextView)findViewById(R.id.textViewHostViewRoomCode);
+        tvRoomCode.setText("Room Code: " + room_code);
+
         //Display room id
         TextView tvHostViewBattlefieldRoomName = (TextView) findViewById(R.id.textViewHostViewBattlefieldRoomName);
         assert tvHostViewBattlefieldRoomName != null;

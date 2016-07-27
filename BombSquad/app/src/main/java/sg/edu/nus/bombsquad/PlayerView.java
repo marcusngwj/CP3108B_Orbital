@@ -141,12 +141,14 @@ public class PlayerView extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()
                 .add("room_code", roomBank.getRoomCode())
+                .add("my_id", global.getUserId())
                 .build();
         Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getRoomDetail.php").post(postData).build();
 
         client.newCall(request)
                 .enqueue(new Callback() {
                     boolean responded;
+                    String score = "";
 
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -158,10 +160,13 @@ public class PlayerView extends AppCompatActivity {
                         final ArrayList<LinearLayout> deployedQuestionList = new ArrayList<LinearLayout>();
                         final ArrayList<String> playerWithBombList = new ArrayList<String>();
                         final ArrayList<String> numPassList = new ArrayList<String>();
+                        final TextView tvScore = (TextView) findViewById(R.id.textViewActualScore);
 
                         try {
                             JSONObject result = new JSONObject(response.body().string());
                             System.out.println(result);
+
+                            score = result.getString("total_score");
 
                             for (int i = 0; i < numQuestion; i++) {
                                 String question_id = result.getJSONObject(i + "").getString("question_id");
@@ -190,6 +195,7 @@ public class PlayerView extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    tvScore.setText(score);
                                     outerLL.removeAllViews();
                                     int i = 0;
                                     for (LinearLayout qnLL : deployedQuestionList) {

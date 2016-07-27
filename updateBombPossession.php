@@ -1,4 +1,6 @@
 <?php
+//Changing the possession of bomb to a selected player and decrease the number of passes by 1
+
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
 	$room_code = mysqli_real_escape_string($con, $_POST["room_code"]);

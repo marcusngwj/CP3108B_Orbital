@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -37,6 +38,9 @@ public class BombPassPlayerSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bomb_pass_player_selection);
+
+        //set up full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: BombPassPlayerSelection");
@@ -108,8 +112,6 @@ public class BombPassPlayerSelection extends AppCompatActivity {
 
                                             client.newCall(request)
                                                     .enqueue(new Callback() {
-                                                        boolean responded;
-
                                                         @Override
                                                         public void onFailure(Call call, IOException e) {
                                                             System.out.println("FAIL");
@@ -117,13 +119,6 @@ public class BombPassPlayerSelection extends AppCompatActivity {
 
                                                         @Override
                                                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                                            JSONObject result = null;
-                                                            try {
-                                                                result = new JSONObject(response.body().string());
-                                                            } catch (JSONException e) {
-                                                                /*e.printStackTrace();*/
-                                                            }
-                                                            System.out.println("HERE IS IT!: " + result);
                                                             response.body().close();
                                                         }
                                                     });

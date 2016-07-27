@@ -1,7 +1,6 @@
 package sg.edu.nus.bombsquad;
 
 import android.graphics.Color;
-import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -28,29 +27,29 @@ public class QuestionDetail {
     //Variables
     Context context;
     LinearLayout layout;
-    TextView tvQuestionHeading;
-    TextView tvQuestion;
-    Button bOptionA;
-    Button bOptionB;
-    Button bOptionC;
-    Button bOptionD;
-    TextView tvTimeLeftTitle;
-    TextView tvTimeLeft;
-    Button bDefuse;
-    Button bPass;
-    int i;  //Question number - 1
-    String question_id;
-    String bomb_name;
-    String question_type;
-    String question;
-    String[] option = new String[5];
-    String correctAnswer;
-    String time_limit;
-    String points_awarded;
-    String points_deducted;
-    String num_pass;
-    boolean answerIsCorrect;
-    CountDownTimer timer;
+    private TextView tvQuestionHeading;
+    private TextView tvQuestion;
+    private Button bOptionA;
+    private Button bOptionB;
+    private Button bOptionC;
+    private Button bOptionD;
+    private TextView tvTimeLeftTitle;
+    private TextView tvTimeLeft;
+    private Button bDefuse;
+    private Button bPass;
+    private int i;  //Question number - 1
+    private String question_id;
+    private String bomb_name;
+    private String question_type;
+    private String question;
+    private String[] option = new String[5];
+    private String correctAnswer;
+    private String time_limit;
+    private String points_awarded;
+    private String points_deducted;
+    private String num_pass;
+    private boolean mcqAnswerIsCorrect;
+    private String finalAnswer;     //3 states: correct, wrong, 'empty string'
 
     /*---------- Constructor ----------*/
     public QuestionDetail(Context context, int i, String question_id, String bomb_name, String question_type, String question,
@@ -72,7 +71,8 @@ public class QuestionDetail {
         this.points_deducted = points_deducted;
         this.num_pass = num_pass;
 
-        answerIsCorrect = false;
+        mcqAnswerIsCorrect = false;
+        finalAnswer = "";    //Question not answered
         setLayout();
     }
 
@@ -204,10 +204,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionA = (String)bOptionA.getTag();
                 if(optionA.equals(correctAnswer)){
-                    answerIsCorrect = true;
+                    mcqAnswerIsCorrect = true;
                 }
                 else{
-                    answerIsCorrect = false;
+                    mcqAnswerIsCorrect = false;
                 }
                 bOptionA.setBackgroundResource(R.drawable.green_border);
                 bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -222,10 +222,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionB = (String)bOptionB.getTag();
                 if(optionB.equals(correctAnswer)){
-                    answerIsCorrect = true;
+                    mcqAnswerIsCorrect = true;
                 }
                 else{
-                    answerIsCorrect = false;
+                    mcqAnswerIsCorrect = false;
                 }
                 bOptionA.setBackgroundResource(R.drawable.white_border);
                 bOptionB.setBackgroundResource(R.drawable.green_border);
@@ -240,10 +240,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionC = (String)bOptionC.getTag();
                 if(optionC.equals(correctAnswer)){
-                    answerIsCorrect = true;
+                    mcqAnswerIsCorrect = true;
                 }
                 else{
-                    answerIsCorrect = false;
+                    mcqAnswerIsCorrect = false;
                 }
                 bOptionA.setBackgroundResource(R.drawable.white_border);
                 bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -258,10 +258,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionD = (String)bOptionD.getTag();
                 if(optionD.equals(correctAnswer)){
-                    answerIsCorrect = true;
+                    mcqAnswerIsCorrect = true;
                 }
                 else{
-                    answerIsCorrect = false;
+                    mcqAnswerIsCorrect = false;
                 }
                 bOptionA.setBackgroundResource(R.drawable.white_border);
                 bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -434,7 +434,9 @@ public class QuestionDetail {
         this.num_pass = num_pass;
     }
 
-    public void setAnswerIsCorrect(boolean answerIsCorrect) { this.answerIsCorrect = answerIsCorrect; }
+    public void setMcqAnswerIsCorrect(boolean answerIsCorrect) { this.mcqAnswerIsCorrect = answerIsCorrect; }
+
+    public void setFinalAnswer(String finalAnswer) { this.finalAnswer = finalAnswer; }
 
 
 
@@ -463,5 +465,6 @@ public class QuestionDetail {
     public String getPoints_awarded() { return points_awarded; }
     public String getPoints_deducted() { return points_deducted; }
     public String getNum_pass() { return num_pass; }
-    public boolean getAnswerIsCorrect() { return answerIsCorrect; }
+    public boolean getMcqAnswerIsCorrect() { return mcqAnswerIsCorrect; }
+    public String getFinalAnswer() { return finalAnswer; }
 }

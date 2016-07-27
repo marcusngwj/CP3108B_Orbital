@@ -104,7 +104,7 @@ public class BombPassPlayerSelection extends AppCompatActivity {
                                                     .add("question_id", roomBank.getCurrentQuestion())
                                                     .add("player_id", bPlayer.getTag()+"")
                                                     .build();
-                                            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateBombPossession.php").post(postData).build();
+                                            final Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateBombPossession.php").post(postData).build();
 
                                             client.newCall(request)
                                                     .enqueue(new Callback() {
@@ -117,6 +117,13 @@ public class BombPassPlayerSelection extends AppCompatActivity {
 
                                                         @Override
                                                         public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                            JSONObject result = null;
+                                                            try {
+                                                                result = new JSONObject(response.body().string());
+                                                            } catch (JSONException e) {
+                                                                /*e.printStackTrace();*/
+                                                            }
+                                                            System.out.println("HERE IS IT!: " + result);
                                                             response.body().close();
                                                         }
                                                     });

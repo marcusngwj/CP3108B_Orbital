@@ -1,5 +1,6 @@
 <?php
-//Find all players in game, randomly select a player, change possession of the bomb to this player, then decrease the number of passes by 1
+//Find all players in game, randomly select a player (excluding myself and the host)
+//Change possession of the bomb to this player, then decrease the number of passes by 1
 
     $con = mysqli_connect("orbitalbombsquad.x10host.com", "orbital2", "h3llo world", "orbital2_bombsquad");
     
@@ -45,13 +46,14 @@
 		
 		$i++;
     }
-		
+	
+	//If player_id_to_receive_bomb is same as my_id or host's id, repeat
 	do {
 		$index = rand(0, $num_rows-1);	//Choosing a random number from the indices of the array
 		$player_id_to_receive_bomb = $response[$index]["player"];
 		$player_first_name_to_receive_bomb = $response[$index]["first_name"];
 		$player_last_name_to_receive_bomb = $response[$index]["last_name"];
-	}while($player_id_to_receive_bomb==$my_id && $player_id_to_receive_bomb==$host_arr[1]);
+	}while($player_id_to_receive_bomb==$my_id || $player_id_to_receive_bomb==$host_arr[1]);
 	
 	/*For checking only*/
 	$response["my_id"] = $my_id;

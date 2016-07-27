@@ -45,8 +45,8 @@ public class BombPassSelectionType extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 passBombToRandomPlayer(global.getUserId(), roomBank.getRoomCode(), roomBank.getCurrentQuestion());
-                /*Intent intentPTS = new Intent(BombPassSelectionType.this, PlayerView.class);
-                startActivity(intentPTS);*/
+                Intent intentPTS = new Intent(BombPassSelectionType.this, PlayerView.class);
+                startActivity(intentPTS);
             }
         });
     }
@@ -64,6 +64,7 @@ public class BombPassSelectionType extends AppCompatActivity {
     }
 
     //Static method to be used by other class
+    //Pass bomb to random players except self and host
     public static void passBombToRandomPlayer(String user_id, String room_code, String question_id){
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()

@@ -175,10 +175,12 @@ public class PlayerView extends AppCompatActivity {
                                 String time_left = result.getJSONObject(i + "").getString("time_left");
                                 String player_id = result.getJSONObject(i + "").getString("player_id");
                                 String num_pass = result.getJSONObject(i + "").getString("num_pass");
+
                                 System.out.println("QUESTION_ID: " + question_id);
                                 System.out.println("DEPLOY_STATUS: " + deploy_status);
                                 System.out.println("NUM_PASS: " + num_pass);
 
+                                //A question will only be displayed when its deploy status is more than 0
                                 if (deployStatusIntegerValue > 0) {
                                     LinearLayout qnLayout = questionHashMap.get(question_id).getLayout();
                                     qnLayout.setTag(time_left); //To pass to the method in " if responded"
@@ -213,7 +215,7 @@ public class PlayerView extends AppCompatActivity {
                                         String time_left = qnLL.getTag().toString();
                                         String player_id = playerWithBombList.get(i);
                                         String num_pass = numPassList.get(i++);
-                                        System.out.println("PLAYER_ID IS: " + player_id);
+
                                         withinABox(question_id, time_left, player_id, num_pass);
                                     }
                                 }
@@ -239,6 +241,8 @@ public class PlayerView extends AppCompatActivity {
         final TextView tvInPossessionOfBomb = (TextView) findViewById(qnID + QuestionDetail.ID_TVINPOSSESSIONOFBOMB_CONSTANT);
         final LinearLayout mcqOptionsLL = (LinearLayout) findViewById(qnID + QuestionDetail.ID_MCQOPTIONSLL_CONSTANT);
 
+        final String correctAnswer = questionHashMap.get(question_id).getCorrectAnswer();
+
         //Button: Defusing a bomb
         final Button bDefuse = (Button) findViewById(qnID + QuestionDetail.ID_BDEFUSE_CONSTANT);
         bDefuse.setVisibility(View.GONE);
@@ -258,12 +262,21 @@ public class PlayerView extends AppCompatActivity {
 
                 int timeLeft = Integer.valueOf(roomDetailHashMap.get(question_id).getTimeLeft());
 
-                //If answer is correct for any type of question
+                //If answer is correct for any type of question and time is not up
                 if ((qnType.equals("Multiple Choice") && qnDetail.getAnswerIsCorrect() && timeLeft > 0) ||
                         (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timeLeft > 0)) {
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     System.out.println("Bomb has been successfully defused");
                 }
+                //Else if qn is MCQ AND user's answer is incorrect AND time is not up
+                /*else if(qnType.equals("Multiple Choice") && !qnDetail.getAnswerIsCorrect() && timeLeft > 0){
+                    tvTimeLeft.setText("YOU FAILED THIS QUESTION"); //Then the bomb will pass a random player - to be designed later - KIV
+                }
+                //Else if qn is not MCQ AND user's answer is incorrect AND time is not up
+                else if(!qnType.equals("Multiple Choice") && !userAnswer.equalsIgnoreCase(correctAnswer) && timeLeft > 0){
+                    tvTimeLeft.setText("YOU FAILED THIS QUESTION"); //Then the bomb will pass a random player - to be designed later - KIV
+                }*/
+                //Else when time's up, the defuse button is deactivated (Cannot press), only can wait for host to change question
             }
         });
 
@@ -341,7 +354,6 @@ public class PlayerView extends AppCompatActivity {
             if (timeLeftIntegerValue <= 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
                 tvTimeLeft.setText("THE BOMB HAS EXPLODED");
             }
-
             //If timer has not finished counting
             else if (!tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
                 tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live

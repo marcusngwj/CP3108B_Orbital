@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -156,6 +157,7 @@ public class PlayerView extends AppCompatActivity {
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                         final ArrayList<LinearLayout> deployedQuestionList = new ArrayList<LinearLayout>();
                         final ArrayList<String> playerWithBombList = new ArrayList<String>();
+                        final ArrayList<String> numPassList = new ArrayList<String>();
 
                         try {
                             JSONObject result = new JSONObject(response.body().string());
@@ -167,14 +169,17 @@ public class PlayerView extends AppCompatActivity {
                                 Integer deployStatusIntegerValue = Integer.valueOf(deploy_status);
                                 String time_left = result.getJSONObject(i + "").getString("time_left");
                                 String player_id = result.getJSONObject(i + "").getString("player_id");
+                                String num_pass = result.getJSONObject(i + "").getString("num_pass");
                                 System.out.println("QUESTION_ID: " + question_id);
                                 System.out.println("DEPLOY_STATUS: " + deploy_status);
+                                System.out.println("NUM_PASS: " + num_pass);
 
                                 if (deployStatusIntegerValue > 0) {
                                     LinearLayout qnLayout = questionHashMap.get(question_id).getLayout();
                                     qnLayout.setTag(time_left); //To pass to the method in " if responded"
                                     deployedQuestionList.add(qnLayout);
                                     playerWithBombList.add(player_id);
+                                    numPassList.add(num_pass);
                                 }
                             }
                             responded = true;
@@ -200,9 +205,10 @@ public class PlayerView extends AppCompatActivity {
 
                                         String question_id = (qnLL.getId() - QuestionDetail.ID_INNERLL_CONSTANT) + "";
                                         String time_left = qnLL.getTag().toString();
-                                        String player_id = playerWithBombList.get(i++);
+                                        String player_id = playerWithBombList.get(i);
+                                        String num_pass = numPassList.get(i++);
                                         System.out.println("PLAYER_ID IS: " + player_id);
-                                        withinABox(question_id, time_left, player_id);
+                                        withinABox(question_id, time_left, player_id, num_pass);
                                     }
                                 }
                             });
@@ -215,9 +221,10 @@ public class PlayerView extends AppCompatActivity {
     }
 
     //Things happening inside a box of question
-    private void withinABox(final String question_id, final String time_left, final String player_id) {
+    private void withinABox(final String question_id, final String time_left, final String player_id, final String num_pass) {
         final int qnID = Integer.valueOf(question_id);
         final int timeLeftIntegerValue = Integer.valueOf(time_left);
+        final int numPassIntegerValue = Integer.valueOf(num_pass);
         final QuestionDetail qnDetail = questionHashMap.get(question_id);
 
         final TextView tvTimeLeft = (TextView) findViewById(qnID + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
@@ -260,13 +267,21 @@ public class PlayerView extends AppCompatActivity {
         bPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //If time is not up and you have not answered correctly, you can pass the bomb,
-                // else otherwise
-                if (timeLeftIntegerValue > 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                    onStop();
-                    Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
-                    roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
-                    startActivity(intentBPST);
+                if(tvTimeLeft.getText().equals("YOU FAILED THIS QUESTION")){
+                    Toast.makeText(getApplicationContext(), "Unable to pass", Toast.LENGTH_SHORT).show();
+                }
+                else if(numPassIntegerValue<=0){
+                    Toast.makeText(getApplicationContext(), "You have reached the maximum number of pass", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //If time is not up and you have not answered correctly, you can pass the bomb,
+                    // else otherwise
+                    if (timeLeftIntegerValue > 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
+                        onStop();
+                        Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
+                        roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
+                        startActivity(intentBPST);
+                    }
                 }
 
             }

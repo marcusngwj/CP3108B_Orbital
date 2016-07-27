@@ -303,7 +303,7 @@ public class ManageRoom extends AppCompatActivity {
                                         RequestBody postData = new FormBody.Builder()
                                                 .add("room_code", k+"")
                                                 .build();
-                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionInRoom.php").post(postData).build();
+                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionNameInRoom.php").post(postData).build();
                                         client.newCall(request)
                                                 .enqueue(new Callback() {
                                                     @Override
@@ -314,50 +314,29 @@ public class ManageRoom extends AppCompatActivity {
                                                     @Override
                                                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                                         try {
-                                                            System.out.println("GOT THE QUESTION IDS OF QUESTION IN ROOM!");
                                                             JSONObject result = new JSONObject(response.body().string());
-                                                            System.out.println("result: " + result);
-
-                                                            if (result.getJSONObject(0+""). getBoolean("success")) {
-                                                                System.out.println("SUCCESS!");
-                                                                OkHttpClient client = new OkHttpClient();
+                                                            System.out.println("Result: " + result);
+                                                            if (result.getJSONObject(0+"").getBoolean("success")) {
+                                                                System.out.println("HERE!");
                                                                 int m = 0;
                                                                 while (m < result.length()) {
-                                                                    final int curr = m;
-                                                                    RequestBody postData = new FormBody.Builder()
-                                                                            .add("question_id", result.getJSONObject(m+"").getString("question_id"))
-                                                                            .build();
-                                                                    Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionName.php").post(postData).build();
-                                                                    client.newCall(request)
-                                                                            .enqueue(new Callback() {
-                                                                                @Override
-                                                                                public void onFailure(Call call, IOException e) {
-                                                                                    System.out.println("FAIL");
-                                                                                }
-                                                                                public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                                                                    try {
-                                                                                        System.out.println("GOT THE NAME OF QUESTIONS!");
-                                                                                        JSONObject result = new JSONObject(response.body().string());
-                                                                                        if (result.getBoolean("success")) {
-                                                                                            System.out.println("SUCCESS!");
-                                                                                            global.getQuestionName()[curr] =result.getString("bomb_name");
-                                                                                            Intent intent = getIntent();
-                                                                                            Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
-                                                                                            editRoomIntent.putExtra("room", intent.getStringExtra("room"));
-                                                                                            editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                                                                            startActivity(editRoomIntent);
-                                                                                        }
-                                                                                    } catch (JSONException e) {
-                                                                                        //e.printStackTrace();
-                                                                                    }
-                                                                                }
-                                                                            });
+                                                                    System.out.println("TEST");
+                                                                    global.getQuestionName()[m] = result.getJSONObject(m + "").getString("bomb_name");
+                                                                    System.out.println("TEST1");
                                                                     m++;
+                                                                    System.out.println("TEST2");
                                                                 }
-
-
+                                                                System.out.println("HERE1!");
+                                                                Intent intent = getIntent();
+                                                                Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
+                                                                editRoomIntent.putExtra("room", intent.getStringExtra("room"));
+                                                                editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                                System.out.println("HERE2!");
+                                                                startActivity(editRoomIntent);
+                                                                System.out.println("HERE3!");
                                                             }
-                                                        } catch (JSONException e){
+                                                            System.out.println("FIRST ELEMENT: " + global.getQuestion_id()[0]);
+                                                        } catch (JSONException e) {
                                                             //e.printStackTrace();
                                                         }
                                                     }

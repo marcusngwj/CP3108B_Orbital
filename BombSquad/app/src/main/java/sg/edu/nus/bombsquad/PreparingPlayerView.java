@@ -21,8 +21,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class PreparingPlayerView extends AppCompatActivity {
     Global global = Global.getInstance();
@@ -73,6 +81,29 @@ public class PreparingPlayerView extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody postData = new FormBody.Builder()
+                    .add("user_id", global.getUserId())
+                    .add("room_code", roomBank.getRoomCode())
+                    .add("total_score", "0")
+                    .build();
+            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertRowIntoScore.php").post(postData).build();
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        boolean responded;
+
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            System.out.println("FAIL");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                            response.body().close();
+                        }
+                    });
+
             global.setCounter(0);
             for(int i=0; i<numQuestion; i++){
                 System.out.println("qnID: " + questionIDList.get(i));

@@ -233,7 +233,10 @@ public class PlayerView extends AppCompatActivity {
         final int qnID = Integer.valueOf(question_id);
         final int timeLeftIntegerValue = Integer.valueOf(time_left);
         final int numPassIntegerValue = Integer.valueOf(num_pass);
+
         final QuestionDetail qnDetail = questionHashMap.get(question_id);
+        final String points_awarded = qnDetail.getPoints_awarded();
+        final String points_deducted = qnDetail.getPoints_deducted();
 
         final TextView tvTimeLeft = (TextView) findViewById(qnID + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
         final EditText etAnswerOption = (EditText) findViewById(qnID + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
@@ -291,6 +294,8 @@ public class PlayerView extends AppCompatActivity {
             }
         });
 
+
+
         //Button: Passing a bomb
         bPass.setVisibility(View.GONE);
         bPass.setOnClickListener(new View.OnClickListener() {
@@ -299,7 +304,7 @@ public class PlayerView extends AppCompatActivity {
                 if (tvTimeLeft.getText().equals("YOU FAILED THIS QUESTION")) {
                     Toast.makeText(getApplicationContext(), "Unable to pass", Toast.LENGTH_SHORT).show();
                 } else if (numPassIntegerValue <= 0) {
-                    Toast.makeText(getApplicationContext(), "You have reached the maximum number of pass", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You have exhausted the maximum number of passes", Toast.LENGTH_SHORT).show();
                 } else {
                     //If time is not up and you have not answered correctly, you can pass the bomb,
                     // else otherwise

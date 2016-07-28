@@ -48,6 +48,7 @@ public class Global {
     private RoomBank roomBank;
     private boolean create;
     private String[] questionName;
+    private boolean editRoomBoolean;
 
 
     /*---------- okgttp ----------*/
@@ -165,6 +166,10 @@ public class Global {
         questionName = arr;
     }
 
+    public void setEditRoomBoolean(boolean bool) {
+        editRoomBoolean = bool;
+    }
+
 
 
 
@@ -259,6 +264,9 @@ public class Global {
         return questionName;
     }
 
+    public boolean getEditRoomBoolean() {
+        return editRoomBoolean;
+    }
 
 
 

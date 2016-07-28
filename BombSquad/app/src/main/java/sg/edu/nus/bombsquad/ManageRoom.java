@@ -320,7 +320,9 @@ public class ManageRoom extends AppCompatActivity {
                                                                 int m = 0;
                                                                 while (m < result.length()-1) {
                                                                     global.getQuestion_id()[m] = result.getJSONObject(m+ "").getString("question_id");
+                                                                    System.out.println(global.getQuestion_id()[m]);
                                                                     global.getQuestionName()[m] = result.getJSONObject(m + "").getString("bomb_name");
+                                                                    System.out.println(global.getQuestionName()[m]);
                                                                     m++;
                                                                 }
                                                                 Intent intent = getIntent();

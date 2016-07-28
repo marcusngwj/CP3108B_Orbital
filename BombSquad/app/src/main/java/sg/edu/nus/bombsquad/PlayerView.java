@@ -252,7 +252,6 @@ public class PlayerView extends AppCompatActivity {
                 String correctAnswer = qnDetail.getCorrectAnswer();
                 String userAnswer = "";
 
-
                 //Reading string from user
                 EditText etAnswerOption = (EditText) findViewById(qnID + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
                 if (etAnswerOption != null) {
@@ -351,7 +350,8 @@ public class PlayerView extends AppCompatActivity {
         else {
             tvInPossessionOfBombTitle.setVisibility(View.VISIBLE);
             tvInPossessionOfBomb.setVisibility(View.VISIBLE);
-            tvInPossessionOfBomb.setText(player_id);
+            getPlayerName(player_id, tvInPossessionOfBomb);
+//            tvInPossessionOfBomb.setText(player_name);
 
             bDefuse.setVisibility(View.GONE);
             bPass.setVisibility(View.GONE);
@@ -373,7 +373,45 @@ public class PlayerView extends AppCompatActivity {
             }
         }
 
+    }
 
+
+    private void getPlayerName(String player_id, final TextView tvInPossessionOfBomb){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("player_id", player_id)
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getPlayerName.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+                            System.out.println(result);
+                            final String player_name = result.getString("first_name") + " " + result.getString("last_name");
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvInPossessionOfBomb.setText(player_name);
+                                }
+                            });
+
+                        } catch (JSONException e) {
+                            /*e.printStackTrace();*/
+                        }
+
+
+                    }
+                });
     }
 
 }

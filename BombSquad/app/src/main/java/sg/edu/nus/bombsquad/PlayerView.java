@@ -176,9 +176,9 @@ public class PlayerView extends AppCompatActivity {
                                 String player_id = result.getJSONObject(i + "").getString("player_id");
                                 String num_pass = result.getJSONObject(i + "").getString("num_pass");
 
-                                System.out.println("QUESTION_ID: " + question_id);
+                                /*System.out.println("QUESTION_ID: " + question_id);
                                 System.out.println("DEPLOY_STATUS: " + deploy_status);
-                                System.out.println("NUM_PASS: " + num_pass);
+                                System.out.println("NUM_PASS: " + num_pass);*/
 
                                 //A question will only be displayed when its deploy status is more than 0
                                 if (deployStatusIntegerValue > 0) {
@@ -215,6 +215,8 @@ public class PlayerView extends AppCompatActivity {
                                         String time_left = qnLL.getTag().toString();
                                         String player_id = playerWithBombList.get(i);
                                         String num_pass = numPassList.get(i++);
+                                        System.out.println("PLAYER_ID W BOMB: " + player_id);
+                                        System.out.println("NUMNUMNUM PASS: " + num_pass);
 
                                         withinABox(question_id, time_left, player_id, num_pass);
                                     }
@@ -235,6 +237,7 @@ public class PlayerView extends AppCompatActivity {
         final int numPassIntegerValue = Integer.valueOf(num_pass);
 
         final QuestionDetail qnDetail = questionHashMap.get(question_id);
+
         final String points_awarded = qnDetail.getPoints_awarded();
         final String points_deducted = qnDetail.getPoints_deducted();
 
@@ -246,79 +249,8 @@ public class PlayerView extends AppCompatActivity {
         final Button bDefuse = (Button) findViewById(qnID + QuestionDetail.ID_BDEFUSE_CONSTANT);
         final Button bPass = (Button) findViewById(qnID + QuestionDetail.ID_BPASS_CONSTANT);
 
-        //Button: Defusing a bomb
         bDefuse.setVisibility(View.GONE);
-        bDefuse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String qnType = qnDetail.getQuestion_type();
-                String correctAnswer = qnDetail.getCorrectAnswer();
-                String userAnswer = "";
-
-                //Reading string from user
-                EditText etAnswerOption = (EditText) findViewById(qnID + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
-                if (etAnswerOption != null) {
-                    userAnswer = etAnswerOption.getText().toString();
-                    System.out.println(userAnswer);
-                }
-
-                if((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswerIsCorrect()) || (!qnType.equals("Multiple Choice") && userAnswer.equals(correctAnswer))){
-                    qnDetail.setFinalAnswer("correct");
-                }
-                else {
-                    qnDetail.setFinalAnswer("wrong");
-                }
-
-                //If haven't reach the max limit of pass
-                //When num_pass==0, cannot pass but can answer
-                if(numPassIntegerValue > -1) {
-                    //If answer is correct for any type of question AND time is not up
-                    if (qnDetail.getFinalAnswer().equals("correct") && timeLeftIntegerValue > 0) {
-                        tvTimeLeft.setText("Bomb has been successfully defused");
-                    }
-                    //Else if answer is wrong for any type AND time is not up
-                    else if (qnDetail.getFinalAnswer().equals("wrong") && timeLeftIntegerValue > 0) {
-                        tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-                        BombPassSelectionType.passBombToRandomPlayer(global.getUserId(), room_code, question_id);
-                    }
-
-                    //Else when time's up, the defuse button is deactivated (Cannot press), only can wait for host to change question
-                }
-                else{
-                    //Cannot answer (cannot press defuse)
-                }
-
-                bDefuse.setEnabled(false);
-                bPass.setEnabled(false);
-
-            }
-        });
-
-
-
-        //Button: Passing a bomb
         bPass.setVisibility(View.GONE);
-        bPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tvTimeLeft.getText().equals("YOU FAILED THIS QUESTION")) {
-                    Toast.makeText(getApplicationContext(), "Unable to pass", Toast.LENGTH_SHORT).show();
-                } else if (numPassIntegerValue <= 0) {
-                    Toast.makeText(getApplicationContext(), "You have exhausted the maximum number of passes", Toast.LENGTH_SHORT).show();
-                } else {
-                    //If time is not up and you have not answered correctly, you can pass the bomb,
-                    // else otherwise
-                    if (timeLeftIntegerValue > 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                        onStop();
-                        Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
-                        roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
-                        startActivity(intentBPST);
-                    }
-                }
-
-            }
-        });
-
 
         //User with bomb
         if (user_id.equals(player_id)) {
@@ -333,31 +265,12 @@ public class PlayerView extends AppCompatActivity {
             } else {
                 etAnswerOption.setVisibility(View.VISIBLE);
             }
-
-            //If time's up and answer is incorrect
-            if (timeLeftIntegerValue <= 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-            }
-            //Else if time is nt up and answer is incorrect
-            else if(timeLeftIntegerValue > 0 && qnDetail.getFinalAnswer().equals("wrong")){
-                tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-            }
-            //Else if timer has not finished counting
-            else if (!tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
-            }
-
-            //Else if qn is answered correctly tvTimeLeft will display "Bomb has been successfully defused"
-
         }
-
         //User without bomb
         else {
             tvInPossessionOfBombTitle.setVisibility(View.VISIBLE);
             tvInPossessionOfBomb.setVisibility(View.VISIBLE);
             getPlayerName(player_id, tvInPossessionOfBomb);
-//            tvInPossessionOfBomb.setText(player_name);
-
             bDefuse.setVisibility(View.GONE);
             bPass.setVisibility(View.GONE);
 
@@ -367,21 +280,45 @@ public class PlayerView extends AppCompatActivity {
             } else {
                 etAnswerOption.setVisibility(View.GONE);
             }
+        }
 
-            //If time's up and qn is not answered correctly
-            if (timeLeftIntegerValue <= 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                tvTimeLeft.setText("THE BOMB HAS EXPLODED");
-            }
-            //Else if timer has not finished counting
-            else if (!tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
+        //If time is not up
+        if(timeLeftIntegerValue>0){
+            //Question is not answered and numPass more than 0
+            if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue>0) {
                 tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
+                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
+                bPassOnClick(bPass, qnDetail);
+            }
+            else if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue==0){
+                tvTimeLeft.setText(timeLeftIntegerValue + "");
+                bPass.setEnabled(false);    //No more pass left, cannot pass
+                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
+            }
+        }
+        //When someone answers the qn correctly
+        else if(timeLeftIntegerValue==-5){
+            tvTimeLeft.setText("Bomb has been successfully defused");
+            bDefuse.setEnabled(false);
+            bPass.setEnabled(false);
+        }
+        //When the time is up
+        else{
+            //No need consider positive case because it has been taken care of
+            if((qnDetail.getFinalAnswer().isEmpty() && global.getUserId().equals(player_id))|| tvTimeLeft.getText().toString().equals("YOU FAILED THIS QUESTION")){
+                tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                bDefuse.setEnabled(false);
+                bPass.setEnabled(false);
+            }
+            else{
+                tvTimeLeft.setText("THE BOMB HAS EXPLODED");
             }
         }
 
     }
 
 
-    private void getPlayerName(String player_id, final TextView tvInPossessionOfBomb){
+    private void getPlayerName(String player_id, final TextView tvInPossessionOfBomb) {
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()
                 .add("player_id", player_id)
@@ -413,124 +350,73 @@ public class PlayerView extends AppCompatActivity {
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
                         }
-
-
                     }
                 });
     }
 
-}
+    private void updateScore(){}
 
+    private void checkAnswer(QuestionDetail qnDetail, String userAnswer){
+        String qnType = qnDetail.getQuestion_type();
+        String correctAnswer = qnDetail.getCorrectAnswer();
 
-//Old code
-/*private void display() {
-    TextView room_name = (TextView) findViewById(R.id.textViewPlayerViewBattlefieldRoomName);
-    assert room_name != null;
-    room_name.setText(global.getRoomName());
-
-    //Exit button, link to RoomType
-    Button bExitPlayerView = (Button) findViewById(R.id.buttonExitPlayerView);
-    bExitPlayerView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            scheduler.shutdown();
-
-            //Remove user from "GAME" table in the database
-            OkHttpClient client = new OkHttpClient();
-            RequestBody postData = new FormBody.Builder()
-                    .add("room_code", room_code)
-                    .add("player", global.getUserId())
-                    .build();
-            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/removePlayerFromGame.php").post(postData).build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            System.out.println("FAIL");
-                        }
-
-                        @Override
-                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                            response.body().close();
-                        }
-                    });
-
-            Intent intentLeave = new Intent(PlayerView.this, RoomType.class);
-            intentLeave.putExtra("user_id", global.getUserId());
-            startActivity(intentLeave);
+        if ((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswer().isEmpty()) || (!qnType.equals("Multiple Choice") && userAnswer.isEmpty())){
+            qnDetail.setFinalAnswer("");
         }
-    });
-
-    //Layout of PlayerView
-    LinearLayout outerLL = (LinearLayout) findViewById(R.id.playerViewLinearLayout);
-    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    lp.setMargins(0, 0, 0, 50);
-
-    //Individual questions
-    for (int i = 0; i < numQuestion; i++) {
-        outerLL.addView(questionDetailList.get(i).getLayout(), lp);
-        questionDetailList.get(i).getLayout().setVisibility(View.GONE);
-
-        withinABox(i);
+        else if((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswer().equals("correct")) || (!qnType.equals("Multiple Choice") && userAnswer.equals(correctAnswer))) {
+            qnDetail.setFinalAnswer("correct");
+        }
+        else {
+            qnDetail.setFinalAnswer("wrong");
+        }
     }
 
-    scheduler.scheduleAtFixedRate(new Runnable() {
-        public void run() {
-            new Background().execute();
-        }
-    }, 0, 1000, TimeUnit.MILLISECONDS);
-
-}
-
-    //Things happening inside a box of question
-    private void withinABox(final int i) {
-        //To display timer
-        final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
-
-        //Button: Defusing a bomb
-        final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
-        bDefuse.setVisibility(View.GONE);
+    private void bDefuseOnClick(final Button bDefuse, final Button bPass, final TextView etAnswerOption, final QuestionDetail qnDetail, final TextView tvTimeLeft){
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String qnType = questionDetailList.get(i).getQuestion_type();
-                String correctAnswer = questionDetailList.get(i).getCorrectAnswer();
                 String userAnswer = "";
-
-                //Reading string from user
-                EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
-                if (etAnswerOption != null) {
+                if(etAnswerOption!=null) {
                     userAnswer = etAnswerOption.getText().toString();
-                    System.out.println(userAnswer);
                 }
-
-                int timeLeft = Integer.valueOf(roomBank.getRoomDetailList().get(i).getTimeLeft(i));
-
-                //If answer is correct for any type of question
-                if ((qnType.equals("Multiple Choice") && questionDetailList.get(i).getAnswerIsCorrect() && timeLeft > 0) ||
-                        (!qnType.equals("Multiple Choice") && userAnswer.equalsIgnoreCase(correctAnswer) && timeLeft > 0)) {
+                checkAnswer(qnDetail, userAnswer);
+                if(qnDetail.getFinalAnswer().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "You have not answered the question", Toast.LENGTH_SHORT).show();
+                }
+                else if(qnDetail.getFinalAnswer().equals("correct")){
+                    updateScore();
+                    System.out.println("ANSWER IS CORRECT!!!");
                     tvTimeLeft.setText("Bomb has been successfully defused");
-                    System.out.println("Bomb " + (i + 1) + " has been successfully defused");
+                    bDefuse.setEnabled(false);
+                    bPass.setEnabled(false);
+                }
+                else{
+                    updateScore();
+                    System.out.println("ANSWER IS WRONG!!!");
+                    tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                    bDefuse.setEnabled(false);
+                    bPass.setEnabled(false);
                 }
             }
         });
+    }
 
-        //Button: Passing a bomb
-        final Button bPass = (Button) findViewById(i + QuestionDetail.ID_BPASS_CONSTANT);
-        bPass.setVisibility(View.GONE);
+    private void bPassOnClick(final Button bPass, final QuestionDetail qnDetail){
         bPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentBPST = new Intent(PlayerView.this, BombPassSelectionType.class);
-                roomBank.setCurrentQuestion(questionDetailList.get(i).getQuestion_id());
+                roomBank.setCurrentQuestion(qnDetail.getQuestion_id());
                 startActivity(intentBPST);
             }
         });
-
-
     }
+}
 
+
+
+
+/*
 
 class Background extends AsyncTask<Void, Void, Void> {
     String[] deployStatusArray = new String[numQuestion];
@@ -625,9 +511,11 @@ class Background extends AsyncTask<Void, Void, Void> {
 
 
     }
-}*/
+}*//*
 
 
+
+*/
 
 
 

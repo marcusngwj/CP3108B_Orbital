@@ -7,7 +7,7 @@
 	$statement = mysqli_prepare($con, "SELECT * FROM Room, Bomb_Depository WHERE Room.room_code = '$room_code' AND Room.question_id = Bomb_Depository.question_id");
     mysqli_stmt_execute($statement);
     mysqli_stmt_store_result($statement);
-    mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code, $question_id, $deploy_status, $time_left, $player_id, $num_pass, $question_id, $bomb_name, $question_type, $question, $option_one, $option_two, $option_three, $option_four, $answer, $time_limit, $points_awarded, $points_deducted, $num_pass, $user_id);
+    mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code, $question_id, $deploy_status, $time_left, $player_id, $num_pass, $question_id, $bomb_name, $question_type, $question, $option_one, $option_two, $option_three, $option_four, $answer, $time_limit, $points_awarded, $points_deducted, $num_pass_uppper_limit, $user_id_host);
 	
     $response = array(array(), array());
     $response["success"] = false;
@@ -39,9 +39,7 @@
 		$response[$i]["time_limit"] = $time_limit;
 		$response[$i]["points_awarded"] = $points_awarded;
 		$response[$i]["points deducted"] = $points_deducted;
-		$response[$i]["num_pass"] = $num_pass;
-		$response[$i]["user_id"] = $user_id;
-		
+				
 		$i++;
     }
 	

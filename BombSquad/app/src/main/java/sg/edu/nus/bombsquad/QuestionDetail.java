@@ -48,7 +48,7 @@ public class QuestionDetail {
     private String points_awarded;
     private String points_deducted;
     private String num_pass;
-    private boolean mcqAnswerIsCorrect;
+    private String mcqAnswer;
     private String finalAnswer;     //3 states: correct, wrong, 'empty string'
 
     /*---------- Constructor ----------*/
@@ -71,7 +71,7 @@ public class QuestionDetail {
         this.points_deducted = points_deducted;
         this.num_pass = num_pass;
 
-        mcqAnswerIsCorrect = false;
+        mcqAnswer = "";     //MCQ qn not answered
         finalAnswer = "";    //Question not answered
         setLayout();
     }
@@ -204,10 +204,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionA = (String)bOptionA.getTag();
                 if(optionA.equals(correctAnswer)){
-                    mcqAnswerIsCorrect = true;
+                    mcqAnswer = "correct";
                 }
                 else{
-                    mcqAnswerIsCorrect = false;
+                    mcqAnswer = "wrong";
                 }
                 bOptionA.setBackgroundResource(R.drawable.green_border);
                 bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -222,10 +222,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionB = (String)bOptionB.getTag();
                 if(optionB.equals(correctAnswer)){
-                    mcqAnswerIsCorrect = true;
+                    mcqAnswer = "correct";
                 }
                 else{
-                    mcqAnswerIsCorrect = false;
+                    mcqAnswer = "wrong";
                 }
                 bOptionA.setBackgroundResource(R.drawable.white_border);
                 bOptionB.setBackgroundResource(R.drawable.green_border);
@@ -240,10 +240,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionC = (String)bOptionC.getTag();
                 if(optionC.equals(correctAnswer)){
-                    mcqAnswerIsCorrect = true;
+                    mcqAnswer = "correct";
                 }
                 else{
-                    mcqAnswerIsCorrect = false;
+                    mcqAnswer = "wrong";
                 }
                 bOptionA.setBackgroundResource(R.drawable.white_border);
                 bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -258,10 +258,10 @@ public class QuestionDetail {
             public void onClick(View v) {
                 String optionD = (String)bOptionD.getTag();
                 if(optionD.equals(correctAnswer)){
-                    mcqAnswerIsCorrect = true;
+                    mcqAnswer = "correct";
                 }
                 else{
-                    mcqAnswerIsCorrect = false;
+                    mcqAnswer = "wrong";
                 }
                 bOptionA.setBackgroundResource(R.drawable.white_border);
                 bOptionB.setBackgroundResource(R.drawable.white_border);
@@ -434,7 +434,7 @@ public class QuestionDetail {
         this.num_pass = num_pass;
     }
 
-    public void setMcqAnswerIsCorrect(boolean answerIsCorrect) { this.mcqAnswerIsCorrect = answerIsCorrect; }
+    public void setMcqAnswer(String answerStatus) { this.mcqAnswer = answerStatus; }
 
     public void setFinalAnswer(String finalAnswer) { this.finalAnswer = finalAnswer; }
 
@@ -465,6 +465,6 @@ public class QuestionDetail {
     public String getPoints_awarded() { return points_awarded; }
     public String getPoints_deducted() { return points_deducted; }
     public String getNum_pass() { return num_pass; }
-    public boolean getMcqAnswerIsCorrect() { return mcqAnswerIsCorrect; }
+    public String getMcqAnswer() { return mcqAnswer; }
     public String getFinalAnswer() { return finalAnswer; }
 }

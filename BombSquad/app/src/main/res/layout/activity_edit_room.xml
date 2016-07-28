@@ -26,7 +26,7 @@
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/greenTick"
+        android:id="@+id/greenPlus"
         android:maxHeight="10dp"
         android:background="@drawable/green_tick"
         android:layout_toLeftOf="@id/fakeView"
@@ -35,7 +35,7 @@
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/redCross"
+        android:id="@+id/redMinus"
         android:background="@drawable/red_cross"
         android:layout_below="@+id/editRoom"
         android:layout_toRightOf="@id/fakeView" />

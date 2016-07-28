@@ -40,7 +40,6 @@ public class BombDepo extends AppCompatActivity {
         final String[] selected_name = new String[100000];
         final Intent intent = getIntent();
         try {
-            final String bomb_name = intent.getStringExtra("bomb_name");
             JSONObject bomb = new JSONObject(intent.getStringExtra("bomb"));
             LinearLayout ll = (LinearLayout) findViewById(R.id.bombDepoScroll);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

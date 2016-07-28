@@ -46,6 +46,7 @@ public class ManageRoom extends AppCompatActivity {
 
         global.setData(selected);
         global.setQuestionName(new String[100000]);
+        global.setQuestion_id(new String[100000]);
         selectedRoomName = new HashMap<String, String>();
         display();
         deleteRoom();
@@ -315,27 +316,19 @@ public class ManageRoom extends AppCompatActivity {
                                                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                                         try {
                                                             JSONObject result = new JSONObject(response.body().string());
-                                                            System.out.println("Result: " + result);
                                                             if (result.getJSONObject(0+"").getBoolean("success")) {
-                                                                System.out.println("HERE!");
                                                                 int m = 0;
-                                                                while (m < result.length()) {
-                                                                    System.out.println("TEST");
+                                                                while (m < result.length()-1) {
+                                                                    global.getQuestion_id()[m] = result.getJSONObject(m+ "").getString("question_id");
                                                                     global.getQuestionName()[m] = result.getJSONObject(m + "").getString("bomb_name");
-                                                                    System.out.println("TEST1");
                                                                     m++;
-                                                                    System.out.println("TEST2");
                                                                 }
-                                                                System.out.println("HERE1!");
                                                                 Intent intent = getIntent();
                                                                 Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
                                                                 editRoomIntent.putExtra("room", intent.getStringExtra("room"));
                                                                 editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                                                System.out.println("HERE2!");
                                                                 startActivity(editRoomIntent);
-                                                                System.out.println("HERE3!");
                                                             }
-                                                            System.out.println("FIRST ELEMENT: " + global.getQuestion_id()[0]);
                                                         } catch (JSONException e) {
                                                             //e.printStackTrace();
                                                         }

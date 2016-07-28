@@ -16,7 +16,7 @@
     $i = 0;
     while(mysqli_stmt_fetch($statement)){
         $response[$i]["success"] = true;
-		$question_id;
+		$response[$i]["question_id"] = $question_id;
 		$statement1 = mysqli_prepare($con, "SELECT * FROM Bomb_Depository WHERE question_id = $question_id");
 		mysqli_stmt_execute($statement1);
 		mysqli_stmt_store_result($statement1);

@@ -238,9 +238,6 @@ public class PlayerView extends AppCompatActivity {
 
         final QuestionDetail qnDetail = questionHashMap.get(question_id);
 
-        final String points_awarded = qnDetail.getPoints_awarded();
-        final String points_deducted = qnDetail.getPoints_deducted();
-
         final TextView tvTimeLeft = (TextView) findViewById(qnID + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
         final EditText etAnswerOption = (EditText) findViewById(qnID + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
         final TextView tvInPossessionOfBombTitle = (TextView) findViewById(qnID + QuestionDetail.ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT);
@@ -354,7 +351,41 @@ public class PlayerView extends AppCompatActivity {
                 });
     }
 
-    private void updateScore(){}
+    private void updateScore(String answerStatus, String points){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("answer_status", answerStatus)
+                .add("points", points)
+                .add("user_id", user_id)
+                .add("room_code", room_code)
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateScore.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+                            System.out.println(result);
+
+
+                        } catch (JSONException e) {
+                            /*e.printStackTrace();*/
+                        }
+
+                        response.body().close();
+
+
+                    }
+                });
+    }
 
     private void checkAnswer(QuestionDetail qnDetail, String userAnswer){
         String qnType = qnDetail.getQuestion_type();
@@ -372,6 +403,8 @@ public class PlayerView extends AppCompatActivity {
     }
 
     private void bDefuseOnClick(final Button bDefuse, final Button bPass, final TextView etAnswerOption, final QuestionDetail qnDetail, final TextView tvTimeLeft){
+        final String points_awarded = qnDetail.getPoints_awarded();
+        final String points_deducted = qnDetail.getPoints_deducted();
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -384,14 +417,14 @@ public class PlayerView extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "You have not answered the question", Toast.LENGTH_SHORT).show();
                 }
                 else if(qnDetail.getFinalAnswer().equals("correct")){
-                    updateScore();
+                    updateScore("correct", points_awarded);
                     System.out.println("ANSWER IS CORRECT!!!");
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     bDefuse.setEnabled(false);
                     bPass.setEnabled(false);
                 }
                 else{
-                    updateScore();
+                    updateScore("wrong", points_deducted);
                     System.out.println("ANSWER IS WRONG!!!");
                     tvTimeLeft.setText("YOU FAILED THIS QUESTION");
                     bDefuse.setEnabled(false);

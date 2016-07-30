@@ -4,7 +4,7 @@ AY2015/16 Summer Project Module
 <br>
 **Ignition Slide**
 <br>
-![Ignition Slide](https://github.com/marcusngwj/CS3108B_Orbital/blob/master/assets/images/ignition_slide.png)
+![Ignition Slide](assets/images/ignition_slide.png)
 <br>
 <br>
 <br>
@@ -16,3 +16,13 @@ AY2015/16 Summer Project Module
 - [x] Enter Room
 - [x] Manage Room
 - [x] Create new bomb
+<br>
+<br>
+<br>
+![Login Page](assets/images/loginPage.PNG)
+![Password Reset](assets/images/passwordReset.PNG)
+![New Bomb](assets/images/newBomb.PNG)
+![Selected Bomb](assets/images/selectedBomb.PNG)
+![Manage Room](assets/images/manageRoom.PNG)
+![Player View 1](assets/images/playerView1.PNG)
+![Player View 1](assets/images/playerView2.PNG)

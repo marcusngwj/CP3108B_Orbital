@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="15dp"
     android:background="#44546A"
     android:orientation="vertical">
 
@@ -15,31 +16,31 @@
         <!--Room Code-->
         <!--Text will be created in java file-->
         <TextView
+            android:id="@+id/textViewPlayerViewRoomCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewPlayerViewRoomCode"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-            android:textSize="40dp"
-            android:textColor="#ffffff"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="10dp"
+            android:gravity="center_horizontal"
             android:textAlignment="gravity"
-            android:gravity="center_horizontal"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff"
+            android:textSize="40dp"
+            android:textStyle="bold" />
 
         <!--Battlefield Title TextView-->
         <TextView
             android:id="@+id/textViewPlayerViewBattlefield"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/textViewPlayerViewRoomCode"
             android:gravity="left"
             android:text="Battlefield: "
             android:textAlignment="gravity"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/abc_primary_text_disable_only_material_dark"
-            android:textSize="25dp"
-            android:layout_below="@id/textViewPlayerViewRoomCode"/>
+            android:textSize="25dp" />
 
         <!--Room Name-->
         <!--Text will be created in java file-->
@@ -47,28 +48,28 @@
             android:id="@+id/textViewPlayerViewBattlefieldRoomName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/textViewPlayerViewBattlefield"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/abc_primary_text_disable_only_material_dark"
-            android:textSize="23dp"
-            android:layout_below="@id/textViewPlayerViewRoomCode"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@id/textViewPlayerViewRoomCode"
+            android:layout_toEndOf="@id/textViewPlayerViewBattlefield"
+            android:gravity="right"
             android:textAlignment="gravity"
-            android:gravity="right"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/abc_primary_text_disable_only_material_dark"
+            android:textSize="23dp" />
 
         <!--Total Score Title TextView-->
         <TextView
             android:id="@+id/textViewScoreTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/textViewPlayerViewBattlefield"
             android:gravity="left"
             android:text="Score: "
             android:textAlignment="gravity"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/abc_primary_text_disable_only_material_dark"
-            android:textSize="25dp"
-            android:layout_below="@id/textViewPlayerViewBattlefield"/>
+            android:textSize="25dp" />
 
         <!--Actual Score TextView-->
         <!--Text will be created in java file-->
@@ -76,34 +77,246 @@
             android:id="@+id/textViewActualScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:layout_below="@id/textViewPlayerViewBattlefield"
             android:layout_marginLeft="80dp"
+            android:gravity="left"
             android:textAlignment="gravity"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/abc_primary_text_disable_only_material_dark"
-            android:textSize="25dp"
-            android:layout_below="@id/textViewPlayerViewBattlefield"/>
+            android:textSize="25dp" />
 
+        <!--Layout for a block of question details-->
         <LinearLayout
             android:id="@+id/playerViewLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/textViewScoreTitle"
+            android:layout_marginBottom="25dp"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_border_transparent_background"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:paddingBottom="25dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp">
 
+            <!--Question heading-->
             <TextView
-                android:id="@+id/textViewPlayerMessage"
+                android:id="@+id/questionHeadingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/abc_primary_text_disable_only_material_dark"
-                android:textSize="23dp" />
+                android:text="Question"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
 
-        </LinearLayout>
+            <!--Question & Answer - LinearLayout-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <!--Question Layout-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+                    <!--Actual question-->
+                    <TextView
+                        android:id="@+id/textViewActualQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20dp" />
+
+                    <!--MCQ options display-->
+                    <TextView
+                        android:id="@+id/textViewMcqOptionsDisplay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textSize="20dp" />
+                </LinearLayout>                                     <!-- End of question layout -->
+
+                <!--Layout for MCQ options selectable-->
+                <LinearLayout
+                    android:id="@+id/linearLayoutMcqOptionSelectableBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+                    <!--Button A-->
+                    <Button
+                        android:id="@+id/buttonOptionA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_border"
+                        android:text="A"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+                    <!--Button B-->
+                    <Button
+                        android:id="@+id/buttonOptionB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_border"
+                        android:text="B"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+                    <!--Button C-->
+                    <Button
+                        android:id="@+id/buttonOptionC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_border"
+                        android:text="C"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+                    <!--Button D-->
+                    <Button
+                        android:id="@+id/buttonOptionD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_border"
+                        android:text="D"
+                        android:textColor="#ffffff"
+                        android:textSize="20dp" />
+                </LinearLayout>                                 <!-- End of MCQ options layout-->
+
+                <!--Opened Ended answer field-->
+                <EditText
+                    android:id="@+id/editTextAnswerOpenEnded"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>                                         <!-- End of Question & Answer Layout -->
+
+            <!--In possession of bomb Layout-->
+            <LinearLayout
+                android:id="@+id/linearLayoutPossessionBlock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <!--In possession of bomb heading-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="In possession of bomb"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp" />
+
+                <!--Name of player with bomb-->
+                <TextView
+                    android:id="@+id/textViewNameOfPlayerWithBomb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/white_bg_black_border"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:paddingTop="5dp" />
+            </LinearLayout>                                         <!-- End of In possession of bomb Layout -->
+
+            <!--Time Left Layout-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp">
+
+                <!--TimeLeft Heading-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time Left"
+                    android:textSize="20dp"
+                    android:textColor="#ffffff"/>
+
+                <!--Actual time left display-->
+                <TextView
+                    android:id="@+id/textViewTimeLeftDisplay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/white_bg_black_border"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="7dp"
+                    android:paddingTop="5dp"/>
+            </LinearLayout>                                         <!-- End of Time Left Layout -->
+
+            <!--Defuse & Pass Layout-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+
+                <!--PLACEHOLDER FOR FORMATTING, NO OTHER FUNCTIONAL USE-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <!--Defuse Button-->
+                <Button
+                    android:id="@+id/buttonDefuse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="Defuse"
+                    android:textSize="20dp"
+                    android:background="@drawable/green_bg_black_border"/>
+
+                <!--PLACEHOLDER FOR FORMATTING, NO OTHER FUNCTIONAL USE-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+
+                <!--Pass Button-->
+                <Button
+                    android:id="@+id/buttonPass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="Pass"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/white_bg_black_border"/>
+
+                <!--PLACEHOLDER FOR FORMATTING, NO OTHER FUNCTIONAL USE-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1" />
+            </LinearLayout>                                         <!-- End if defuse and pass layout -->
+        </LinearLayout>                                             <!-- End of a block of question details Layout -->
 
         <!--Exit Room button-->
         <Button
@@ -111,12 +324,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/playerViewLinearLayout"
+            android:background="@drawable/white_border"
             android:gravity="center"
             android:text="EXIT ROOM"
             android:textAlignment="gravity"
             android:textColor="#ffffff"
-            android:textSize="25dp"
-            android:background="@drawable/white_border"/>
+            android:textSize="25dp" />
 
     </RelativeLayout>
 

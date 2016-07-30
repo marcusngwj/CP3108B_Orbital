@@ -515,4 +515,27 @@ public class QuestionDetail {
                     }
                 });
     }
+
+    public static void updateNumPass(String room_code, String question_id, String num_pass){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_code", room_code)
+                .add("question_id", question_id)
+                .add("num_pass", num_pass)
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateNumPass.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        response.body().close();
+                    }
+                });
+    }
 }

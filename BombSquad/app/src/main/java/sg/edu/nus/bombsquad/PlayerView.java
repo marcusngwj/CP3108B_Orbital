@@ -119,7 +119,7 @@ public class PlayerView extends AppCompatActivity {
             public void run() {
                 prepareDisplay();
             }
-        }, 0, 750, TimeUnit.MILLISECONDS);
+        }, 0, 500, TimeUnit.MILLISECONDS);
 
     }
 
@@ -406,6 +406,11 @@ public class PlayerView extends AppCompatActivity {
             bDefuse.setEnabled(false);
             bPass.setEnabled(false);
         }
+        else if(questionStatusIntegerValue==QuestionDetail.BOMB_HAS_EXPLODED){
+            tvTimeLeft.setText("THE BOMB HAS EXPLODED");
+            bDefuse.setEnabled(false);
+            bPass.setEnabled(false);
+        }
         else if(timeLeftIntegerValue>0 && qnDetail.getAttemptedThisQuestion() && user_id.equals(player_id) && numPassIntegerValue>0){
             BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
         }
@@ -414,23 +419,24 @@ public class PlayerView extends AppCompatActivity {
             //Question is not answered and numPass more than 0
             if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue>0) {
                 tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
-                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
+                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft, numPassIntegerValue);
                 bPassOnClick(bPass, qnDetail);
             }
-            else if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue==0){
+            else if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue<=0){
                 tvTimeLeft.setText(timeLeftIntegerValue + "");
                 bPass.setEnabled(false);    //No more pass left, cannot pass
-                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
+                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft, numPassIntegerValue);
             }
         }
         //When the time is up
-        else{
+        else if(timeLeftIntegerValue<=0){
+            QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_EXPLODED+"");
+            bDefuse.setEnabled(false);
+            bPass.setEnabled(false);
+
             //No need consider positive case because it has been taken care of
             if((qnDetail.getFinalAnswer().isEmpty() && global.getUserId().equals(player_id))|| tvTimeLeft.getText().toString().equals("YOU FAILED THIS QUESTION")){
                 tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-                QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_EXPLODED+"");
-                bDefuse.setEnabled(false);
-                bPass.setEnabled(false);
             }
             else{
                 tvTimeLeft.setText("THE BOMB HAS EXPLODED");
@@ -489,7 +495,7 @@ public class PlayerView extends AppCompatActivity {
                 });
     }
 
-    private void bDefuseOnClick(final Button bDefuse, final Button bPass, final TextView etAnswerOption, final QuestionDetail qnDetail, final TextView tvTimeLeft){
+    private void bDefuseOnClick(final Button bDefuse, final Button bPass, final TextView etAnswerOption, final QuestionDetail qnDetail, final TextView tvTimeLeft, final int numPassIntegerValue){
         final String points_awarded = qnDetail.getPoints_awarded();
         final String points_deducted = qnDetail.getPoints_deducted();
         bDefuse.setOnClickListener(new View.OnClickListener() {
@@ -513,7 +519,13 @@ public class PlayerView extends AppCompatActivity {
                 else{
                     updateScore("wrong", points_deducted);
                     tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-                    BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
+                    if(numPassIntegerValue>0){
+                        QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.PLAYER_FAILED_THIS_QUESTION+"");
+                        BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
+                    }
+                    else{
+                        QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_EXPLODED+"");
+                    }
                     bDefuse.setEnabled(false);
                     bPass.setEnabled(false);
                 }

@@ -337,6 +337,7 @@ public class HostView extends AppCompatActivity {
                             public void onResponse(Call call, Response response) throws IOException {
                                 global.undeployQ(questionIDArray[idx]);
                                 global.setTimeLeft(1);
+                                global.getPlayerPossessBomb()[idx] = 0; //To remove the bomb from player possession
                             }
                         });
             }

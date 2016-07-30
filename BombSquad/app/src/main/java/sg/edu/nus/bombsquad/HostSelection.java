@@ -32,6 +32,7 @@ public class HostSelection extends AppCompatActivity {
     final ScheduledExecutorService scheduler1 = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler2 = Executors.newSingleThreadScheduledExecutor();
     final ScheduledExecutorService scheduler3 = Executors.newSingleThreadScheduledExecutor();
+    Global global = Global.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +40,9 @@ public class HostSelection extends AppCompatActivity {
         //To show on Android Monitor onCreate
         System.out.println("Activity Name: HostSelection");
         Intent intent = getIntent();
-        Global global = Global.getInstance();
         String question_id = intent.getStringExtra("question_id");
         String time_limit = intent.getStringExtra("time_limit");
         String room_code = intent.getStringExtra("room_code");
-        global.setBooleanAccess(false);
-        new GetPlayerInRoom().execute((room_code+""));
         deployToRandom(room_code, question_id, time_limit);
         deployToSelected(room_code, question_id, time_limit);
     }
@@ -61,66 +59,79 @@ public class HostSelection extends AppCompatActivity {
 
     private void deployToRandom(String roomCode, String questionId, String timeLeft) {
 
-        final Global global = Global.getInstance();
         final String room_code = roomCode;
         final String question_id = questionId;
         final String time_left = timeLeft;
         Button bRandomPlayer = (Button)findViewById(R.id.buttonRandomPlayer);
         assert bRandomPlayer != null;
-        global.setCounter(0);
         bRandomPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!global.playerExist()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
-                    builder.setMessage("There are no players in the room")
-                            .create()
-                            .show();
-                    global.setBooleanAccess(false);
-                }
-                scheduler2.scheduleAtFixedRate(new Runnable() {
-                    public void run() {
-                        if (!global.playerExist()) {
-                            scheduler2.shutdown();;
-                        }
-                        if (global.getBooleanAccess()) {
-                            final String[] player_id = global.getPlayerId();
-                            int random = (int) Math.floor(Math.random() * (player_id.length));
-                            String randomPlayer = player_id[random];
-                            global.setBooleanAccess(false);
-                            OkHttpClient client = new OkHttpClient();
-                            RequestBody postData = new FormBody.Builder()
-                                    .add("room_code", room_code)
-                                    .add("question_id", question_id)
-                                    .add("player_id", randomPlayer)
-                                    .add("time_left", time_left)
-                                    .build();
-                            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
-                            client.newCall(request)
-                                    .enqueue(new Callback() {
-                                        @Override
-                                        public void onFailure(Call call, IOException e) {
-                                            System.out.println("FAIL");
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", room_code)
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getPlayerInRoom.php").post(postData).build();
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                try {
+                                    JSONObject result = new JSONObject(response.body().string());
+                                    if (result.getJSONObject(0+"").getBoolean("success")) {
+                                        global.setPlayerId(new String[result.length()-1]);
+                                        String[] player_id = global.getPlayerId();
+                                        int i = 1;
+                                        while (i < result.length()-1) {
+                                            player_id[i] = result.getJSONObject(i+"").getString("player");
+                                            i++;
                                         }
-                                        @Override
-                                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                            Intent intent = getIntent();
-                                            Intent hostIntent = new Intent(HostSelection.this, HostView.class);
-                                            global.setDeployedQ(question_id, true);
-                                            new UpdateTime().execute(time_left);
-                                            global.setBooleanAccess(false);
-                                            scheduler2.shutdown();
-                                            global.setCounter(global.getCounter()+1);
-                                            if (global.getCounter() == 1) {
-                                                hostIntent.putExtra("room", intent.getStringExtra("room"));
-                                                hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                                startActivity(hostIntent);
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                }, 0, 500, TimeUnit.MILLISECONDS);
+                                        int random = (int) Math.ceil(Math.random() * (player_id.length-1));
+                                        System.out.println("RANDOM: " + random);
+                                        String randomPlayer = player_id[random];
+                                        System.out.println("PLAYER: " + randomPlayer);
+                                        OkHttpClient client = new OkHttpClient();
+                                        RequestBody postData = new FormBody.Builder()
+                                                .add("room_code", room_code)
+                                                .add("question_id", question_id)
+                                                .add("player_id", randomPlayer)
+                                                .add("time_left", time_left)
+                                                .build();
+                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
+                                        client.newCall(request)
+                                                .enqueue(new Callback() {
+                                                    @Override
+                                                    public void onFailure(Call call, IOException e) {
+                                                        System.out.println("FAIL");
+                                                    }
+                                                    @Override
+                                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                        Intent intent = getIntent();
+                                                        Intent hostIntent = new Intent(HostSelection.this, HostView.class);
+                                                        hostIntent.putExtra("room", intent.getStringExtra("room"));
+                                                        hostIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                        global.setDeployedQ(question_id, true);
+                                                        new UpdateTime().execute(time_left);
+                                                        startActivity(hostIntent);
+                                                    }
+                                                });
+                                    }
+                                    else {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
+                                        builder.setMessage("There are no players in the room")
+                                                .setNegativeButton("ok", null)
+                                                .create()
+                                                .show();
+                                    }
+                                } catch (JSONException e) {
+                                    //e.printStackTrace();
+                                }
+                            }
+                        });
             }
         });
     }
@@ -135,104 +146,11 @@ public class HostSelection extends AppCompatActivity {
         bSelectPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!global.playerExist()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
-                    builder.setMessage("There are no players in the room")
-                            .create()
-                            .show();
-                    global.setBooleanAccess(false);
-                }
-                scheduler1.scheduleAtFixedRate(new Runnable() {
-                    public void run() {
-                        /*if (!global.playerExist()) {
-                            scheduler1.shutdown();
-                        }*/
-                        if (global.getBooleanAccess() && global.playerExist()) {
-                            Intent intent = getIntent();
-                            Intent intent1 = new Intent(HostSelection.this, PlayerList.class);
-                            intent1.putExtra("room_code", room_code);
-                            intent1.putExtra("question_id", question_id);
-                            intent1.putExtra("time_left", time_left);
-                            intent1.putExtra("room", intent.getStringExtra("room"));
-                            intent1.putExtra("user_id", intent.getStringExtra("user_id"));
-                            global.setBooleanAccess(false);
-                            scheduler1.shutdown();
-                            startActivity(intent1);
-                        }
-                    }
-                }, 0, 500, TimeUnit.MILLISECONDS);
-
-            }
-        });
-
-    }
-
-    class GetPlayerInRoom extends AsyncTask<String, Void, Void> {
-        final Global global = Global.getInstance();
-
-        protected Void doInBackground(String... codes) {
-            OkHttpClient client = new OkHttpClient();
-            RequestBody postData = new FormBody.Builder().add("room_code", codes[0]).build();
-            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getPlayerInRoom.php").post(postData).build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            System.out.println("FAIL");
-                        }
-                        @Override
-                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                            try {
-                                JSONObject result = new JSONObject(response.body().string());
-                                int i = 0;
-                                global.setPlayerId(new String[result.length()-1]);
-                                global.setPlayerList(new String[result.length()-1]);
-                                String[] player_id = global.getPlayerId();
-                                while (i < result.length()-1) {
-                                    player_id[i] = result.getJSONObject(i+"").getString("player");
-                                    i++;
-                                }
-                            } catch (JSONException e) {
-                             //   e.printStackTrace();
-                            }
-                            global.setBooleanVar(true);
-                        }
-                    });
-            return null;
-        }
-
-        protected void onPostExecute(Void update) {
-
-            scheduler.scheduleAtFixedRate(new Runnable() {
-                public void run() {
-                    if (global.getBooleanVar()) {
-                        new GetPlayerList().execute();
-                        global.setBooleanVar(false);
-                        scheduler.shutdown();
-                    }
-                }
-            }, 0, 500, TimeUnit.MILLISECONDS);
-
-        }
-    }
-
-    class GetPlayerList extends AsyncTask<Void, Void, Void> {
-        final Global global = Global.getInstance();
-        String[] player_id = global.getPlayerId();
-        String[] player_list = global.getPlayerList();
-        protected Void doInBackground(Void... unused) {
-            int i = 0;
-            while (i < player_id.length) {
-                final String currPlayer = player_id[i];
-                if (currPlayer == null) {
-                    global.setPlayerExist(false);
-                    return null;
-                }
-                final int curr = i;
                 OkHttpClient client = new OkHttpClient();
-                RequestBody postData = new FormBody.Builder().add("player_id", currPlayer).build();
-                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getPlayerName.php").post(postData).build();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", room_code)
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getPlayer.php").post(postData).build();
                 client.newCall(request)
                         .enqueue(new Callback() {
                             @Override
@@ -243,22 +161,41 @@ public class HostSelection extends AppCompatActivity {
                             public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                 try {
                                     JSONObject result = new JSONObject(response.body().string());
-                                    String first_name = result.getString("first_name");
-                                    String last_name = result.getString("last_name");
-                                    player_list[curr] = first_name+ " " + last_name;
-                                    global.pushPlayerInRoom(currPlayer+"", player_list[curr]);
-                                    global.setBooleanAccess(true);
-                                    global.setPlayerExist(true);
+                                    if (result.getJSONObject(0+"").getBoolean("success")) {
+                                        global.setPlayerId(new String[result.length()-1]);
+                                        global.setPlayerList(new String[result.length()-1]);
+                                        int i = 1;
+                                        String[] player_id = global.getPlayerId();
+                                        String[] player_list = global.getPlayerList();
+                                        while (i < result.length()-1) {
+                                            player_id[i] = result.getJSONObject(i+"").getString("player");
+                                            player_list[i] = result.getJSONObject(i+"").getString("first_name") + " "
+                                                    + result.getJSONObject(i+"").getString("last_name");
+                                            i++;
+                                        }
+                                        Intent intent = getIntent();
+                                        Intent intent1 = new Intent(HostSelection.this, PlayerList.class);
+                                        intent1.putExtra("room_code", room_code);
+                                        intent1.putExtra("question_id", question_id);
+                                        intent1.putExtra("time_left", time_left);
+                                        intent1.putExtra("room", intent.getStringExtra("room"));
+                                        intent1.putExtra("user_id", intent.getStringExtra("user_id"));
+                                        startActivity(intent1);
+                                    }
+                                    else {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
+                                        builder.setMessage("There are no players in the room")
+                                                .setNegativeButton("ok", null)
+                                                .create()
+                                                .show();
+                                    }
                                 } catch (JSONException e) {
-                                   // e.printStackTrace();
+                                    //e.printStackTrace();
                                 }
-
                             }
                         });
-                i++;
             }
-            return null;
-        }
+        });
     }
 
     class UpdateTime extends AsyncTask<String, Void, Void> {

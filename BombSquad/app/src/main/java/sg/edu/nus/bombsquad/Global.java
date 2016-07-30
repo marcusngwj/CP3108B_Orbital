@@ -34,7 +34,7 @@ public class Global {
     private String[] question_id = new String[100000];
     private String player_name;
     private String[] player_id = new String[100000];
-    private String[] player_list;
+    private String[] player_list = new String[100000];
     private boolean booleanAccess;
     private boolean playerStatus;
     private int timeLeft;

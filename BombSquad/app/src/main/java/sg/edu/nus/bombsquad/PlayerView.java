@@ -162,6 +162,7 @@ public class PlayerView extends AppCompatActivity {
                             String time_left="";
                             String player_id="";
                             String num_pass="";
+                            String question_status="";
 
                             int countNumDeploy = 0;
                             for (int i = 0; i < numQuestion; i++) {
@@ -175,14 +176,19 @@ public class PlayerView extends AppCompatActivity {
                                     time_left = result.getJSONObject(i + "").getString("time_left");
                                     player_id = result.getJSONObject(i + "").getString("player_id");
                                     num_pass = result.getJSONObject(i + "").getString("num_pass");
+                                    question_status = result.getJSONObject(i + "").getString("question_status");
                                 }
 
                             }
+
                             if(countNumDeploy==1){
-                                if(dialog.isShowing()){
-                                    dialog.dismiss();
-                                }
-                                display(question_id, player_id, time_left, num_pass, score);
+                                if(dialog.isShowing()){ dialog.dismiss(); }
+
+                                int numPassIntegerValue = Integer.valueOf(num_pass);
+                                if(numPassIntegerValue==0) { QuestionDetail.updateQuestionStatus(room_code, question_id, QuestionDetail.REACHED_UPPER_LIMIT_OF_PASSES+"");}
+
+                                QuestionDetail qnDetail = questionHashMap.get(question_id);
+                                display(qnDetail, player_id, time_left, numPassIntegerValue, question_status, score);
                             }
                             else{
                                 runOnUiThread(new Runnable() {
@@ -205,14 +211,14 @@ public class PlayerView extends AppCompatActivity {
 
     }
 
-    private void display(String question_id, final String idOfPlayerWithBomb, final String time_left, final String num_pass, final String score){
-        final QuestionDetail qnDetail = questionHashMap.get(question_id);
+    private void display(final QuestionDetail qnDetail, final String idOfPlayerWithBomb, final String time_left, final int numPassIntegerValue, final String question_status, final String score){
+        final String question_id = qnDetail.getQuestion_id();
         final String qnType = qnDetail.getQuestion_type();
         final String actualQuestion = qnDetail.getQuestion();
         final String[] mcqOptions = qnDetail.getOption();
 
         final int timeLeftIntegerValue = Integer.valueOf(time_left);
-        final int numPassIntegerValue = Integer.valueOf(num_pass);
+        final int questionStatusIntegerValue = Integer.valueOf(question_status);
 
         final TextView tvActualScore = (TextView)findViewById(R.id.textViewActualScore);
         final TextView tvActualQuestion = (TextView)findViewById(R.id.textViewActualQuestion);
@@ -278,11 +284,10 @@ public class PlayerView extends AppCompatActivity {
                     bPass.setVisibility(View.GONE);
                 }
 
-                setTimeLeftDisplay(qnDetail, timeLeftIntegerValue, numPassIntegerValue, tvTimeLeft, bDefuse, bPass, etAnswerOpenEnded, idOfPlayerWithBomb);
+                setTimeLeftDisplay(qnDetail, timeLeftIntegerValue, numPassIntegerValue, questionStatusIntegerValue, tvTimeLeft, bDefuse, bPass, etAnswerOpenEnded, idOfPlayerWithBomb);
             }
         });
     }
-
 
     private void mcqButtonManipulation(final Button bOptionA, final Button bOptionB, final Button bOptionC, final Button bOptionD, final QuestionDetail qnDetail){
         final String correctAnswer = qnDetail.getCorrectAnswer();
@@ -395,9 +400,17 @@ public class PlayerView extends AppCompatActivity {
                 });
     }
 
-    private void setTimeLeftDisplay(QuestionDetail qnDetail, int timeLeftIntegerValue, int numPassIntegerValue, TextView tvTimeLeft, Button bDefuse, Button bPass, TextView etAnswerOption, String player_id){
+    private void setTimeLeftDisplay(QuestionDetail qnDetail, int timeLeftIntegerValue, int numPassIntegerValue, int questionStatusIntegerValue, TextView tvTimeLeft, Button bDefuse, Button bPass, TextView etAnswerOption, String player_id){
+        if(questionStatusIntegerValue==QuestionDetail.BOMB_HAS_BEEN_DEFUSED){
+            tvTimeLeft.setText("Bomb has been successfully defused");
+            bDefuse.setEnabled(false);
+            bPass.setEnabled(false);
+        }
+        else if(timeLeftIntegerValue>0 && qnDetail.getAttemptedThisQuestion() && user_id.equals(player_id) && numPassIntegerValue>0){
+            BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
+        }
         //If time is not up
-        if(timeLeftIntegerValue>0){
+        else if(timeLeftIntegerValue>0 && !qnDetail.getAttemptedThisQuestion()){
             //Question is not answered and numPass more than 0
             if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue>0) {
                 tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
@@ -410,17 +423,12 @@ public class PlayerView extends AppCompatActivity {
                 bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
             }
         }
-        //When someone answers the qn correctly
-        else if(timeLeftIntegerValue==-5){
-            tvTimeLeft.setText("Bomb has been successfully defused");
-            bDefuse.setEnabled(false);
-            bPass.setEnabled(false);
-        }
         //When the time is up
         else{
             //No need consider positive case because it has been taken care of
             if((qnDetail.getFinalAnswer().isEmpty() && global.getUserId().equals(player_id))|| tvTimeLeft.getText().toString().equals("YOU FAILED THIS QUESTION")){
                 tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_EXPLODED+"");
                 bDefuse.setEnabled(false);
                 bPass.setEnabled(false);
             }
@@ -497,18 +505,19 @@ public class PlayerView extends AppCompatActivity {
                 }
                 else if(qnDetail.getFinalAnswer().equals("correct")){
                     updateScore("correct", points_awarded);
-                    System.out.println("ANSWER IS CORRECT!!!");
                     tvTimeLeft.setText("Bomb has been successfully defused");
+                    QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_BEEN_DEFUSED+"");
                     bDefuse.setEnabled(false);
                     bPass.setEnabled(false);
                 }
                 else{
                     updateScore("wrong", points_deducted);
-                    System.out.println("ANSWER IS WRONG!!!");
                     tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                    BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
                     bDefuse.setEnabled(false);
                     bPass.setEnabled(false);
                 }
+                qnDetail.setAttemptedThisQuestion(true);
             }
         });
     }

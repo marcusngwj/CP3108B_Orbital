@@ -3,55 +3,42 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#44546A"
-    android:id = "@+id/editRoom_layout">
+    android:id = "@+id/editRoomChooseBomb_layout">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Edit Room"
-        android:id="@+id/editRoom"
+        android:text="Add Bomb"
+        android:id="@+id/editRoomChooseBomb"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/abc_primary_text_disable_only_material_dark"
         android:textSize="40dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:paddingBottom="10dp" />
-    <View
-        android:id ="@+id/fakeView"
-        android:layout_width ="50dp"
-        android:layout_height ="20dp"
-        android:layout_centerInParent="true" />
 
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/greenPlus"
+        android:id="@+id/greenTick"
         android:maxHeight="10dp"
-        android:background="@drawable/green_plus"
-        android:layout_below="@id/editRoom"
-        android:layout_toLeftOf="@id/fakeView" />
-
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/redMinus"
-        android:background="@drawable/red_minus"
-        android:layout_below="@+id/editRoom"
-        android:layout_toRightOf="@id/fakeView" />
+        android:background="@drawable/green_tick"
+        android:layout_below="@id/editRoomChooseBomb"
+        android:layout_centerInParent="true" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editRoomScrollView"
-        android:layout_below="@+id/redMinus"
+        android:id="@+id/editRoomChooseBombScrollView"
+        android:layout_below="@+id/greenTick"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editRoomScroll"
+            android:id="@+id/editRoomChooseRoomScroll"
             android:orientation="vertical">
         </LinearLayout>
 

@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="15dp"
     android:background="#44546A"
     android:orientation="vertical">
 
@@ -11,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#44546A"
+        android:paddingBottom="15dp"
         android:orientation="vertical">
 
         <!--Room Code-->

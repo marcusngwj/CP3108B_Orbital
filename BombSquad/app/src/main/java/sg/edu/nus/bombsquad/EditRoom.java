@@ -19,19 +19,29 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class EditRoom extends AppCompatActivity{
+    boolean[] selected = new boolean[100000];
     Global global = Global.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_room);
+        System.out.println("I AM IN EDIT ROOM!");
         display();
         plus();
         minus();
     }
 
     private void display() {
-        final boolean[] selected = new boolean[100000];
         LinearLayout ll = (LinearLayout)findViewById(R.id.editRoomScroll);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -70,10 +80,13 @@ public class EditRoom extends AppCompatActivity{
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getJSONObject("0").getBoolean("success");
-
                             if(success){
-                                Intent addRoomIntent = new Intent(EditRoom.this, BombDepo.class); //will be another class not bomb depo but similar
+                                Intent intent = getIntent();
+                                Intent addRoomIntent = new Intent(EditRoom.this, EditRoomChooseBomb.class);
                                 addRoomIntent.putExtra("bomb", jsonResponse.toString());
+                                addRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                addRoomIntent.putExtra("room_code", intent.getStringExtra("room_code"));
+                                addRoomIntent.putExtra("room_name", intent.getStringExtra("room_name"));
                                 startActivity(addRoomIntent);
                             }
                         } catch (JSONException e) {
@@ -95,6 +108,45 @@ public class EditRoom extends AppCompatActivity{
     }
 
     private void minus() {
+        final Intent intent = getIntent();
+        ImageButton redMinus = (ImageButton)findViewById(R.id.redMinus);
+        assert  redMinus != null;
+        redMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OkHttpClient client = new OkHttpClient();
+                int i = 0;
+                while (i < 100000) {
+                    if (selected[i]) {
+                        System.out.println("user id = " + intent.getStringExtra("user_id"));
+                        System.out.println("question_id" + i);
+                        final int idx = i;
+                        RequestBody postData = new FormBody.Builder()
+                                .add("user_id", intent.getStringExtra("user_id"))
+                                .add("question_id", i + "")
+                                .build();
+                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/bombDeleteFromRoom.php").post(postData).build();
+                        client.newCall(request)
+                                .enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        System.out.println("FAIL");
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                        selected[idx] = false;
+                                    }
+                                });
+                    }
+                    i++;
+                }
+                Intent back = new Intent(EditRoom.this, ManageRoom.class);
+                back.putExtra("user_id" , intent.getStringExtra("user_id"));
+                back.putExtra("room", intent.getStringExtra("room"));
+                startActivity(back);
+            }
+        });
 
     }
 }

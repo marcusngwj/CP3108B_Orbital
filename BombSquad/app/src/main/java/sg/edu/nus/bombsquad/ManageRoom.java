@@ -300,7 +300,7 @@ public class ManageRoom extends AppCompatActivity {
                                 System.out.println("EDIT ROOM");
                                 while (k < 100000) {
                                     if (selected[k]) {
-                                        System.out.println("room_code" + k);
+                                        final int room_code = k;
                                         RequestBody postData = new FormBody.Builder()
                                                 .add("room_code", k+"")
                                                 .build();
@@ -329,6 +329,8 @@ public class ManageRoom extends AppCompatActivity {
                                                                 Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
                                                                 editRoomIntent.putExtra("room", intent.getStringExtra("room"));
                                                                 editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                                editRoomIntent.putExtra("room_code", room_code+"");
+                                                                editRoomIntent.putExtra("room_name", selectedRoomName.get(room_code+""));
                                                                 startActivity(editRoomIntent);
                                                             }
                                                         } catch (JSONException e) {

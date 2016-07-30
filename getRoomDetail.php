@@ -7,7 +7,7 @@
 	$statement = mysqli_prepare($con, "SELECT * FROM Room, Bomb_Depository WHERE Room.room_code = '$room_code' AND Room.question_id = Bomb_Depository.question_id");
     mysqli_stmt_execute($statement);
     mysqli_stmt_store_result($statement);
-    mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code, $question_id, $deploy_status, $time_left, $player_id, $num_pass, $question_id, $bomb_name, $question_type, $question, $option_one, $option_two, $option_three, $option_four, $answer, $time_limit, $points_awarded, $points_deducted, $num_pass_uppper_limit, $user_id_host);
+    mysqli_stmt_bind_result($statement, $room_id, $room_name, $user_id, $room_code, $question_id, $deploy_status, $time_left, $player_id, $num_pass, $question_status, $question_id, $bomb_name, $question_type, $question, $option_one, $option_two, $option_three, $option_four, $answer, $time_limit, $points_awarded, $points_deducted, $num_pass_uppper_limit, $user_id_host);
 	
     $response = array(array(), array());
     $response["success"] = false;
@@ -26,7 +26,7 @@
 		$response[$i]["time_left"] = $time_left;
 		$response[$i]["player_id"] = $player_id;	//player_id who possesses the bomb
 		$response[$i]["num_pass"] = $num_pass;
-		$response[$i]["question_id"] = $question_id;
+		$response[$i]["question_status"] = $question_status;
 		
 		$response[$i]["bomb_name"] = $bomb_name;
 		$response[$i]["question_type"] = $question_type;

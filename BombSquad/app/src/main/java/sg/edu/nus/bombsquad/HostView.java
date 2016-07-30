@@ -201,8 +201,9 @@ public class HostView extends AppCompatActivity {
             for (int j = 2; j < 6; j++) {
                 result += createQnBoxArr[i][j] + "\n";
             }
+            result += "Answer: " + createQnBoxArr[i][6];
         } else {
-            result = createQnBoxArr[i][6];
+            result = "Answer: " + createQnBoxArr[i][6];
         }
         tvAnswerOption.setText(result);
         tvAnswerOption.setTextSize(20);
@@ -235,7 +236,7 @@ public class HostView extends AppCompatActivity {
         tvTimeLeft.setTextColor(Color.WHITE);
         tvTimeLeft.setPadding(15, 5, 2, 2);
 
-        //Time Left - EditText
+        //Time Left - Display countdown timing - textview
         LinearLayout.LayoutParams etTimeLeftLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         etTimeLeftLL.setMargins(30, 0, 30, 35);
         tvTimeLefts[i] = new TextView(this);
@@ -244,6 +245,13 @@ public class HostView extends AppCompatActivity {
         tvTimeLefts[i].setBackgroundResource(R.drawable.white_bg_black_border);
         tvTimeLefts[i].setLayoutParams(etTimeLeftLL);
 
+        //Question status
+        TextView tvQuestionStatus = new TextView(this);
+        tvQuestionStatus.setText("Question Status");
+        tvQuestionStatus.setTextSize(20);
+        tvQuestionStatus.setTextColor(Color.WHITE);
+        tvQuestionStatus.setPadding(15, 5, 2, 2);
+        
         //LinearLayout for defuse and detonate
         LinearLayout defuseDetonateLL = new LinearLayout(this);
         defuseDetonateLL.setOrientation(LinearLayout.HORIZONTAL);

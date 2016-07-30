@@ -18,16 +18,19 @@
         android:layout_centerHorizontal="true"
         android:paddingBottom="10dp" />
 
+    <View
+        android:id ="@+id/fakeView"
+        android:layout_width ="50dp"
+        android:layout_height ="20dp"
+        android:layout_centerInParent="true" />
+
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/RMgreenTick"
-        android:maxHeight="10dp"
         android:background="@drawable/green_tick"
-        android:layout_marginLeft="25dp"
-        android:layout_marginEnd="51dp"
         android:layout_alignTop="@+id/RMredCross"
-        android:layout_toStartOf="@+id/RMredCross" />
+        android:layout_toLeftOf="@+id/fakeView" />
 
     <ImageButton
         android:layout_width="50dp"
@@ -35,8 +38,7 @@
         android:id="@+id/RMredCross"
         android:background="@drawable/red_cross"
         android:layout_below="@+id/manageRoom"
-        android:layout_alignEnd="@+id/manageRoom"
-        android:layout_marginEnd="70dp" />
+        android:layout_toRightOf="@+id/fakeView" />
 
     <ScrollView
         android:layout_width="wrap_content"

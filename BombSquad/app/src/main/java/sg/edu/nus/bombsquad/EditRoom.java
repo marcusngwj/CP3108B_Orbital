@@ -41,6 +41,15 @@ public class EditRoom extends AppCompatActivity{
         minus();
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        Intent back = new Intent(EditRoom.this, ManageRoom.class);
+        back.putExtra("user_id" , intent.getStringExtra("user_id"));
+        back.putExtra("room", intent.getStringExtra("room"));
+        startActivity(back);
+    }
+
     private void display() {
         LinearLayout ll = (LinearLayout)findViewById(R.id.editRoomScroll);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -73,7 +82,6 @@ public class EditRoom extends AppCompatActivity{
         greenPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                global.setEditRoomBoolean(true);
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response){
@@ -87,6 +95,7 @@ public class EditRoom extends AppCompatActivity{
                                 addRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
                                 addRoomIntent.putExtra("room_code", intent.getStringExtra("room_code"));
                                 addRoomIntent.putExtra("room_name", intent.getStringExtra("room_name"));
+                                addRoomIntent.putExtra("room", intent.getStringExtra("room"));
                                 startActivity(addRoomIntent);
                             }
                         } catch (JSONException e) {
@@ -118,8 +127,6 @@ public class EditRoom extends AppCompatActivity{
                 int i = 0;
                 while (i < 100000) {
                     if (selected[i]) {
-                        System.out.println("user id = " + intent.getStringExtra("user_id"));
-                        System.out.println("question_id" + i);
                         final int idx = i;
                         RequestBody postData = new FormBody.Builder()
                                 .add("user_id", intent.getStringExtra("user_id"))

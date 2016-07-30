@@ -296,50 +296,66 @@ public class ManageRoom extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int k = 0;
+                                int count = 0;
                                 OkHttpClient client = new OkHttpClient();
-                                System.out.println("EDIT ROOM");
                                 while (k < 100000) {
                                     if (selected[k]) {
-                                        final int room_code = k;
-                                        RequestBody postData = new FormBody.Builder()
-                                                .add("room_code", k+"")
-                                                .build();
-                                        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionNameInRoom.php").post(postData).build();
-                                        client.newCall(request)
-                                                .enqueue(new Callback() {
-                                                    @Override
-                                                    public void onFailure(Call call, IOException e) {
-                                                        System.out.println("FAIL");
-                                                    }
-
-                                                    @Override
-                                                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                                        try {
-                                                            JSONObject result = new JSONObject(response.body().string());
-                                                            if (result.getJSONObject(0+"").getBoolean("success")) {
-                                                                int m = 0;
-                                                                while (m < result.length()-1) {
-                                                                    global.getQuestion_id()[m] = result.getJSONObject(m+ "").getString("question_id");
-                                                                    System.out.println(global.getQuestion_id()[m]);
-                                                                    global.getQuestionName()[m] = result.getJSONObject(m + "").getString("bomb_name");
-                                                                    System.out.println(global.getQuestionName()[m]);
-                                                                    m++;
-                                                                }
-                                                                Intent intent = getIntent();
-                                                                Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
-                                                                editRoomIntent.putExtra("room", intent.getStringExtra("room"));
-                                                                editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
-                                                                editRoomIntent.putExtra("room_code", room_code+"");
-                                                                editRoomIntent.putExtra("room_name", selectedRoomName.get(room_code+""));
-                                                                startActivity(editRoomIntent);
-                                                            }
-                                                        } catch (JSONException e) {
-                                                            //e.printStackTrace();
-                                                        }
-                                                    }
-                                                });
+                                        count++;
                                     }
                                     k++;
+                                }
+                                if (count > 1) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ManageRoom.this);
+                                    builder.setMessage("Please only select 1 room to edit")
+                                            .setPositiveButton("Ok", null)
+                                            .create()
+                                            .show();
+                                }
+                                else {
+                                    k = 0;
+                                    while (k < 100000) {
+                                        if (selected[k]) {
+                                            final int room_code = k;
+                                            RequestBody postData = new FormBody.Builder()
+                                                    .add("room_code", k + "")
+                                                    .build();
+                                            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getQuestionNameInRoom.php").post(postData).build();
+                                            client.newCall(request)
+                                                    .enqueue(new Callback() {
+                                                        @Override
+                                                        public void onFailure(Call call, IOException e) {
+                                                            System.out.println("FAIL");
+                                                        }
+
+                                                        @Override
+                                                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                                            try {
+                                                                JSONObject result = new JSONObject(response.body().string());
+                                                                if (result.getJSONObject(0 + "").getBoolean("success")) {
+                                                                    int m = 0;
+                                                                    while (m < result.length() - 1) {
+                                                                        global.getQuestion_id()[m] = result.getJSONObject(m + "").getString("question_id");
+                                                                        System.out.println(global.getQuestion_id()[m]);
+                                                                        global.getQuestionName()[m] = result.getJSONObject(m + "").getString("bomb_name");
+                                                                        System.out.println(global.getQuestionName()[m]);
+                                                                        m++;
+                                                                    }
+                                                                    Intent intent = getIntent();
+                                                                    Intent editRoomIntent = new Intent(ManageRoom.this, EditRoom.class);
+                                                                    editRoomIntent.putExtra("room", intent.getStringExtra("room"));
+                                                                    editRoomIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                                                    editRoomIntent.putExtra("room_code", room_code + "");
+                                                                    editRoomIntent.putExtra("room_name", selectedRoomName.get(room_code + ""));
+                                                                    startActivity(editRoomIntent);
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                //e.printStackTrace();
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                        k++;
+                                    }
                                 }
 
                             }

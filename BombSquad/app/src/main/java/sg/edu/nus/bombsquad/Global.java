@@ -29,7 +29,6 @@ public class Global {
     private String user_id; //DO NOT EDIT (Should remain constant throughout everything)
     private String room_name;
     private String room_code;
-    private String room_status;
     private int num_question;
     private String[] question_id = new String[100000];
     private String player_name;
@@ -43,6 +42,7 @@ public class Global {
     private int[] playerPossessBomb;
     private int[] timeLefts;
     private TextView[] tvTimeLefts;
+    private TextView[] tvQnStat;
     private boolean updateHostViewBoolean;
     private boolean runScheduler;
     private RoomBank roomBank;
@@ -72,6 +72,18 @@ public class Global {
 
 
 
+    /*-------- Qn Statuses -------*/
+    private String[] qnStatus = {"Question is not deployed",
+    "Question being deployed",
+    "Bomb has been successfully defused",
+    "Bomb has exploded",
+    "Player has failed this question",
+    "Upper limit of passes reached",
+    "TO BE REPLACE BY ACTUAL"};
+    private int[] qnStatusCode;
+
+
+
     /*---------- Modify ----------*/
     public void setData(String[] arr) { stringArr = arr; }
 
@@ -96,8 +108,6 @@ public class Global {
     public void setRoomName(String name) { room_name = name; }
 
     public void setRoomCode(String string) { room_code = string; }
-
-    public void setRoomStatus(String string) { room_status = string; }
 
     public void setNumQuestion(int num) { num_question = num; }
 
@@ -124,6 +134,10 @@ public class Global {
     public void setTimeLefts(int[] arr) { timeLefts = arr; }
 
     public void setTvTimeLefts(TextView[] arr) { tvTimeLefts = arr; }
+
+    public void setTvQnStat(TextView[] arr) {
+        tvQnStat = arr;
+    }
 
     public void setUpdateHostViewBoolean(Boolean bool) { updateHostViewBoolean = bool; }
 
@@ -175,6 +189,10 @@ public class Global {
         error = bool;
     }
 
+    public void setQnStatusCode(int[] arr){
+        qnStatusCode = arr;
+    }
+
 
 
 
@@ -203,8 +221,6 @@ public class Global {
 
     public String getRoomCode() { return room_code; }
 
-    public String getRoomStatus() { return room_status; }
-
     public int getNumQuestion() { return num_question; }
 
     public String[] getQuestion_id() { return question_id; }
@@ -230,6 +246,10 @@ public class Global {
     public int[] getTimeLefts() { return timeLefts; }
 
     public TextView[] getTvTimeLefts() { return tvTimeLefts; }
+
+    public TextView[] getTvQnStat() {
+        return tvQnStat;
+    }
 
     public boolean getUpdateHostViewBoolean() { return updateHostViewBoolean; }
 
@@ -275,6 +295,14 @@ public class Global {
 
     public boolean getError() {
         return error;
+    }
+
+    public String[] getQnStatus() {
+        return qnStatus;
+    }
+
+    public int[] getQnStatusCode() {
+        return qnStatusCode;
     }
 
 

@@ -31,9 +31,6 @@ import okhttp3.RequestBody;
 
 public class HostSelection extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    final ScheduledExecutorService scheduler1 = Executors.newSingleThreadScheduledExecutor();
-    final ScheduledExecutorService scheduler2 = Executors.newSingleThreadScheduledExecutor();
-    final ScheduledExecutorService scheduler3 = Executors.newSingleThreadScheduledExecutor();
     Global global = Global.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +208,7 @@ public class HostSelection extends AppCompatActivity {
         protected Void doInBackground(String... times) {
             final String time = times[0];
             global.setTimeLeft(Integer.parseInt(time) + 1);
-            scheduler3.scheduleAtFixedRate(new Runnable() {
+            scheduler.scheduleAtFixedRate(new Runnable() {
                 public void run() {
                     if (global.getTimeLeft() > 0) {
                         global.setTimeLeft(global.getTimeLeft() - 1);
@@ -237,7 +234,7 @@ public class HostSelection extends AppCompatActivity {
                     }
                     if (global.getTimeLeft() <= 0) {
                         global.undeployQ(global.getCurrQuestionId());
-                        scheduler3.shutdown();
+                        scheduler.shutdown();
                     }
                 }
             }, 0, 1, TimeUnit.SECONDS);

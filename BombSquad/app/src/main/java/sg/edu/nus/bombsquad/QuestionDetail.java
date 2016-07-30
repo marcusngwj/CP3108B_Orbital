@@ -73,7 +73,7 @@ public class QuestionDetail {
 
         mcqAnswer = "";     //MCQ qn not answered
         finalAnswer = "";    //Question not answered
-        setLayout();
+        //setLayout();
     }
 
 

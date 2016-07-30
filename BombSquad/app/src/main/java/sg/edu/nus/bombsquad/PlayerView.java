@@ -1,5 +1,6 @@
 package sg.edu.nus.bombsquad;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -23,6 +24,7 @@ import com.google.android.gms.appdatasearch.GetRecentContextCall;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -54,8 +56,7 @@ public class PlayerView extends AppCompatActivity {
     final ArrayList<String> questionIDList = roomBank.getQuestionIDList();
     final HashMap<String, QuestionDetail> questionHashMap = roomBank.getQuestionHashMap();
     final HashMap<String, RoomDetail> roomDetailHashMap = roomBank.getRoomDetailHashMap();
-
-    LinearLayout outerLL;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,17 +113,13 @@ public class PlayerView extends AppCompatActivity {
             }
         });
 
-        //Layout of PlayerView
-        outerLL = (LinearLayout) findViewById(R.id.playerViewLinearLayout);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, 0, 50);
-
+        dialog = new ProgressDialog(PlayerView.this);
 
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                display();
+                prepareDisplay();
             }
-        }, 0, 500, TimeUnit.MILLISECONDS);
+        }, 0, 750, TimeUnit.MILLISECONDS);
 
     }
 
@@ -137,7 +134,7 @@ public class PlayerView extends AppCompatActivity {
         //super.onBackPressed();    //user cannot press the back button on android
     }
 
-    private void display() {
+    private void prepareDisplay(){
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()
                 .add("room_code", roomBank.getRoomCode())
@@ -147,9 +144,6 @@ public class PlayerView extends AppCompatActivity {
 
         client.newCall(request)
                 .enqueue(new Callback() {
-                    boolean responded;
-                    String score = "";
-
                     @Override
                     public void onFailure(Call call, IOException e) {
                         System.out.println("FAIL");
@@ -157,71 +151,52 @@ public class PlayerView extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                        final ArrayList<LinearLayout> deployedQuestionList = new ArrayList<LinearLayout>();
-                        final ArrayList<String> playerWithBombList = new ArrayList<String>();
-                        final ArrayList<String> numPassList = new ArrayList<String>();
-                        final TextView tvScore = (TextView) findViewById(R.id.textViewActualScore);
 
                         try {
                             JSONObject result = new JSONObject(response.body().string());
                             System.out.println(result);
 
-                            score = result.getString("total_score");
+                            String score = result.getString("total_score");
 
+                            String question_id="";
+                            String time_left="";
+                            String player_id="";
+                            String num_pass="";
+
+                            int countNumDeploy = 0;
                             for (int i = 0; i < numQuestion; i++) {
-                                String question_id = result.getJSONObject(i + "").getString("question_id");
                                 String deploy_status = result.getJSONObject(i + "").getString("deploy_status");
                                 Integer deployStatusIntegerValue = Integer.valueOf(deploy_status);
-                                String time_left = result.getJSONObject(i + "").getString("time_left");
-                                String player_id = result.getJSONObject(i + "").getString("player_id");
-                                String num_pass = result.getJSONObject(i + "").getString("num_pass");
-
-                                /*System.out.println("QUESTION_ID: " + question_id);
-                                System.out.println("DEPLOY_STATUS: " + deploy_status);
-                                System.out.println("NUM_PASS: " + num_pass);*/
 
                                 //A question will only be displayed when its deploy status is more than 0
                                 if (deployStatusIntegerValue > 0) {
-                                    LinearLayout qnLayout = questionHashMap.get(question_id).getLayout();
-                                    qnLayout.setTag(time_left); //To pass to the method in " if responded"
-                                    deployedQuestionList.add(qnLayout);
-                                    playerWithBombList.add(player_id);
-                                    numPassList.add(num_pass);
+                                    countNumDeploy++;
+                                    question_id = result.getJSONObject(i + "").getString("question_id");
+                                    time_left = result.getJSONObject(i + "").getString("time_left");
+                                    player_id = result.getJSONObject(i + "").getString("player_id");
+                                    num_pass = result.getJSONObject(i + "").getString("num_pass");
                                 }
+
                             }
-                            responded = true;
+                            if(countNumDeploy==1){
+                                if(dialog.isShowing()){
+                                    dialog.dismiss();
+                                }
+                                display(question_id, player_id, time_left, num_pass, score);
+                            }
+                            else{
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.setTitle("Waiting for host to deploy a question");
+                                        dialog.setCancelable(false);
+                                        dialog.show();
+                                    }
+                                });
+                            }
+
                         } catch (JSONException e) {
                             /*e.printStackTrace();*/
-                        }
-                        if (responded) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    tvScore.setText(score);
-                                    outerLL.removeAllViews();
-                                    int i = 0;
-                                    for (LinearLayout qnLL : deployedQuestionList) {
-                                        //To remove the error thrown on runtime
-                                        if (qnLL != null) {
-                                            ViewGroup parent = (ViewGroup) qnLL.getParent();
-                                            if (parent != null) {
-                                                parent.removeView(qnLL);
-                                            }
-                                        }
-
-                                        outerLL.addView(qnLL);
-
-                                        String question_id = (qnLL.getId() - QuestionDetail.ID_INNERLL_CONSTANT) + "";
-                                        String time_left = qnLL.getTag().toString();
-                                        String player_id = playerWithBombList.get(i);
-                                        String num_pass = numPassList.get(i++);
-                                        System.out.println("PLAYER_ID W BOMB: " + player_id);
-                                        System.out.println("NUMNUMNUM PASS: " + num_pass);
-
-                                        withinABox(question_id, time_left, player_id, num_pass);
-                                    }
-                                }
-                            });
                         }
 
 
@@ -230,90 +205,159 @@ public class PlayerView extends AppCompatActivity {
 
     }
 
-    //Things happening inside a box of question
-    private void withinABox(final String question_id, final String time_left, final String player_id, final String num_pass) {
-        final int qnID = Integer.valueOf(question_id);
+    private void display(String question_id, final String idOfPlayerWithBomb, final String time_left, final String num_pass, final String score){
+        final QuestionDetail qnDetail = questionHashMap.get(question_id);
+        final String qnType = qnDetail.getQuestion_type();
+        final String actualQuestion = qnDetail.getQuestion();
+        final String[] mcqOptions = qnDetail.getOption();
+
         final int timeLeftIntegerValue = Integer.valueOf(time_left);
         final int numPassIntegerValue = Integer.valueOf(num_pass);
 
-        final QuestionDetail qnDetail = questionHashMap.get(question_id);
+        final TextView tvActualScore = (TextView)findViewById(R.id.textViewActualScore);
+        final TextView tvActualQuestion = (TextView)findViewById(R.id.textViewActualQuestion);
+        final TextView tvMcqOptionsDisplay = (TextView)findViewById(R.id.textViewMcqOptionsDisplay);
+        final EditText etAnswerOpenEnded = (EditText)findViewById(R.id.editTextAnswerOpenEnded);
+        final LinearLayout mcqOptionSelectableBlockLL = (LinearLayout)findViewById(R.id.linearLayoutMcqOptionSelectableBlock);
+        final Button bOptionA = (Button)findViewById(R.id.buttonOptionA);
+        final Button bOptionB = (Button)findViewById(R.id.buttonOptionB);
+        final Button bOptionC = (Button)findViewById(R.id.buttonOptionC);
+        final Button bOptionD = (Button)findViewById(R.id.buttonOptionD);
 
-        final TextView tvTimeLeft = (TextView) findViewById(qnID + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
-        final EditText etAnswerOption = (EditText) findViewById(qnID + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
-        final TextView tvInPossessionOfBombTitle = (TextView) findViewById(qnID + QuestionDetail.ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT);
-        final TextView tvInPossessionOfBomb = (TextView) findViewById(qnID + QuestionDetail.ID_TVINPOSSESSIONOFBOMB_CONSTANT);
-        final LinearLayout mcqOptionsLL = (LinearLayout) findViewById(qnID + QuestionDetail.ID_MCQOPTIONSLL_CONSTANT);
-        final Button bDefuse = (Button) findViewById(qnID + QuestionDetail.ID_BDEFUSE_CONSTANT);
-        final Button bPass = (Button) findViewById(qnID + QuestionDetail.ID_BPASS_CONSTANT);
+        final LinearLayout possessionBlockLL = (LinearLayout)findViewById(R.id.linearLayoutPossessionBlock);
+        final TextView tvNameOfPlayerWithBomb = (TextView)findViewById(R.id.textViewNameOfPlayerWithBomb);
 
-        bDefuse.setVisibility(View.GONE);
-        bPass.setVisibility(View.GONE);
+        final TextView tvTimeLeft = (TextView)findViewById(R.id.textViewTimeLeftDisplay);
 
-        //User with bomb
-        if (user_id.equals(player_id)) {
-            tvInPossessionOfBombTitle.setVisibility(View.GONE);
-            tvInPossessionOfBomb.setVisibility(View.GONE);
-            bDefuse.setVisibility(View.VISIBLE);
-            bPass.setVisibility(View.VISIBLE);
+        final Button bDefuse = (Button)findViewById(R.id.buttonDefuse);
+        final Button bPass = (Button)findViewById(R.id.buttonPass);
 
-            //Question type verification
-            if (questionHashMap.get(question_id).getQuestion_type().equals("Multiple Choice")) {
-                mcqOptionsLL.setVisibility(View.VISIBLE);
-            } else {
-                etAnswerOption.setVisibility(View.VISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Score display
+                tvActualScore.setText(score);
+
+                //Question and answer
+                tvActualQuestion.setText(actualQuestion);
+                if(qnType.equals("Multiple Choice")) {
+                    String result = "A. " + mcqOptions[0] + "\nB. " + mcqOptions[1] + "\nC. " + mcqOptions[2] + "\nD. " + mcqOptions[3];
+                    tvMcqOptionsDisplay.setText(result);
+                    bOptionA.setTag(mcqOptions[0]);
+                    bOptionB.setTag(mcqOptions[1]);
+                    bOptionC.setTag(mcqOptions[2]);
+                    bOptionD.setTag(mcqOptions[3]);
+                }
+                else {
+                    tvMcqOptionsDisplay.setText("");
+                }
+
+                //Variations on display depending on user_id
+                if(user_id.equals(idOfPlayerWithBomb)) {
+                    if(qnType.equals("Multiple Choice")) {
+                        mcqOptionSelectableBlockLL.setVisibility(View.VISIBLE);
+                        etAnswerOpenEnded.setVisibility(View.GONE);
+                        mcqButtonManipulation(bOptionA, bOptionB, bOptionC, bOptionD, qnDetail);
+                    }
+                    else {
+                        mcqOptionSelectableBlockLL.setVisibility(View.GONE);
+                        etAnswerOpenEnded.setVisibility(View.VISIBLE);
+                    }
+                    possessionBlockLL.setVisibility(View.GONE);
+                    bDefuse.setVisibility(View.VISIBLE);
+                    bPass.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mcqOptionSelectableBlockLL.setVisibility(View.GONE);
+                    etAnswerOpenEnded.setVisibility(View.GONE);
+
+                    possessionBlockLL.setVisibility(View.VISIBLE);
+                    getPlayerName(idOfPlayerWithBomb, tvNameOfPlayerWithBomb);
+
+                    bDefuse.setVisibility(View.GONE);
+                    bPass.setVisibility(View.GONE);
+                }
+
+                setTimeLeftDisplay(qnDetail, timeLeftIntegerValue, numPassIntegerValue, tvTimeLeft, bDefuse, bPass, etAnswerOpenEnded, idOfPlayerWithBomb);
             }
-        }
-        //User without bomb
-        else {
-            tvInPossessionOfBombTitle.setVisibility(View.VISIBLE);
-            tvInPossessionOfBomb.setVisibility(View.VISIBLE);
-            getPlayerName(player_id, tvInPossessionOfBomb);
-            bDefuse.setVisibility(View.GONE);
-            bPass.setVisibility(View.GONE);
-
-            //Question type verification
-            if (questionHashMap.get(question_id).getQuestion_type().equals("Multiple Choice")) {
-                mcqOptionsLL.setVisibility(View.GONE);
-            } else {
-                etAnswerOption.setVisibility(View.GONE);
-            }
-        }
-
-        //If time is not up
-        if(timeLeftIntegerValue>0){
-            //Question is not answered and numPass more than 0
-            if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue>0) {
-                tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
-                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
-                bPassOnClick(bPass, qnDetail);
-            }
-            else if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue==0){
-                tvTimeLeft.setText(timeLeftIntegerValue + "");
-                bPass.setEnabled(false);    //No more pass left, cannot pass
-                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
-            }
-        }
-        //When someone answers the qn correctly
-        else if(timeLeftIntegerValue==-5){
-            tvTimeLeft.setText("Bomb has been successfully defused");
-            bDefuse.setEnabled(false);
-            bPass.setEnabled(false);
-        }
-        //When the time is up
-        else{
-            //No need consider positive case because it has been taken care of
-            if((qnDetail.getFinalAnswer().isEmpty() && global.getUserId().equals(player_id))|| tvTimeLeft.getText().toString().equals("YOU FAILED THIS QUESTION")){
-                tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-                bDefuse.setEnabled(false);
-                bPass.setEnabled(false);
-            }
-            else{
-                tvTimeLeft.setText("THE BOMB HAS EXPLODED");
-            }
-        }
-
+        });
     }
 
+
+    private void mcqButtonManipulation(final Button bOptionA, final Button bOptionB, final Button bOptionC, final Button bOptionD, final QuestionDetail qnDetail){
+        final String correctAnswer = qnDetail.getCorrectAnswer();
+        //Button A onClickListener
+        bOptionA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String optionA = (String)bOptionA.getTag();
+                if(optionA.equals(correctAnswer)){
+                    qnDetail.setMcqAnswer("correct");
+                }
+                else{
+                    qnDetail.setMcqAnswer("wrong");
+                }
+                bOptionA.setBackgroundResource(R.drawable.green_border);
+                bOptionB.setBackgroundResource(R.drawable.white_border);
+                bOptionC.setBackgroundResource(R.drawable.white_border);
+                bOptionD.setBackgroundResource(R.drawable.white_border);
+            }
+        });
+
+        //Button B onClickListener
+        bOptionB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String optionB = (String)bOptionB.getTag();
+                if(optionB.equals(correctAnswer)){
+                    qnDetail.setMcqAnswer("correct");
+                }
+                else{
+                    qnDetail.setMcqAnswer("wrong");
+                }
+                bOptionA.setBackgroundResource(R.drawable.white_border);
+                bOptionB.setBackgroundResource(R.drawable.green_border);
+                bOptionC.setBackgroundResource(R.drawable.white_border);
+                bOptionD.setBackgroundResource(R.drawable.white_border);
+            }
+        });
+
+        //Button C onClickListener
+        bOptionC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String optionC = (String)bOptionC.getTag();
+                if(optionC.equals(correctAnswer)){
+                    qnDetail.setMcqAnswer("correct");
+                }
+                else{
+                    qnDetail.setMcqAnswer("wrong");
+                }
+                bOptionA.setBackgroundResource(R.drawable.white_border);
+                bOptionB.setBackgroundResource(R.drawable.white_border);
+                bOptionC.setBackgroundResource(R.drawable.green_border);
+                bOptionD.setBackgroundResource(R.drawable.white_border);
+            }
+        });
+
+        //Button D onClickListener
+        bOptionD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String optionD = (String)bOptionD.getTag();
+                if(optionD.equals(correctAnswer)){
+                    qnDetail.setMcqAnswer("correct");
+                }
+                else{
+                    qnDetail.setMcqAnswer("wrong");
+                }
+                bOptionA.setBackgroundResource(R.drawable.white_border);
+                bOptionB.setBackgroundResource(R.drawable.white_border);
+                bOptionC.setBackgroundResource(R.drawable.white_border);
+                bOptionD.setBackgroundResource(R.drawable.green_border);
+            }
+        });
+    }
 
     private void getPlayerName(String player_id, final TextView tvInPossessionOfBomb) {
         OkHttpClient client = new OkHttpClient();
@@ -351,6 +395,56 @@ public class PlayerView extends AppCompatActivity {
                 });
     }
 
+    private void setTimeLeftDisplay(QuestionDetail qnDetail, int timeLeftIntegerValue, int numPassIntegerValue, TextView tvTimeLeft, Button bDefuse, Button bPass, TextView etAnswerOption, String player_id){
+        //If time is not up
+        if(timeLeftIntegerValue>0){
+            //Question is not answered and numPass more than 0
+            if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue>0) {
+                tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
+                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
+                bPassOnClick(bPass, qnDetail);
+            }
+            else if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue==0){
+                tvTimeLeft.setText(timeLeftIntegerValue + "");
+                bPass.setEnabled(false);    //No more pass left, cannot pass
+                bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft);
+            }
+        }
+        //When someone answers the qn correctly
+        else if(timeLeftIntegerValue==-5){
+            tvTimeLeft.setText("Bomb has been successfully defused");
+            bDefuse.setEnabled(false);
+            bPass.setEnabled(false);
+        }
+        //When the time is up
+        else{
+            //No need consider positive case because it has been taken care of
+            if((qnDetail.getFinalAnswer().isEmpty() && global.getUserId().equals(player_id))|| tvTimeLeft.getText().toString().equals("YOU FAILED THIS QUESTION")){
+                tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                bDefuse.setEnabled(false);
+                bPass.setEnabled(false);
+            }
+            else{
+                tvTimeLeft.setText("THE BOMB HAS EXPLODED");
+            }
+        }
+    }
+
+    private void checkAnswer(QuestionDetail qnDetail, String userAnswer){
+        String qnType = qnDetail.getQuestion_type();
+        String correctAnswer = qnDetail.getCorrectAnswer();
+
+        if ((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswer().isEmpty()) || (!qnType.equals("Multiple Choice") && userAnswer.isEmpty())){
+            qnDetail.setFinalAnswer("");
+        }
+        else if((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswer().equals("correct")) || (!qnType.equals("Multiple Choice") && userAnswer.equals(correctAnswer))) {
+            qnDetail.setFinalAnswer("correct");
+        }
+        else {
+            qnDetail.setFinalAnswer("wrong");
+        }
+    }
+
     private void updateScore(String answerStatus, String points){
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()
@@ -385,21 +479,6 @@ public class PlayerView extends AppCompatActivity {
 
                     }
                 });
-    }
-
-    private void checkAnswer(QuestionDetail qnDetail, String userAnswer){
-        String qnType = qnDetail.getQuestion_type();
-        String correctAnswer = qnDetail.getCorrectAnswer();
-
-        if ((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswer().isEmpty()) || (!qnType.equals("Multiple Choice") && userAnswer.isEmpty())){
-            qnDetail.setFinalAnswer("");
-        }
-        else if((qnType.equals("Multiple Choice") && qnDetail.getMcqAnswer().equals("correct")) || (!qnType.equals("Multiple Choice") && userAnswer.equals(correctAnswer))) {
-            qnDetail.setFinalAnswer("correct");
-        }
-        else {
-            qnDetail.setFinalAnswer("wrong");
-        }
     }
 
     private void bDefuseOnClick(final Button bDefuse, final Button bPass, final TextView etAnswerOption, final QuestionDetail qnDetail, final TextView tvTimeLeft){
@@ -444,209 +523,7 @@ public class PlayerView extends AppCompatActivity {
             }
         });
     }
+
 }
 
 
-
-
-/*
-
-class Background extends AsyncTask<Void, Void, Void> {
-    String[] deployStatusArray = new String[numQuestion];
-    String[] timeLeftArray = new String[numQuestion];
-    String[] playerIDArray = new String[numQuestion];
-
-    protected void onPreExecute(Void pre) {
-    }
-
-    protected Void doInBackground(Void... param) {
-        System.out.println("**************************************");
-        for (int i = 0; i < numQuestion; i++) {
-            deployStatusArray[i] = roomDetailList.get(i).getDeployStatus(i);
-            timeLeftArray[i] = roomDetailList.get(i).getTimeLeft(i);
-            playerIDArray[i] = roomDetailList.get(i).getPlayerID(i);
-
-            System.out.println(i + ":");
-            System.out.println("Deploy_status: " + deployStatusArray[i]);
-            System.out.println("Time_left: " + timeLeftArray[i]);
-            System.out.println("Player who got the bomb: " + playerIDArray[i]);
-            System.out.println("....................");
-        }
-        System.out.println("**************************************");
-        System.out.println();
-        return null;
-    }
-
-    protected void onPostExecute(Void update) {
-        for (int i = 0; i < numQuestion; i++) {
-            final EditText etAnswerOption = (EditText) findViewById(i + QuestionDetail.ID_ETANSWEROPTION_CONSTANT);
-            final LinearLayout mcqOptionsLL = (LinearLayout) findViewById(i + QuestionDetail.ID_MCQOPTIONSLL_CONSTANT);
-            final TextView tvInPossessionOfBombTitle = (TextView) findViewById(i + QuestionDetail.ID_TVINPOSSESSIONOFBOMBTITLE_CONSTANT);
-            final TextView tvInPossessionOfBomb = (TextView) findViewById(i + QuestionDetail.ID_TVINPOSSESSIONOFBOMB_CONSTANT);
-            final TextView tvTimeLeft = (TextView) findViewById(i + QuestionDetail.ID_TVTIMELEFT_CONSTANT);
-            final Button bDefuse = (Button) findViewById(i + QuestionDetail.ID_BDEFUSE_CONSTANT);
-            final Button bPass = (Button) findViewById(i + QuestionDetail.ID_BPASS_CONSTANT);
-
-            int deployStatusIntegerValue = Integer.valueOf(deployStatusArray[i]);
-            int timeLeftIntegerValue = Integer.valueOf(timeLeftArray[i]);
-
-            //If a question is being deployed
-            if (deployStatusIntegerValue > 0) {
-                questionDetailList.get(i).getLayout().setVisibility(View.VISIBLE);
-
-                //If time's up and qn is not answered correctly
-                if (timeLeftIntegerValue <= 0 && !tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                    tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-                }
-
-                //If timer has not finished counting
-                else if (!tvTimeLeft.getText().equals("Bomb has been successfully defused")) {
-                    tvTimeLeft.setText(timeLeftIntegerValue + "");    //Display timer; grabbed from server; live
-                }
-
-                //If qn is answered correctly
-                //tvTimeLeft will display "Bomb has been successfully defused"
-            } else {
-                questionDetailList.get(i).getLayout().setVisibility(View.GONE);
-            }
-
-            //If user possesses the bomb, show button for defuse and pass, hide bomb possession display
-            if (user_id.equals(playerIDArray[i])) {
-                tvInPossessionOfBombTitle.setVisibility(View.GONE);
-                tvInPossessionOfBomb.setVisibility(View.GONE);
-                bDefuse.setVisibility(View.VISIBLE);
-                bPass.setVisibility(View.VISIBLE);
-
-                //Question type verification
-                if (questionDetailList.get(i).getQuestion_type().equals("Multiple Choice")) {
-                    mcqOptionsLL.setVisibility(View.VISIBLE);
-                } else {
-                    etAnswerOption.setVisibility(View.VISIBLE);
-                }
-            }
-            //else hide both buttons, show bomb possession display
-            else {
-                tvInPossessionOfBombTitle.setVisibility(View.VISIBLE);
-                tvInPossessionOfBomb.setVisibility(View.VISIBLE);
-                tvInPossessionOfBomb.setText(playerIDArray[i]);
-
-                bDefuse.setVisibility(View.GONE);
-                bPass.setVisibility(View.GONE);
-
-                //Question type verification
-                if (questionDetailList.get(i).getQuestion_type().equals("Multiple Choice")) {
-                    mcqOptionsLL.setVisibility(View.GONE);
-                } else {
-                    etAnswerOption.setVisibility(View.GONE);
-                }
-            }
-        }
-
-
-    }
-}*//*
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-    /*class Background extends AsyncTask<String, Void, Void> {
-        TextView uiUpdate = (TextView) findViewById(R.id.textViewPlayerMessage);
-        final Global global = Global.getInstance();
-
-        protected void onPreExecute(Void pre) {
-            uiUpdate.setText("Waiting for host to start game...");
-        }
-
-        protected Void doInBackground(String... codes) {
-            OkHttpClient client = new OkHttpClient();
-            RequestBody postData = new FormBody.Builder().add("room_code", codes[0]).build();
-            Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updatePlayerView.php").post(postData).build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            System.out.println("FAIL");
-                        }
-
-                        @Override
-                        public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                            try {
-                                JSONObject result = new JSONObject(response.body().string());
-                                global.setRoomStatus(result.getString("room_status"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-            return null;
-        }
-
-        protected void onPostExecute(Void update) {
-            Global global = Global.getInstance();
-            if (global.getRoomStatus() != null && global.getRoomStatus().equals("1")) {
-                System.out.println("In Activity");
-                uiUpdate.setText("In room");
-            }
-            if (global.getRoomStatus() != null && global.getRoomStatus().equals("0")) {
-                uiUpdate.setText("Room closed");
-            }
-        }
-    }*/
-
-
-
-
-
-/*
-The original AsyncTask using Volley
-class Background extends AsyncTask<String, Void, Void> {
-        TextView uiUpdate = (TextView)findViewById(R.id.textViewPlayerMessage);
-        RequestQueue queue = Volley.newRequestQueue(PlayerView.this);
-
-        protected void onPreExecute(Void pre) {
-            uiUpdate.setText("Waiting for host to start game...");
-        }
-
-        protected Void doInBackground(String... codes) {
-            final Global global = Global.getInstance();
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject responseListener = new JSONObject(response);
-                        boolean success = responseListener.getBoolean("success");
-                        if (success){
-                            global.setRoomStatus(responseListener.getString("room_status"));
-                        }
-                    }
-                    catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            UpdatePlayerViewRequest updatePlayer = new UpdatePlayerViewRequest(codes[0], responseListener);
-            queue.add(updatePlayer);
-            return null;
-        }
-
-        protected void onPostExecute(Void update) {
-            Global global = Global.getInstance();
-            if (global.getRoomStatus() != null && global.getRoomStatus().equals("1")) {
-                uiUpdate.setText("In room");
-            }
-        }
-    }
-    */

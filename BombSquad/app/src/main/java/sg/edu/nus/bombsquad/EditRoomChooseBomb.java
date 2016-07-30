@@ -35,6 +35,17 @@ public class EditRoomChooseBomb extends AppCompatActivity {
         addToRoom();
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        Intent back = new Intent(EditRoomChooseBomb.this, EditRoom.class);
+        back.putExtra("user_id", intent.getStringExtra("user_id"));
+        back.putExtra("room_code", intent.getStringExtra("room_code"));
+        back.putExtra("room_name", intent.getStringExtra("room_name"));
+        back.putExtra("room", intent.getStringExtra("room"));
+        startActivity(back);
+    }
+
     private void display() {
         Intent intent = getIntent();
         try {
@@ -80,8 +91,6 @@ public class EditRoomChooseBomb extends AppCompatActivity {
                 int i = 0;
                 while (i < 100000) {
                     if (selected[i]) {
-                        System.out.println("ERCB Room Code: " + intent.getStringExtra("room_code"));
-                        System.out.println("ERCB Room NAme: " + intent.getStringExtra("room_name"));
                         RequestBody postData = new FormBody.Builder()
                                 .add("user_id", intent.getStringExtra("user_id"))
                                 .add("room_name", intent.getStringExtra("room_name"))

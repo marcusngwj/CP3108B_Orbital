@@ -75,7 +75,7 @@ public class HostView extends AppCompatActivity {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Need to add the delete room code here~
+                        closeRoom();
                         Intent intent = getIntent();
                         Intent back = new Intent(HostView.this, ManageRoom.class);
                         back.putExtra("room", intent.getStringExtra("room"));
@@ -96,6 +96,25 @@ public class HostView extends AppCompatActivity {
         scheduler.shutdown();
     }
 
+    //When closing a room
+    private void closeRoom(){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_code", global.getRoomCode())
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/closeRoom.php").post(postData).build();
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        response.body().close();
+                    }
+                });
+    }
 
     //To display the entire layout of hostview
     private void display(String room_code, String room_name, int numQuestion, String[] questionIDArray) {
@@ -113,22 +132,7 @@ public class HostView extends AppCompatActivity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OkHttpClient client = new OkHttpClient();
-                RequestBody postData = new FormBody.Builder()
-                        .add("room_code", global.getRoomCode())
-                        .build();
-                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/closeRoom.php").post(postData).build();
-                client.newCall(request)
-                        .enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                System.out.println("FAIL");
-                            }
-                            @Override
-                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                response.body().close();
-                            }
-                        });
+                onBackPressed();
             }
         });
 
@@ -152,7 +156,6 @@ public class HostView extends AppCompatActivity {
             i++;
         }
     }
-
 
     //To create an individual box that contain details of a particular question
     private LinearLayout createQuestionBox(LinearLayout.LayoutParams lp, int i, final String[] questionIDArray, final String[][] createQnBoxArr) {
@@ -211,7 +214,7 @@ public class HostView extends AppCompatActivity {
         //In possession of - TextView
         TextView tvInPossessionOf = new TextView(this);
 
-        tvInPossessionOf.setText("In possession of");
+        tvInPossessionOf.setText("In possession of bomb");
         tvInPossessionOf.setTextSize(20);
         tvInPossessionOf.setTextColor(Color.WHITE);
         tvInPossessionOf.setPadding(15, 5, 2, 2);

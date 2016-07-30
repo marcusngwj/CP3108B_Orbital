@@ -82,6 +82,7 @@ public class HostView extends AppCompatActivity {
                         back.putExtra("user_id", intent.getStringExtra("user_id"));
                         global.clearDeployed();
                         global.setTimeLeft(0);
+                        scheduler.shutdown();
                         startActivity(back);
                     }
                 })
@@ -304,7 +305,7 @@ public class HostView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 global.undeployQ(questionIDArray[idx]);
-                global.setTimeLeft(0);
+                global.setTimeLeft(1);
             }
         });
 

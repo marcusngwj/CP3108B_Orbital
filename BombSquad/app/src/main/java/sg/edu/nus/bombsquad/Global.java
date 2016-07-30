@@ -34,7 +34,7 @@ public class Global {
     private String[] question_id = new String[100000];
     private String player_name;
     private String[] player_id = new String[100000];
-    private String[] player_list;
+    private String[] player_list = new String[100000];
     private boolean booleanAccess;
     private boolean playerStatus;
     private int timeLeft;
@@ -49,6 +49,7 @@ public class Global {
     private boolean create;
     private String[] questionName;
     private boolean editRoomBoolean;
+    private boolean error;
 
 
     /*---------- okgttp ----------*/
@@ -170,6 +171,10 @@ public class Global {
         editRoomBoolean = bool;
     }
 
+    public void setError(boolean bool) {
+        error = bool;
+    }
+
 
 
 
@@ -268,6 +273,9 @@ public class Global {
         return editRoomBoolean;
     }
 
+    public boolean getError() {
+        return error;
+    }
 
 
 

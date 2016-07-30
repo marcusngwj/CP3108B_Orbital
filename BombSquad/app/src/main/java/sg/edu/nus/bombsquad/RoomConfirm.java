@@ -1,6 +1,7 @@
 package sg.edu.nus.bombsquad;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -44,6 +45,7 @@ public class RoomConfirm extends AppCompatActivity {
                 if (selected[i]) {
                     CheckedTextView ctv = new CheckedTextView(this);
                     ctv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                    ctv.setTextColor(Color.WHITE);
                     ctv.setText(selected_name[i]);
                     assert ll != null;
                     ll.addView(ctv, lp);

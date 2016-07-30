@@ -65,7 +65,7 @@ public class PlayerList extends AppCompatActivity {
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.player_list);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        int i = 0;
+        int i = 1;
         while (i < player_id.length) {
             final String currPlayer = player_id[i];
             Button player = new Button(this);

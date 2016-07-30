@@ -3,6 +3,8 @@ package sg.edu.nus.bombsquad;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -120,15 +122,17 @@ public class HostSelection extends AppCompatActivity {
                                                     }
                                                 });
                                     }
-                                    else {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
-                                        builder.setMessage("There are no players in the room")
-                                                .setNegativeButton("ok", null)
-                                                .create()
-                                                .show();
-                                    }
                                 } catch (JSONException e) {
-                                    //e.printStackTrace();
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
+                                            builder.setMessage("There are no players in the room")
+                                                    .setNegativeButton("ok", null)
+                                                    .create()
+                                                    .show();
+                                        }
+                                    });
                                 }
                             }
                         });
@@ -171,6 +175,7 @@ public class HostSelection extends AppCompatActivity {
                                             player_id[i] = result.getJSONObject(i+"").getString("player");
                                             player_list[i] = result.getJSONObject(i+"").getString("first_name") + " "
                                                     + result.getJSONObject(i+"").getString("last_name");
+                                            global.pushPlayerInRoom(player_id[i], player_list[i]);
                                             i++;
                                         }
                                         Intent intent = getIntent();
@@ -182,15 +187,17 @@ public class HostSelection extends AppCompatActivity {
                                         intent1.putExtra("user_id", intent.getStringExtra("user_id"));
                                         startActivity(intent1);
                                     }
-                                    else {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
-                                        builder.setMessage("There are no players in the room")
-                                                .setNegativeButton("ok", null)
-                                                .create()
-                                                .show();
-                                    }
                                 } catch (JSONException e) {
-                                    //e.printStackTrace();
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(HostSelection.this);
+                                            builder.setMessage("There are no players in the room")
+                                                    .setNegativeButton("ok", null)
+                                                    .create()
+                                                    .show();
+                                        }
+                                    });
                                 }
                             }
                         });

@@ -3,7 +3,7 @@
     
 	$room_code = mysqli_real_escape_string($con, $_POST["room_code"]);
     
-	$statement = mysqli_prepare($con, "UPDATE Room SET player_id = 0, time_left = 0 WHERE room_code = ?");
+	$statement = mysqli_prepare($con, "UPDATE Room SET player_id = 0, time_left = 0, question_status = 0 WHERE room_code = ?");
 	mysqli_stmt_bind_param($statement, "s", $room_code);
 	mysqli_stmt_execute($statement);
 	

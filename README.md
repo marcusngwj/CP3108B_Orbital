@@ -12,7 +12,7 @@ AY2015/16 Summer Project Module
 <br>
 - [x] Register new account
 - [x] Login
-- [x] Craete Room
+- [x] Create Room
 - [x] Enter Room
 - [x] Manage Room
 - [x] Create new bomb

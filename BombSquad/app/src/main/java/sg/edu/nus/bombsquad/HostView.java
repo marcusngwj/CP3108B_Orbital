@@ -33,6 +33,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HostView extends AppCompatActivity {
     Global global = Global.getInstance();
@@ -53,8 +54,10 @@ public class HostView extends AppCompatActivity {
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
         global.setRoomCode(room_code);
         global.setHostViewPossession(new TextView[numQuestion]);
+        global.setQnStatusCode(new int[numQuestion]);
         global.setTvTimeLefts(new TextView[numQuestion]);
         global.setPlayerPossessBomb(new int[numQuestion]);
+        global.setTvQnStat(new TextView[numQuestion]);
         global.setTimeLefts(new int[numQuestion]);
 
 
@@ -163,6 +166,8 @@ public class HostView extends AppCompatActivity {
         final int idx = i;
         TextView[] possession = global.getHostViewPossession();
         TextView[] tvTimeLefts = global.getTvTimeLefts();
+        TextView[] tvQnStat = global.getTvQnStat();
+
         //Inner container
         LinearLayout innerLL = new LinearLayout(this);
         innerLL.setOrientation(LinearLayout.VERTICAL);
@@ -246,13 +251,24 @@ public class HostView extends AppCompatActivity {
         tvTimeLefts[i].setBackgroundResource(R.drawable.white_bg_black_border);
         tvTimeLefts[i].setLayoutParams(etTimeLeftLL);
 
-        //Question status
+        //Question status - header
         TextView tvQuestionStatus = new TextView(this);
         tvQuestionStatus.setText("Question Status");
         tvQuestionStatus.setTextSize(20);
         tvQuestionStatus.setTextColor(Color.WHITE);
         tvQuestionStatus.setPadding(15, 5, 2, 2);
-        
+
+        //Question status - body
+        LinearLayout.LayoutParams etQnStatLL = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        etQnStatLL.setMargins(30, 0, 30, 35);
+        tvQnStat[i] = new TextView(this);
+        tvQnStat[i].setPadding(15, 15, 12, 12);
+        tvQnStat[i].setWidth(30);
+        tvQnStat[i].setBackgroundResource(R.drawable.white_bg_black_border);
+        tvQnStat[i].setLayoutParams(etQnStatLL);
+
+
+
         //LinearLayout for defuse and detonate
         LinearLayout defuseDetonateLL = new LinearLayout(this);
         defuseDetonateLL.setOrientation(LinearLayout.HORIZONTAL);
@@ -304,11 +320,27 @@ public class HostView extends AppCompatActivity {
         bDefuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                global.undeployQ(questionIDArray[idx]);
-                global.setTimeLeft(1);
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", global.getRoomCode())
+                        .add("question_id", questionIDArray[idx])
+                        .add("question_status", "2")
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateQuestionStatus.php").post(postData).build();
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                global.undeployQ(questionIDArray[idx]);
+                                global.setTimeLeft(1);
+                            }
+                        });
             }
         });
-
         //Detonate - Button
         Button bDetonate = new Button(this);
         bDetonate.setBackgroundResource(R.drawable.red_bg_black_border);
@@ -316,8 +348,26 @@ public class HostView extends AppCompatActivity {
         bDetonate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                global.undeployQ(questionIDArray[idx]);
-                global.setTimeLeft(1);
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", global.getRoomCode())
+                        .add("question_id", questionIDArray[idx])
+                        .add("question_status", "3")
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateQuestionStatus.php").post(postData).build();
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                global.undeployQ(questionIDArray[idx]);
+                                global.setTimeLeft(1);
+                            }
+                        });
+
             }
         });
 
@@ -332,6 +382,8 @@ public class HostView extends AppCompatActivity {
         innerLL.addView(possession[i]);
         innerLL.addView(tvTimeLeft);
         innerLL.addView(tvTimeLefts[i]);
+        innerLL.addView(tvQuestionStatus);
+        innerLL.addView(tvQnStat[i]);
         innerLL.addView(defuseDetonateLL);
 
         scheduler.scheduleAtFixedRate(new Runnable() {
@@ -348,7 +400,9 @@ public class HostView extends AppCompatActivity {
     class UpdateHostView extends AsyncTask<Void, Void, Void> {
         final TextView[] possession = global.getHostViewPossession();
         final int[] playerPossessBomb = global.getPlayerPossessBomb();
+        final int[] qnStatCode = global.getQnStatusCode();
         final TextView[] tvTimeLefts = global.getTvTimeLefts();
+        final TextView[] tvQnStat = global.getTvQnStat();
         final int[] timeLefts = global.getTimeLefts();
 
         public Void doInBackground(Void... unused) {
@@ -379,6 +433,7 @@ public class HostView extends AppCompatActivity {
                                     JSONObject result = new JSONObject(response.body().string());
                                     playerPossessBomb[count] = Integer.parseInt(result.getString("player_id"));
                                     timeLefts[count] = Integer.parseInt(result.getString("time_left"));
+                                    qnStatCode[count] = Integer.parseInt(result.getString("question_status"));
                                     global.setRunScheduler(true); //to indicate in scheduler that a response was received
                                     global.setUpdateHostViewBoolean(true);
                                 } catch (JSONException e) {
@@ -400,6 +455,7 @@ public class HostView extends AppCompatActivity {
                 while (i < global.getNumQuestion()) {
                     possession[i].setText(global.getPlayerInRoom(Integer.toString(playerPossessBomb[i])));
                     tvTimeLefts[i].setText(Integer.toString(timeLefts[i]));
+                    tvQnStat[i].setText(global.getQnStatus()[qnStatCode[i]]);
                     i++;
                 }
                 global.setUpdateHostViewBoolean(false);

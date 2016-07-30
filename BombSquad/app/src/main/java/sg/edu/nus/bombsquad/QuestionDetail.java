@@ -9,6 +9,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Context;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class QuestionDetail {
     //Constants
     public static final int ID_INNERLL_CONSTANT = 1000000;
@@ -23,6 +35,14 @@ public class QuestionDetail {
     public static final int ID_TVTIMELEFT_CONSTANT = 6000000;
     public static final int ID_BDEFUSE_CONSTANT = 7000000;
     public static final int ID_BPASS_CONSTANT = 8000000;
+
+    //Constants for question_status
+    public static final int QUESTION_NOT_DEPLOYED = 0;
+    public static final int QUESTION_IS_BEING_DEPLOYED = 1;
+    public static final int BOMB_HAS_BEEN_DEFUSED = 2;
+    public static final int BOMB_HAS_EXPLODED = 3;
+    public static final int PLAYER_FAILED_THIS_QUESTION = 4;
+    public static final int REACHED_UPPER_LIMIT_OF_PASSES = 5;
 
     //Variables
     Context context;
@@ -50,6 +70,7 @@ public class QuestionDetail {
     private String num_pass;
     private String mcqAnswer;
     private String finalAnswer;     //3 states: correct, wrong, 'empty string'
+    private boolean attemptedThisQuestion;
 
     /*---------- Constructor ----------*/
     public QuestionDetail(Context context, int i, String question_id, String bomb_name, String question_type, String question,
@@ -73,6 +94,7 @@ public class QuestionDetail {
 
         mcqAnswer = "";     //MCQ qn not answered
         finalAnswer = "";    //Question not answered
+        attemptedThisQuestion = false;
         //setLayout();
     }
 
@@ -438,7 +460,7 @@ public class QuestionDetail {
 
     public void setFinalAnswer(String finalAnswer) { this.finalAnswer = finalAnswer; }
 
-
+    public void setAttemptedThisQuestion(boolean attemptedThisQuestion) { this.attemptedThisQuestion = attemptedThisQuestion; }
 
 
 
@@ -467,4 +489,30 @@ public class QuestionDetail {
     public String getNum_pass() { return num_pass; }
     public String getMcqAnswer() { return mcqAnswer; }
     public String getFinalAnswer() { return finalAnswer; }
+    public boolean getAttemptedThisQuestion() { return attemptedThisQuestion; }
+
+
+    /*---------- Static Method ----------*/
+    public static void updateQuestionStatus(String room_code, String question_id, String question_status){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_code", room_code)
+                .add("question_id", question_id)
+                .add("question_status", question_status)
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateQuestionStatus.php").post(postData).build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("FAIL");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        response.body().close();
+                    }
+                });
+    }
 }

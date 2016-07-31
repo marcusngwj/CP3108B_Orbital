@@ -1,6 +1,7 @@
 package sg.edu.nus.bombsquad;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -196,6 +197,15 @@ public class PlayerView extends AppCompatActivity {
                                     public void run() {
                                         dialog.setTitle("Waiting for host to deploy a question");
                                         dialog.setCancelable(false);
+                                        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Exit Room", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                RoomBank.removePlayerFromGame(room_code, user_id);
+                                                Intent intent = new Intent(PlayerView.this, EnterRoom.class);
+                                                startActivity(intent);
+                                            }
+                                        });
                                         dialog.show();
                                     }
                                 });

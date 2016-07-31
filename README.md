@@ -18,7 +18,6 @@ A maximum of X passes can be made before the bomb explodes, where X is predeterm
 <br>
 <br>
 ### **Features**
-<br>
 - [x] Register new account
 - [x] Login
 - [x] Create Room

@@ -1,13 +1,13 @@
-# CS3108B_Orbital
-AY2015/16 Summer Project Module
+# Bomb Squad
+
 <br>
 <br>
-![Download Here](assets/images/icons/download.png)
+<img src="assets/images/icons/download.png" width="300">
+<br>
+Bomb Squad is an android mobile application, adpated from "The Bomb Game" commonly played during camps. This project is aimed at facilitating the answering of questions posted by tutor in class, and possibly extending it to a game that can be casually played among friends.
 <br>
 <br>
-**Ignition Slide**
 <br>
-![Ignition Slide](assets/images/ignition_slide.png)
 <br>
 <br>
 <br>

@@ -17,7 +17,7 @@ In the event that the student A does not know the answer for the question, he/sh
 A maximum of X passes can be made before the bomb explodes, where X is predetermined by the tutor. If the bomb explodes, the student possessing the bomb at the time would have their points deducted. When the bomb explodes or is defused, the round ends and all player will be reinstated to join the next round.
 <br>
 <br>
-# **Features**
+### **Features**
 <br>
 - [x] Register new account
 - [x] Login

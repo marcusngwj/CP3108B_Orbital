@@ -1,4 +1,5 @@
 # <img src="assets/images/icons/bombSquad.png">
+<img src="assets/images/icons/bombIcon.png" width="100">
 <img src="assets/images/icons/download.png" width="300">
 <br>
 <br>

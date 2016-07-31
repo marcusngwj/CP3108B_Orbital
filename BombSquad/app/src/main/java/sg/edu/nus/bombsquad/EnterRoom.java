@@ -115,66 +115,13 @@ public class EnterRoom extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();    //user cannot press the back button on android
+        Intent intent = getIntent();
+        Intent back = new Intent(EnterRoom.this, RoomType.class);
+        back.putExtra("user_id", global.getUserId());
+        startActivity(back);
+    }
 }
-
-
-
-
-
-
-
-
-//Old code
-/*Response.Listener<String> responseCatcher = new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            try {
-                                                JSONObject jsonResponse = new JSONObject(response);
-                                                ArrayList<String> questionIDList = new ArrayList<String>();
-
-                                                System.out.println(jsonResponse);
-
-                                                RoomBank tempRoomBank = global.getRoomBank();
-                                                HashMap<String, RoomDetail> roomDetailHashMap = new HashMap<String, RoomDetail>();
-                                                int count = 0;  //Count total number of questions in a room
-
-                                                int i = 0;
-                                                while (i < jsonResponse.length()) {
-                                                    if (jsonResponse.getJSONObject(i + "").getBoolean("success")) {
-                                                        String room_id = jsonResponse.getJSONObject(i + "").getString("room_id");
-                                                        String deploy_status = jsonResponse.getJSONObject(i + "").getString("deploy_status");
-                                                        String time_left = jsonResponse.getJSONObject(i + "").getString("time_left");
-                                                        String player_id = jsonResponse.getJSONObject(i + "").getString("player_id");
-                                                        String question_id = jsonResponse.getJSONObject(i + "").getString("question_id");
-                                                        count++;
-                                                        questionIDList.add(question_id);
-                                                        roomBank.setQuestionIDList(questionIDList);
-
-                                                        tempRoomBank.setNumQuestion(count);
-
-                                                        roomDetailHashMap.put(question_id, new RoomDetail(roomBank.getRoomCode(), room_id, question_id, deploy_status, time_left, player_id));
-
-                                                        tempRoomBank.setRoomDetailHashMap(roomDetailHashMap);
-                                                        global.setRoomBank(tempRoomBank);
-                                                    }
-                                                    i++;
-                                                }
-
-
-                                            } catch (JSONException e) {
-                                                *//*e.printStackTrace();*//*
-                                            }
-
-                                            //Add user into "GAME" table in the database
-                                            RoomBank.addPlayerIntoGame(room_code, global.getUserId());
-
-
-
-                                            Intent playerIntent = new Intent(EnterRoom.this, PreparingPlayerView.class);
-                                            startActivity(playerIntent);
-
-                                        }
-                                    };
-                                    GetRoomDetailRequest getRoomDetailRequest = new GetRoomDetailRequest(roomCode + "", responseCatcher);
-                                    RequestQueue requestQueue = Volley.newRequestQueue(EnterRoom.this);
-                                    requestQueue.add(getRoomDetailRequest);*/

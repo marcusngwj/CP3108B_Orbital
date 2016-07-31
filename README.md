@@ -2,6 +2,9 @@
 AY2015/16 Summer Project Module
 <br>
 <br>
+![Download Here](assets/images/icons/download.png)
+<br>
+<br>
 **Ignition Slide**
 <br>
 ![Ignition Slide](assets/images/ignition_slide.png)
@@ -19,10 +22,10 @@ AY2015/16 Summer Project Module
 <br>
 <br>
 <br>
-![Login Page](assets/images/loginPage.PNG)
-![Password Reset](assets/images/passwordReset.PNG)
-![New Bomb](assets/images/newBomb.PNG)
-![Selected Bomb](assets/images/selectedBomb.PNG)
-![Manage Room](assets/images/manageRoom.PNG)
-![Player View 1](assets/images/playerView1.PNG)
-![Player View 1](assets/images/playerView2.PNG)
+![Login Page](assets/images/screenshots/loginPage.PNG)
+![Password Reset](assets/images/screenshots/passwordReset.PNG)
+![New Bomb](assets/images/screenshots/newBomb.PNG)
+![Selected Bomb](assets/images/screenshots/selectedBomb.PNG)
+![Manage Room](assets/images/screenshots/manageRoom.PNG)
+![Player View 1](assets/images/screenshots/playerView1.PNG)
+![Player View 1](assets/images/screenshots/playerView2.PNG)

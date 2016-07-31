@@ -9,6 +9,19 @@
 	mysqli_stmt_bind_param($statement, "sss", $time_left, $room_code, $question_id);
 	mysqli_stmt_execute($statement);
 	
+	$statement1 = mysqli_prepare($con, "SELECT * FROM Room WHERE room_code = ? AND question_id = ?");
+	mysqli_stmt_bind_param($statement1, "ss", $room_code, $question_id);
+	mysqli_stmt_execute($statement1);
+	mysqli_stmt_store_result($statement1);
+    mysqli_stmt_bind_result($statement1, $room_id, $room_name, $user_id, $room_code, $question_id, $deploy_status, $time_left, $player_id, $num_pass, $question_status);
+    mysqli_stmt_fetch($statement1);
+	$response = array();
+	$response["success"] = false;  
+	while(mysqli_stmt_fetch($statement1)){
+		$response["success"] = true;
+		$response["deploy_status"] = $deploy_status;
+	}
+	
 	if($result == true) {
 		echo '{"query_result":"SUCCESS"}';
 	}

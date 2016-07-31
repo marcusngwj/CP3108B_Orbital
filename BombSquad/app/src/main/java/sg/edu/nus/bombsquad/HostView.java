@@ -52,13 +52,14 @@ public class HostView extends AppCompatActivity {
         final String room_name = global.getRoomName();
         final int numQuestion = global.getNumQuestion();
         final String[] questionIDArray = global.getQuestion_id();    //Array that contains all the question_ids
-        global.setRoomCode(room_code);
         global.setHostViewPossession(new TextView[numQuestion]);
         global.setQnStatusCode(new int[numQuestion]);
         global.setTvTimeLefts(new TextView[numQuestion]);
         global.setPlayerPossessBomb(new int[numQuestion]);
         global.setTvQnStat(new TextView[numQuestion]);
         global.setTimeLefts(new int[numQuestion]);
+
+
 
 
         //To show on Android Monitor onCreate
@@ -84,7 +85,7 @@ public class HostView extends AppCompatActivity {
                         back.putExtra("room", intent.getStringExtra("room"));
                         back.putExtra("user_id", intent.getStringExtra("user_id"));
                         global.clearDeployed();
-                        global.setTimeLeft(0);
+                        global.setTimeLeft(1);
                         scheduler.shutdown();
                         startActivity(back);
                     }

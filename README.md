@@ -2,7 +2,7 @@
 AY2015/16 Summer Project Module
 <br>
 <br>
-![Download Here](assets/images/icons/download.png)
+<img src="assets/images/icons/download.png" width="300">
 <br>
 <br>
 **Ignition Slide**

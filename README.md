@@ -1,5 +1,4 @@
-# Bomb Squad
-<img src="assets/images/icons/bombSquad.png">
+# <img src="assets/images/icons/bombSquad.png">
 <br>
 <br>
 <img src="assets/images/icons/download.png" width="300">

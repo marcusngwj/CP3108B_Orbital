@@ -517,6 +517,7 @@ public class PlayerView extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "You have not answered the question", Toast.LENGTH_SHORT).show();
                 }
                 else if(qnDetail.getFinalAnswer().equals("correct")){
+                    qnDetail.setAttemptedThisQuestion(true);
                     updateScore("correct", points_awarded);
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_BEEN_DEFUSED+"");
@@ -524,6 +525,7 @@ public class PlayerView extends AppCompatActivity {
                     //bPass.setEnabled(false);
                 }
                 else{
+                    qnDetail.setAttemptedThisQuestion(true);
                     updateScore("wrong", points_deducted);
                     tvTimeLeft.setText("YOU FAILED THIS QUESTION");
                     if(numPassIntegerValue>0){
@@ -536,7 +538,6 @@ public class PlayerView extends AppCompatActivity {
                     //bDefuse.setEnabled(false);
                     //bPass.setEnabled(false);
                 }
-                qnDetail.setAttemptedThisQuestion(true);
             }
         });
     }

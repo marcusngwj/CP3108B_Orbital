@@ -11,6 +11,10 @@
 	mysqli_stmt_bind_param($statement1, "s", $room_code);
 	mysqli_stmt_execute($statement1);
 	
+	$statement2 = mysqli_prepare($con, "DELETE FROM Score WHERE room_code = ?");
+	mysqli_stmt_bind_param($statement2, "s", $room_code);
+	mysqli_stmt_execute($statement2);
+	
 	if($result == true) {
 		echo '{"query_result":"SUCCESS"}';
 	}

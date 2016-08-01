@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#44546A"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Score Board"
+        android:id="@+id/scoreBoard"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/abc_primary_text_disable_only_material_dark"
+        android:textSize="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="2dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:id="@+id/border"
+        android:background="#FFFFFF"
+        android:layout_below="@id/scoreBoard" />
+
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/border"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scoreBoardScroll"
+            android:orientation="vertical">
+
+            <View
+                android:id ="@+id/fakeView"
+                android:layout_width ="50dp"
+                android:layout_height ="20dp"
+                android:layout_centerInParent="true" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/scoreTable"
+                android:layout_toRightOf="@+id/fakeView"/>
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameTable"
+                android:layout_toLeftOf="@+id/fakeView"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonEndBattle"
+                android:text="Exit Room"
+                android:textColor="#ffffff"
+                android:textSize="30dp"
+                android:background="@drawable/white_border"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginBottom="35dp"
+                android:layout_below="@+id/nameTable"/>
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+
+
+
+</RelativeLayout>

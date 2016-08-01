@@ -122,7 +122,7 @@ public class HostView extends AppCompatActivity {
     }
 
     //To display the entire layout of hostview
-    private void display(String room_code, String room_name, int numQuestion, String[] questionIDArray) {
+    private void display(final String room_code, String room_name, int numQuestion, String[] questionIDArray) {
         //Display room code
         TextView tvRoomCode = (TextView)findViewById(R.id.textViewHostViewRoomCode);
         tvRoomCode.setText("Room Code: " + room_code);
@@ -137,7 +137,41 @@ public class HostView extends AppCompatActivity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("room_code", room_code)
+                        .build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getScore.php").post(postData).build();
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject result = new JSONObject(response.body().string());
+                                    if (result.getJSONObject(0+"").getBoolean("success")) {
+                                        String[] playerListScore = new String[result.length()-1];
+                                        int i = 0;
+                                        while (i < result.length()-1) {
+                                            global.putPlayerScore(result.getJSONObject(0+"").getString("user_id"),
+                                                    result.getJSONObject(0+"").getString("total_score"));
+                                            playerListScore[i] = result.getJSONObject(0+"").getString("user_id");
+                                            i++;
+                                        }
+                                        global.setPlayerListScore(playerListScore);
+                                        Intent scoreBoardIntent = new Intent(HostView.this, ScoreBoard.class);
+                                        scoreBoardIntent.putExtra("num_player", result.length()-1+"");
+                                        startActivity(scoreBoardIntent);
+                                    }
+                                } catch (JSONException e) {
+                                    //e.printStackTrace();
+                                }
+                            }
+                        });
             }
         });
 

@@ -14,6 +14,11 @@
 	mysqli_stmt_bind_param($statement, "s", $room_code);
 	mysqli_stmt_execute($statement);
 	
+	$statement = mysqli_prepare($con, "DELETE FROM Score WHERE room_code = ?");
+	mysqli_stmt_bind_param($statement, "s", $room_code);
+	mysqli_stmt_execute($statement);
+	
+	
 	$result = mysqli_query($con,"INSERT INTO Game (host, room_status, room_code, player) 
       VALUES ('$host', '$room_status', '$room_code', '$player')");
 		  

@@ -169,6 +169,7 @@ public class HostView extends AppCompatActivity {
                                         Intent scoreBoardIntent = new Intent(HostView.this, ScoreBoard.class);
                                         scoreBoardIntent.putExtra("num_player", result.length()-2+"");
                                         scoreBoardIntent.putExtra("user_id", intent.getStringExtra("user_id"));
+                                        scoreBoardIntent.putExtra("room_code", global.getRoomCode());
                                         startActivity(scoreBoardIntent);
                                     }
                                 } catch (JSONException e) {

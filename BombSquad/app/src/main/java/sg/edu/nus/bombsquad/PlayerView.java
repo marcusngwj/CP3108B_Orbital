@@ -154,6 +154,7 @@ public class PlayerView extends AppCompatActivity {
                                         Intent scoreBoardIntent = new Intent(PlayerView.this, ScoreBoard.class);
                                         scoreBoardIntent.putExtra("num_player", result.length()-3+"");
                                         scoreBoardIntent.putExtra("user_id", global.getUserId());
+                                        scoreBoardIntent.putExtra("room_code", roomBank.getRoomCode());
                                         scheduler.shutdown();
                                         startActivity(scoreBoardIntent);
                                     }
@@ -564,6 +565,7 @@ public class PlayerView extends AppCompatActivity {
                     updateScore("correct", points_awarded);
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_BEEN_DEFUSED+"");
+                    insertIntoHistory(room_code, qnDetail.getQuestion_id(), qnDetail.getFinalAnswer());
                     //bDefuse.setEnabled(false);
                     //bPass.setEnabled(false);
                 }
@@ -571,6 +573,7 @@ public class PlayerView extends AppCompatActivity {
                     qnDetail.setAttemptedThisQuestion(true);
                     updateScore("wrong", points_deducted);
                     tvTimeLeft.setText("YOU FAILED THIS QUESTION");
+                    insertIntoHistory(room_code, qnDetail.getQuestion_id(), qnDetail.getFinalAnswer());
                     if(numPassIntegerValue>0){
                         QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.PLAYER_FAILED_THIS_QUESTION+"");
                         BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
@@ -594,6 +597,34 @@ public class PlayerView extends AppCompatActivity {
                 startActivity(intentBPST);
             }
         });
+    }
+
+    private void insertIntoHistory(String room_code, String question_id, String player_answer) {
+        System.out.println("room_code: " + room_code);
+        System.out.println("question_id: " + question_id);
+        System.out.println("player_answer: " + player_answer);
+        System.out.println("player_id: " + user_id);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_code", room_code)
+                .add("question_id", question_id)
+                .add("player_id", user_id)
+                .add("player_answer", player_answer)
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertIntoHistory.php").post(postData).build();
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("Push to History: Failure");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        System.out.println("Push to History: Success");
+                    }
+                });
     }
 
 }

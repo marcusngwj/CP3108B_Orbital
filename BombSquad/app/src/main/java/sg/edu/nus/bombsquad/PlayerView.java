@@ -116,9 +116,52 @@ public class PlayerView extends AppCompatActivity {
 
         dialog = new ProgressDialog(PlayerView.this);
 
+        final OkHttpClient client = new OkHttpClient();
+        final Request.Builder requestBuilder = new Request.Builder();
+
         scheduler.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 prepareDisplay();
+                RequestBody postData = new FormBody.Builder()
+                        .add("player", user_id)
+                        .add("room_code", room_code)
+                        .build();
+                Request request = requestBuilder.url("http://orbitalbombsquad.x10host.com/gameEnd.php").post(postData).build();
+                client.newCall(request)
+                        .enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                System.out.println("FAIL");
+                            }
+
+                            @Override
+                            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                                try {
+                                    JSONObject result = new JSONObject(response.body().string());
+                                    if (result.getBoolean("success") && result.getString("room_status").equals("0")) {
+                                        String[] playerListScore = new String[result.length()-1];
+                                        int i = 0;
+                                        String name = "";
+                                        while (i < result.length()-3) {
+                                            name = result.getJSONObject(i+"").getString("first_name")
+                                                    + " " + result.getJSONObject(i+"").getString("last_name");
+                                            global.putPlayerScore(name,
+                                                    result.getJSONObject(i+"").getString("total_score"));
+                                            playerListScore[i] = name;
+                                            i++;
+                                        }
+                                        global.setPlayerListScore(playerListScore);
+                                        Intent scoreBoardIntent = new Intent(PlayerView.this, ScoreBoard.class);
+                                        scoreBoardIntent.putExtra("num_player", result.length()-3+"");
+                                        scoreBoardIntent.putExtra("user_id", global.getUserId());
+                                        scheduler.shutdown();
+                                        startActivity(scoreBoardIntent);
+                                    }
+                                } catch (JSONException e) {
+                                    //e.printStackTrace();
+                                }
+                            }
+                        });
             }
         }, 0, 500, TimeUnit.MILLISECONDS);
 

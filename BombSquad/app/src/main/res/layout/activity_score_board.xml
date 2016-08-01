@@ -64,7 +64,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonEndBattle"
+                android:id="@+id/buttonEndGame"
                 android:text="Exit Room"
                 android:textColor="#ffffff"
                 android:textSize="30dp"

@@ -141,7 +141,7 @@ public class HostView extends AppCompatActivity {
                 RequestBody postData = new FormBody.Builder()
                         .add("room_code", room_code)
                         .build();
-                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/getScore.php").post(postData).build();
+                Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/exitRoom.php").post(postData).build();
                 client.newCall(request)
                         .enqueue(new Callback() {
                             @Override
@@ -156,15 +156,19 @@ public class HostView extends AppCompatActivity {
                                     if (result.getJSONObject(0+"").getBoolean("success")) {
                                         String[] playerListScore = new String[result.length()-1];
                                         int i = 0;
-                                        while (i < result.length()-1) {
-                                            global.putPlayerScore(result.getJSONObject(0+"").getString("user_id"),
-                                                    result.getJSONObject(0+"").getString("total_score"));
-                                            playerListScore[i] = result.getJSONObject(0+"").getString("user_id");
+                                        String name = "";
+                                        while (i < result.length()-2) {
+                                            name = result.getJSONObject(i+"").getString("first_name")
+                                                    + " " + result.getJSONObject(i+"").getString("last_name");
+                                            global.putPlayerScore(name, result.getJSONObject(i+"").getString("total_score"));
+                                            playerListScore[i] = name;
                                             i++;
                                         }
                                         global.setPlayerListScore(playerListScore);
+                                        Intent intent = getIntent();
                                         Intent scoreBoardIntent = new Intent(HostView.this, ScoreBoard.class);
-                                        scoreBoardIntent.putExtra("num_player", result.length()-1+"");
+                                        scoreBoardIntent.putExtra("num_player", result.length()-2+"");
+                                        scoreBoardIntent.putExtra("user_id", intent.getStringExtra("user_id"));
                                         startActivity(scoreBoardIntent);
                                     }
                                 } catch (JSONException e) {

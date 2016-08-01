@@ -229,9 +229,7 @@ public class HostSelection extends AppCompatActivity {
                                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
                                         try {
                                             JSONObject result = new JSONObject(response.body().string());
-                                            System.out.println(result);
                                             if (result.getString("question_status").equals("2") || result.getString("question_status").equals("3")){
-                                                System.out.println("SUCCESS");
                                                 global.setTimeLeft(1);
                                             }
                                         } catch (JSONException e){

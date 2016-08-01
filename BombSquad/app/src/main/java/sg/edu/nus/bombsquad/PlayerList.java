@@ -26,6 +26,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class PlayerList extends AppCompatActivity {
     final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -79,6 +80,7 @@ public class PlayerList extends AppCompatActivity {
                             .add("question_id", question_id)
                             .add("player_id", currPlayer)
                             .add("time_left", time_left)
+                            .add("num_pass", global.getPassLeft(question_id))
                             .build();
                     Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
                     client.newCall(request)
@@ -129,12 +131,21 @@ public class PlayerList extends AppCompatActivity {
                                 .enqueue(new Callback() {
                                     @Override
                                     public void onFailure(Call call, IOException e) {
-                                        System.out.println("FAIL");
+                                        System.out.println("PLAYER LIST UPDATE TIME LEFT FAIL");
                                     }
 
                                     @Override
                                     public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                                        response.body().close();
+                                        try {
+                                            JSONObject result = new JSONObject(response.body().string());
+                                            System.out.println(result);
+                                            if (result.getString("deploy_status").equals("2") || result.getString("deploy_Status").equals("3")){
+                                                System.out.println("SUCCESS");
+                                                global.setTimeLeft(0);
+                                            }
+                                        } catch (JSONException e){
+                                            //e.printStackTrace();
+                                        }
                                     }
                                 });
                     }

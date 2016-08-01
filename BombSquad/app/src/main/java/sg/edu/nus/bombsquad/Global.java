@@ -64,8 +64,12 @@ public class Global {
     /*------Player in room -------*/
     private HashMap<String, String> playerInRoom = new HashMap<>();
 
-    /*------Player in room -------*/
+    /*---Time of each question ---*/
     private HashMap<String, String> timeLimit = new HashMap<>();
+
+    /*- Num pass of each question-*/
+    private HashMap<String, String> passLeft = new HashMap<>();
+
 
     /*------ While loading -------*/
     private AlertDialog.Builder builder;
@@ -193,6 +197,10 @@ public class Global {
         qnStatusCode = arr;
     }
 
+    public void putPassLeft(String key, String value) {
+        passLeft.put(key, value);
+    }
+
 
 
 
@@ -303,6 +311,10 @@ public class Global {
 
     public int[] getQnStatusCode() {
         return qnStatusCode;
+    }
+
+    public String getPassLeft(String key) {
+        return passLeft.get(key);
     }
 
 

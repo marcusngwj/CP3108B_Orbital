@@ -20,6 +20,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class QuestionDetail {
     //Constants
@@ -514,6 +515,29 @@ public class QuestionDetail {
                         response.body().close();
                     }
                 });
+        System.out.println("QUESTION STATUS: " + question_status);
+        //if bomb defuse or explode
+        if (question_status.equals("2") || question_status.equals("3")) {
+            System.out.println("SUCCESS");
+            RequestBody postData1 = new FormBody.Builder()
+                    .add("room_code", room_code)
+                    .add("question_id", question_id)
+                    .add("deploy_status", "0")
+                    .build();
+            Request request1 = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateDeployStatus.php").post(postData1).build();
+            client.newCall(request1)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            System.out.println("FAIL");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            //Nothing
+                        }
+                    });
+        }
     }
 
     public static void updateNumPass(String room_code, String question_id, String num_pass){

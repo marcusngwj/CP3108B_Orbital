@@ -155,7 +155,6 @@ public class PlayerView extends AppCompatActivity {
 
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            System.out.println(result);
 
                             String score = result.getString("total_score");
 
@@ -393,7 +392,6 @@ public class PlayerView extends AppCompatActivity {
 
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            System.out.println(result);
                             final String player_name = result.getString("first_name") + " " + result.getString("last_name");
 
                             runOnUiThread(new Runnable() {
@@ -413,13 +411,13 @@ public class PlayerView extends AppCompatActivity {
     private void setTimeLeftDisplay(QuestionDetail qnDetail, int timeLeftIntegerValue, int numPassIntegerValue, int questionStatusIntegerValue, TextView tvTimeLeft, Button bDefuse, Button bPass, TextView etAnswerOption, String player_id){
         if(questionStatusIntegerValue==QuestionDetail.BOMB_HAS_BEEN_DEFUSED){
             tvTimeLeft.setText("Bomb has been successfully defused");
-            bDefuse.setEnabled(false);
-            bPass.setEnabled(false);
+            //bDefuse.setEnabled(false);
+            //bPass.setEnabled(false);
         }
         else if(questionStatusIntegerValue==QuestionDetail.BOMB_HAS_EXPLODED){
             tvTimeLeft.setText("THE BOMB HAS EXPLODED");
-            bDefuse.setEnabled(false);
-            bPass.setEnabled(false);
+            //bDefuse.setEnabled(false);
+            //bPass.setEnabled(false);
         }
         else if(timeLeftIntegerValue>0 && qnDetail.getAttemptedThisQuestion() && user_id.equals(player_id) && numPassIntegerValue>0){
             BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
@@ -434,15 +432,15 @@ public class PlayerView extends AppCompatActivity {
             }
             else if(qnDetail.getFinalAnswer().isEmpty() && numPassIntegerValue<=0){
                 tvTimeLeft.setText(timeLeftIntegerValue + "");
-                bPass.setEnabled(false);    //No more pass left, cannot pass
+                //bPass.setEnabled(false);    //No more pass left, cannot pass
                 bDefuseOnClick(bDefuse, bPass, etAnswerOption, qnDetail, tvTimeLeft, numPassIntegerValue);
             }
         }
         //When the time is up
         else if(timeLeftIntegerValue<=0){
             QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_EXPLODED+"");
-            bDefuse.setEnabled(false);
-            bPass.setEnabled(false);
+            //bDefuse.setEnabled(false);
+            //bPass.setEnabled(false);
 
             //No need consider positive case because it has been taken care of
             if((qnDetail.getFinalAnswer().isEmpty() && global.getUserId().equals(player_id))|| tvTimeLeft.getText().toString().equals("YOU FAILED THIS QUESTION")){
@@ -491,7 +489,6 @@ public class PlayerView extends AppCompatActivity {
 
                         try {
                             JSONObject result = new JSONObject(response.body().string());
-                            System.out.println(result);
 
 
                         } catch (JSONException e) {
@@ -523,8 +520,8 @@ public class PlayerView extends AppCompatActivity {
                     updateScore("correct", points_awarded);
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_BEEN_DEFUSED+"");
-                    bDefuse.setEnabled(false);
-                    bPass.setEnabled(false);
+                    //bDefuse.setEnabled(false);
+                    //bPass.setEnabled(false);
                 }
                 else{
                     updateScore("wrong", points_deducted);
@@ -536,8 +533,8 @@ public class PlayerView extends AppCompatActivity {
                     else{
                         QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_EXPLODED+"");
                     }
-                    bDefuse.setEnabled(false);
-                    bPass.setEnabled(false);
+                    //bDefuse.setEnabled(false);
+                    //bPass.setEnabled(false);
                 }
                 qnDetail.setAttemptedThisQuestion(true);
             }

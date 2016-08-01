@@ -90,15 +90,14 @@ public class HostSelection extends AppCompatActivity {
                                             i++;
                                         }
                                         int random = (int) Math.ceil(Math.random() * (player_id.length-1));
-                                        System.out.println("RANDOM: " + random);
                                         String randomPlayer = player_id[random];
-                                        System.out.println("PLAYER: " + randomPlayer);
                                         OkHttpClient client = new OkHttpClient();
                                         RequestBody postData = new FormBody.Builder()
                                                 .add("room_code", room_code)
                                                 .add("question_id", question_id)
                                                 .add("player_id", randomPlayer)
                                                 .add("time_left", time_left)
+                                                .add("num_pass", global.getPassLeft(question_id))
                                                 .build();
                                         Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/hostDeployBomb.php").post(postData).build();
                                         client.newCall(request)

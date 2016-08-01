@@ -8,5 +8,10 @@
 	$statement = mysqli_prepare($con, "UPDATE Room SET question_status = '$question_status' WHERE room_code = '$room_code' AND question_id = '$question_id'");
 	mysqli_stmt_execute($statement);
 	
+	if ($question_status == 2 || $question_status == 3) {
+		$statement1 = mysqli_prepare($con, "UPDATE Room SET deploy_status = 0 WHERE room_code = '$room_code' AND question_id = '$question_id'");
+		mysqli_stmt_execute($statement1);
+	}
+	
 	mysqli_close($con);
 ?>

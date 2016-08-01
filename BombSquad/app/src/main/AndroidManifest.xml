@@ -33,6 +33,7 @@
         <activity android:name=".PlayerList" />
         <activity android:name=".EditRoom" />
         <activity android:name=".EditRoomChooseBomb" />
+        <activity android:name=".ScoreBoard" />
 
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for

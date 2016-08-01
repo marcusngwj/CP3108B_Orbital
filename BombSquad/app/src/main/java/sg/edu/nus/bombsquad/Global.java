@@ -50,6 +50,7 @@ public class Global {
     private String[] questionName;
     private boolean editRoomBoolean;
     private boolean error;
+    private String[] playerListScore;
 
 
     /*---------- okgttp ----------*/
@@ -70,6 +71,8 @@ public class Global {
     /*- Num pass of each question-*/
     private HashMap<String, String> passLeft = new HashMap<>();
 
+    /*--- Score of each player ---*/
+    private HashMap<String, String> playerScore = new HashMap<>();
 
     /*------ While loading -------*/
     private AlertDialog.Builder builder;
@@ -201,7 +204,13 @@ public class Global {
         passLeft.put(key, value);
     }
 
+    public void putPlayerScore(String key, String value){
+        playerScore.put(key,value);
+    }
 
+    public void setPlayerListScore(String[] arr) {
+        playerListScore = arr;
+    }
 
 
     /*---------- Retrieve ----------*/
@@ -317,6 +326,13 @@ public class Global {
         return passLeft.get(key);
     }
 
+    public String getPlayerScore(String key) {
+        return playerScore.get(key);
+    }
+
+    public String[] getPlayerListScore() {
+        return playerListScore;
+    }
 
 
     //Others

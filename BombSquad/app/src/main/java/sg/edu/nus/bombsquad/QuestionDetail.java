@@ -524,19 +524,6 @@ public class QuestionDetail {
                     .add("question_id", question_id)
                     .add("deploy_status", "0")
                     .build();
-            Request request1 = new Request.Builder().url("http://orbitalbombsquad.x10host.com/updateDeployStatus.php").post(postData1).build();
-            client.newCall(request1)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            System.out.println("FAIL");
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            //Nothing
-                        }
-                    });
         }
     }
 

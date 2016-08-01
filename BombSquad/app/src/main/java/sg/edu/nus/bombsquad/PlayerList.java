@@ -139,9 +139,9 @@ public class PlayerList extends AppCompatActivity {
                                         try {
                                             JSONObject result = new JSONObject(response.body().string());
                                             System.out.println(result);
-                                            if (result.getString("deploy_status").equals("2") || result.getString("deploy_Status").equals("3")){
+                                            if (result.getString("question_status").equals("2") || result.getString("question_status").equals("3")){
                                                 System.out.println("SUCCESS");
-                                                global.setTimeLeft(0);
+                                                global.setTimeLeft(1);
                                             }
                                         } catch (JSONException e){
                                             //e.printStackTrace();

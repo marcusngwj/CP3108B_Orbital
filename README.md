@@ -1,6 +1,6 @@
 # <img src="assets/images/icons/bombSquad.png">
 <img src="assets/images/icons/bombIcon.png" width="100">
-<img src="assets/images/icons/download.png" width="300">
+<a href="https://github.com/marcusngwj/CS3108B_Orbital/blob/master/assets/apk/sg.edu.nus.bombsquad_1.0.apk?raw=true"><img src="assets/images/icons/download.png" width="300"></a>
 <br>
 <br>
 Bomb Squad is a multiplayer android mobile quiz game, adpated from "The Bomb Game" commonly played during camps. This project is aimed at facilitating the answering of questions posted by tutor in class, and possibly extending it to a game that can be casually played among friends.

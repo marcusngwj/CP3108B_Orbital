@@ -70,6 +70,7 @@ public class QuestionDetail {
     private String points_deducted;
     private String num_pass;
     private String mcqAnswer;
+    private String playerAnswer;
     private String finalAnswer;     //3 states: correct, wrong, 'empty string'
     private boolean attemptedThisQuestion;
 
@@ -93,6 +94,7 @@ public class QuestionDetail {
         this.points_deducted = points_deducted;
         this.num_pass = num_pass;
 
+        playerAnswer = "";
         mcqAnswer = "";     //MCQ qn not answered
         finalAnswer = "";    //Question not answered
         attemptedThisQuestion = false;
@@ -226,6 +228,7 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionA = (String)bOptionA.getTag();
+                playerAnswer = optionA;
                 if(optionA.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -244,6 +247,7 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionB = (String)bOptionB.getTag();
+                playerAnswer = optionB;
                 if(optionB.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -262,6 +266,7 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionC = (String)bOptionC.getTag();
+                playerAnswer = optionC;
                 if(optionC.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -280,6 +285,7 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionD = (String)bOptionD.getTag();
+                playerAnswer = optionD;
                 if(optionD.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -491,6 +497,9 @@ public class QuestionDetail {
     public String getMcqAnswer() { return mcqAnswer; }
     public String getFinalAnswer() { return finalAnswer; }
     public boolean getAttemptedThisQuestion() { return attemptedThisQuestion; }
+    public String getPlayerMcqAnswer() {
+        return playerAnswer;
+    }
 
 
     /*---------- Static Method ----------*/

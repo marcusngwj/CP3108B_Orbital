@@ -94,7 +94,7 @@ public class QuestionDetail {
         this.points_deducted = points_deducted;
         this.num_pass = num_pass;
 
-        playerAnswer = "";
+        playerAnswer = "Test";
         mcqAnswer = "";     //MCQ qn not answered
         finalAnswer = "";    //Question not answered
         attemptedThisQuestion = false;
@@ -228,7 +228,6 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionA = (String)bOptionA.getTag();
-                playerAnswer = optionA;
                 if(optionA.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -247,7 +246,6 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionB = (String)bOptionB.getTag();
-                playerAnswer = optionB;
                 if(optionB.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -266,7 +264,6 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionC = (String)bOptionC.getTag();
-                playerAnswer = optionC;
                 if(optionC.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -285,7 +282,6 @@ public class QuestionDetail {
             @Override
             public void onClick(View v) {
                 String optionD = (String)bOptionD.getTag();
-                playerAnswer = optionD;
                 if(optionD.equals(correctAnswer)){
                     mcqAnswer = "correct";
                 }
@@ -468,6 +464,10 @@ public class QuestionDetail {
     public void setFinalAnswer(String finalAnswer) { this.finalAnswer = finalAnswer; }
 
     public void setAttemptedThisQuestion(boolean attemptedThisQuestion) { this.attemptedThisQuestion = attemptedThisQuestion; }
+
+    public void setPlayerAnswer (String playerAnswer){
+        this.playerAnswer = playerAnswer;
+    }
 
 
 

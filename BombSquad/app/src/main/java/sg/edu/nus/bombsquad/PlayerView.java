@@ -349,6 +349,7 @@ public class PlayerView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String optionA = (String)bOptionA.getTag();
+                qnDetail.setPlayerAnswer(optionA);
                 if(optionA.equals(correctAnswer)){
                     qnDetail.setMcqAnswer("correct");
                 }
@@ -367,6 +368,7 @@ public class PlayerView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String optionB = (String)bOptionB.getTag();
+                qnDetail.setPlayerAnswer(optionB);
                 if(optionB.equals(correctAnswer)){
                     qnDetail.setMcqAnswer("correct");
                 }
@@ -385,6 +387,7 @@ public class PlayerView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String optionC = (String)bOptionC.getTag();
+                qnDetail.setPlayerAnswer(optionC);
                 if(optionC.equals(correctAnswer)){
                     qnDetail.setMcqAnswer("correct");
                 }
@@ -403,6 +406,7 @@ public class PlayerView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String optionD = (String)bOptionD.getTag();
+                qnDetail.setPlayerAnswer(optionD);
                 if(optionD.equals(correctAnswer)){
                     qnDetail.setMcqAnswer("correct");
                 }
@@ -565,7 +569,7 @@ public class PlayerView extends AppCompatActivity {
                     updateScore("correct", points_awarded);
                     tvTimeLeft.setText("Bomb has been successfully defused");
                     QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.BOMB_HAS_BEEN_DEFUSED+"");
-                    insertIntoHistory(room_code, qnDetail.getQuestion_id(), qnDetail.getPlayerMcqAnswer());
+                    insertIntoHistory(room_code, qnDetail.getQuestion_id(), userAnswer, qnDetail.getPlayerMcqAnswer(), "correct");
                     //bDefuse.setEnabled(false);
                     //bPass.setEnabled(false);
                 }
@@ -573,7 +577,7 @@ public class PlayerView extends AppCompatActivity {
                     qnDetail.setAttemptedThisQuestion(true);
                     updateScore("wrong", points_deducted);
                     tvTimeLeft.setText("YOU FAILED THIS QUESTION");
-                    insertIntoHistory(room_code, qnDetail.getQuestion_id(), qnDetail.getPlayerMcqAnswer());
+                    insertIntoHistory(room_code, qnDetail.getQuestion_id(), userAnswer, qnDetail.getPlayerMcqAnswer(), "wrong");
                     if(numPassIntegerValue>0){
                         QuestionDetail.updateQuestionStatus(room_code, qnDetail.getQuestion_id(), QuestionDetail.PLAYER_FAILED_THIS_QUESTION+"");
                         BombPassSelectionType.passBombToRandomPlayer(user_id, room_code, qnDetail.getQuestion_id());
@@ -599,15 +603,20 @@ public class PlayerView extends AppCompatActivity {
         });
     }
 
-    private void insertIntoHistory(String room_code, String question_id, String player_answer) {
-        System.out.println(player_answer);
+    private void insertIntoHistory(String room_code, String question_id, String longAnswer, String mcqAnswer, String correctness) {
+        String playerAnswer = longAnswer;
+        if (longAnswer.equals("")) {
+            playerAnswer = mcqAnswer;
+        }
         OkHttpClient client = new OkHttpClient();
         RequestBody postData = new FormBody.Builder()
                 .add("room_code", room_code)
                 .add("question_id", question_id)
                 .add("player_id", user_id)
-                .add("player_answer", player_answer)
+                .add("player_answer", playerAnswer)
+                .add("correctness", correctness)
                 .build();
+        System.out.println("Correctness: " + correctness);
         Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertIntoHistory.php").post(postData).build();
         client.newCall(request)
                 .enqueue(new Callback() {

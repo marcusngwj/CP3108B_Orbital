@@ -5,6 +5,7 @@
 	$question_id = mysqli_real_escape_string($con, $_POST["question_id"]);
 	$player_id = mysqli_real_escape_string($con, $_POST["player_id"]);
 	$player_answer = mysqli_real_escape_string($con, $_POST["player_answer"]);
+	$correctness = mysqli_real_escape_string($con, $_POST["correctness"]);
 	
 	$statement = mysqli_prepare($con, "SELECT * FROM Game WHERE room_code = ? LIMIT 1");
     mysqli_stmt_bind_param($statement, "s", $room_code);
@@ -54,8 +55,8 @@
 	
 	echo json_encode($response);
 	
-	$result = mysqli_query($con,"INSERT INTO History (game_id, host_id, bomb_id, bomb_name, question_type, question, option_one, option_two, option_three, option_four, answer, player_id, player_answer) 
-	VALUES ('$game_id', '$host', '$question_id', '$bomb_name', '$question_type', '$question', '$option_one', '$option_two', '$option_three', '$option_four', '$answer', '$player_id', '$player_answer')");
+	$result = mysqli_query($con,"INSERT INTO History (game_id, host_id, bomb_id, bomb_name, question_type, question, option_one, option_two, option_three, option_four, answer, player_id, player_answer, correctness) 
+	VALUES ('$game_id', '$host', '$question_id', '$bomb_name', '$question_type', '$question', '$option_one', '$option_two', '$option_three', '$option_four', '$answer', '$player_id', '$player_answer', '$correctness')");
 	
 	if($result == true) {
 		echo '{"query_result":"SUCCESS"}';

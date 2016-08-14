@@ -616,7 +616,6 @@ public class PlayerView extends AppCompatActivity {
                 .add("player_answer", playerAnswer)
                 .add("correctness", correctness)
                 .build();
-        System.out.println("Correctness: " + correctness);
         Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertIntoHistory.php").post(postData).build();
         client.newCall(request)
                 .enqueue(new Callback() {

@@ -69,7 +69,7 @@ public class HostView extends AppCompatActivity {
         System.out.println("NUM QUESTION: " + numQuestion);
 
         display(room_code, room_name, numQuestion, questionIDArray);
-
+        insertIntoHistory();
     }
 
     @Override
@@ -503,4 +503,35 @@ public class HostView extends AppCompatActivity {
             }
         }
     }
+    private void insertIntoHistory() {
+        Intent intent = getIntent();
+        OkHttpClient client = new OkHttpClient();
+        RequestBody postData = new FormBody.Builder()
+                .add("room_code", global.getRoomCode())
+                .add("question_id", "Host")
+                .add("player_id", intent.getStringExtra("user_id"))
+                .add("player_answer", "Host")
+                .add("correctness", "Host")
+                .build();
+        Request request = new Request.Builder().url("http://orbitalbombsquad.x10host.com/insertIntoHistory.php").post(postData).build();
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println("Push to History: Failure");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, okhttp3.Response response) throws IOException {
+                        System.out.println("Push to History: Success");
+                        try {
+                            JSONObject result = new JSONObject(response.body().string());
+                            System.out.println(result);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
 }

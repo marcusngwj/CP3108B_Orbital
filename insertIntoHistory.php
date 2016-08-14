@@ -55,8 +55,8 @@
 	
 	echo json_encode($response);
 	
-	$result = mysqli_query($con,"INSERT INTO History (game_id, host_id, bomb_id, bomb_name, question_type, question, option_one, option_two, option_three, option_four, answer, player_id, player_answer, correctness) 
-	VALUES ('$game_id', '$host', '$question_id', '$bomb_name', '$question_type', '$question', '$option_one', '$option_two', '$option_three', '$option_four', '$answer', '$player_id', '$player_answer', '$correctness')");
+	$result = mysqli_query($con,"INSERT INTO History (game_id, host_id, room_code, bomb_id, bomb_name, question_type, question, option_one, option_two, option_three, option_four, answer, player_id, player_answer, correctness) 
+	VALUES ('$game_id', '$host', '$room_code', '$question_id', '$bomb_name', '$question_type', '$question', '$option_one', '$option_two', '$option_three', '$option_four', '$answer', '$player_id', '$player_answer', '$correctness')");
 	
 	if($result == true) {
 		echo '{"query_result":"SUCCESS"}';

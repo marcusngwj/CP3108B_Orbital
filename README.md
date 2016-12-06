@@ -35,3 +35,7 @@ A maximum of X passes can be made before the bomb explodes, where X is predeterm
 ![Manage Room](assets/images/screenshots/manageRoom.PNG)
 ![Player View 1](assets/images/screenshots/playerView1.PNG)
 ![Player View 1](assets/images/screenshots/playerView2.PNG)
+
+<br>
+<br>
+![Poster](assets/images/others/poster.png)

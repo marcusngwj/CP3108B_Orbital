@@ -18,6 +18,7 @@ In the event that the student A does not know the answer for the question, he/sh
 A maximum of X passes can be made before the bomb explodes, where X is predetermined by the tutor. If the bomb explodes, the student possessing the bomb at the time would have their points deducted. When the bomb explodes or is defused, the round ends and all player will be reinstated to join the next round.
 <br>
 <br>
+
 ### **Features**
 - [x] Register new account
 - [x] Login
@@ -28,6 +29,7 @@ A maximum of X passes can be made before the bomb explodes, where X is predeterm
 <br>
 <br>
 <br>
+
 ![Login Page](assets/images/screenshots/loginPage.PNG)
 ![Password Reset](assets/images/screenshots/passwordReset.PNG)
 ![New Bomb](assets/images/screenshots/newBomb.PNG)
@@ -38,4 +40,9 @@ A maximum of X passes can be made before the bomb explodes, where X is predeterm
 
 <br>
 <br>
+
 ![Poster](assets/images/others/poster.png)
+
+<br>
+
+Featured on [Facebook of NUS School of Computing](https://www.facebook.com/nusschoolofcomputing/videos/10154495108133885/)
